@@ -1,0 +1,6 @@
+node_modules
+areas
+failed_logs/*
+!failed_logs/.gitkeep
+run_logs/*
+!run_logs/.gitkeep
