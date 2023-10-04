@@ -2,6 +2,12 @@ import request from 'request';
 import fs from 'fs';
 import { headers } from "./utils.mjs";
 
+/**
+ * Get area id and key
+ * @param {string} areaValue
+ * @param {boolean} isName If false searches by area name isntead of areaId
+ * @returns {Promise}
+ */
 export function getAreaIdentifiers(areaValue, isName = true) {
   return new Promise((resolve, reject) => {
     const options = {
@@ -22,6 +28,11 @@ export function getAreaIdentifiers(areaValue, isName = true) {
   });
 }
 
+/**
+ * Get subareas for a given area, including identifiers
+ * @param {string} areaId
+ * @returns {Promise}
+ */
 export function getSubAreas(areaId) {
   return new Promise((resolve, reject) => {
     const options = {
@@ -56,6 +67,12 @@ export function getSubAreas(areaId) {
   });
 }
 
+/**
+ * Gets an areas JSON from the CDN
+ * @param {string} areaId
+ * @param {string} areaKey
+ * @returns {Object} the JSON of an area from the CDN
+ */
 function getAreaBundle(areaId, areaKey) {
   return new Promise((resolve, reject) => {
     const options = {
@@ -74,6 +91,14 @@ function getAreaBundle(areaId, areaKey) {
   });
 }
 
+/**
+ * Saves an area JSON bundle to disk
+ * @param {string} areaName
+ * @param {string} areaId
+ * @param {string} areaKey
+ * @param {string} bundle Area JSON
+ * @returns
+ */
 function saveAreaBundle(areaName, areaId, areaKey, bundle) {
   return new Promise((resolve, reject) => {
     fs.writeFile(`areas/${areaName}__${areaId}_${areaKey}.json`, bundle, function (err) {
@@ -83,6 +108,13 @@ function saveAreaBundle(areaName, areaId, areaKey, bundle) {
   });
 }
 
+/**
+ * Archives an area by getting its bundle and saving it to disk
+ * @param {string} areaName
+ * @param {string} areaId
+ * @param {string} areaKey
+ * @returns
+ */
 export function archiveArea(areaName, areaId, areaKey) {
   return new Promise((resolve, reject) => {
     getAreaBundle(areaId, areaKey).then((bundle) => {

@@ -2,6 +2,9 @@ import glob from 'glob';
 import fs from 'fs';
 import 'dotenv/config'
 
+/**
+ * This is used by all network requests to mimic the Anyland client and include the session cookie
+ */
 export const headers = {
   'Content-Type': 'application/x-www-form-urlencoded',
   'User-Agent': 'UnityPlayer/2018.1.0f2 (UnityWebRequest/1.0, libcurl/7.51.0-DEV)',
@@ -11,10 +14,25 @@ export const headers = {
   'Cookie': process.env.ANYLAND_COOKIE
 };
 
+/**
+ * Check if an area has been archived
+ * @param {string} areaName
+ * @param {string} areaId
+ * @param {string} areaKey
+ * @returns {boolean}
+ */
 export function isAreaArchived(areaName, areaId, areaKey) {
   return glob.sync(`areas/${areaName}__${areaId}_${areaKey}.json`).length > 0;
 }
 
+/**
+ * Log a failed download
+ * @param {string} areaName
+ * @param {string} areaId
+ * @param {string} areaKey
+ * @param {string} error
+ * @returns {Promise}
+ */
 export function logFailedArchive(areaName, areaId, areaKey, error) {
   return new Promise((resolve, reject) => {
     const logData = `${areaName},${areaId},${areaKey},${error}\n`;
@@ -25,6 +43,10 @@ export function logFailedArchive(areaName, areaId, areaKey, error) {
   });
 }
 
+/**
+ * Rotate the failed download log
+ * Moves the old log to failedDownlods.N.csv where N is the number of old logs ie: failedDownloads.1.csv
+ */
 export function rotateFailedDownloadsLog() {
   const basePath = 'failed_logs/failedDownloads';
   const csvExtension = '.csv';
@@ -46,6 +68,9 @@ export function rotateFailedDownloadsLog() {
   }
 }
 
+/**
+ * Initialize the archive log csv
+ */
 export function createArchiveLog() {
   if (!fs.existsSync('archived_world_list.csv')) {
     const headers = 'areaName,areaId,areaKey,subArea,parentAreaId\n';
@@ -53,11 +78,23 @@ export function createArchiveLog() {
   }
 }
 
+/**
+ * Add an archive log entry
+ * @param {string}} areaName
+ * @param {string}} areaId
+ * @param {string}} areaKey
+ * @param {string}} subArea
+ * @param {string}} parentId
+ */
 export function addArchiveLog(areaName, areaId, areaKey, subArea = false, parentId = '') {
   const row = `${areaName},${areaId},${areaKey},${subArea ? 'Y' : 'N'},${subArea ? parentId : '-'}\n`;
   fs.appendFileSync('archived_world_list.csv', row);
 }
 
+/**
+ * Rotate the run output log
+ * Moves the old log to runOutput.N.csv where N is the number of old logs ie: runOutput.1.csv
+ */
 export function rotateRunOutputLog() {
   const basePath = 'run_logs/runOutput';
   const logExtension = '.log';

@@ -7,6 +7,12 @@ let failedAreas = [];
 let downloadTimer = null;
 const downloadDelay = 1; // How long in seconds between getting each area
 
+/**
+ * Queue a search query
+ * Adds all new unique matched areas to the queue, including subareas
+ * @param {string} query
+ * @returns {Promise}
+ */
 export function queueSearch(query) {
   return new Promise((resolve, reject) => {
     const options = {
@@ -62,6 +68,10 @@ export function queueSearch(query) {
   });
 }
 
+/**
+ * Start the download queue timer, running every X seconds
+ * @param {Number} delay in seconds
+ */
 export function startDownloadQueue(delay = downloadDelay) {
   createArchiveLog();
   rotateRunOutputLog();
@@ -70,18 +80,33 @@ export function startDownloadQueue(delay = downloadDelay) {
   downloadTimer = setInterval(processQueueStep, delay * 1000);
 }
 
+/**
+ * Check if a world is in the download queue
+ * @param {string} areaId
+ * @param {string} areaKey
+ * @returns {boolean}
+ */
 function isInDownloadQueue(areaId, areaKey) {
   return downloadQueue.some(area =>
     area.areaId === areaId && area.areaKey === areaKey
   );
 }
 
+/**
+ * Check if a world is in the failed download queue
+ * @param {*} areaId
+ * @param {*} areaKey
+ * @returns {boolean}
+ */
 function isInFailedAreas(areaId, areaKey) {
   return failedAreas.some(area =>
     area.areaId === areaId && area.areaKey === areaKey
   );
 }
 
+/**
+ * Archive the next world in the download queue
+ */
 async function processQueueStep() {
   if (!downloadQueue.length) return;
   try {
