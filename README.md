@@ -2,7 +2,7 @@
 
 ### _Once more with feeling..._
 
-This is an archive of all Anyland public worlds that my user (Zetaphor) as of <archive_date>.
+This is an archive of all Anyland public worlds that my user (Zetaphor) was able to access as of <archive_date>.
 
 This archive was created with the intent of preserving the legacy of Anyland for its users, past and present, as well as future generations who may take an interest in this unique platform.
 
