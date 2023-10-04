@@ -71,7 +71,7 @@ export function getSubAreas(areaId) {
  * Gets an areas JSON from the CDN
  * @param {string} areaId
  * @param {string} areaKey
- * @returns {Object} the JSON of an area from the CDN
+ * @returns {Promise}
  */
 function getAreaBundle(areaId, areaKey) {
   return new Promise((resolve, reject) => {
@@ -97,7 +97,6 @@ function getAreaBundle(areaId, areaKey) {
  * @param {string} areaId
  * @param {string} areaKey
  * @param {string} bundle Area JSON
- * @returns
  */
 function saveAreaBundle(areaName, areaId, areaKey, bundle) {
   return new Promise((resolve, reject) => {
@@ -113,7 +112,7 @@ function saveAreaBundle(areaName, areaId, areaKey, bundle) {
  * @param {string} areaName
  * @param {string} areaId
  * @param {string} areaKey
- * @returns
+ * returns {Promise} 
  */
 export function archiveArea(areaName, areaId, areaKey) {
   return new Promise((resolve, reject) => {
