@@ -23,7 +23,7 @@ export function getAreaIdentifiers(areaValue, isName = true) {
       if (typeof response === 'undefined' || typeof response.body === 'undefined') reject('Missing response');
       const areaData = JSON.parse(response.body);
       if (typeof areaData.areaId === 'undefined' || typeof areaData.areaKey === 'undefined') reject('Undefined keys, probably area name');
-      resolve({ id: areaData.areaId, key: areaData.areaKey });
+      resolve({ id: areaData.areaId, key: areaData.areaKey, areaData: areaData });
     });
   });
 }
@@ -55,7 +55,8 @@ export function getSubAreas(areaId) {
             id: identifiers.id,
             key: identifiers.key,
             subArea: true,
-            parentId: areaId
+            parentId: areaId,
+            areaData: identifiers
           });
         }
         resolve(subAreas);
@@ -107,23 +108,36 @@ function saveAreaBundle(areaName, areaId, areaKey, bundle) {
   });
 }
 
+function saveAreaData(areaName, areaId, areaKey, areaData) {
+  return new Promise((resolve, reject) => {
+    fs.writeFile(`areas/${areaName}__${areaId}_${areaKey}_areaData.json`, JSON.stringify(areaData), function (err) {
+      if (err) reject(err)
+      resolve();
+    });
+  });
+}
+
 /**
  * Archives an area by getting its bundle and saving it to disk
  * @param {string} areaName
  * @param {string} areaId
  * @param {string} areaKey
- * returns {Promise} 
+ * returns {Promise}
  */
-export function archiveArea(areaName, areaId, areaKey) {
+export function archiveArea(areaName, areaId, areaKey, areaData) {
   return new Promise((resolve, reject) => {
-    getAreaBundle(areaId, areaKey).then((bundle) => {
-      saveAreaBundle(areaName, areaId, areaKey, bundle).then(() => {
-        resolve({ success: true, msg: `Successfully archived area (${areaName})`});
+    saveAreaData(areaName, areaId, areaKey, areaData).then(() => {
+      getAreaBundle(areaId, areaKey).then((bundle) => {
+        saveAreaBundle(areaName, areaId, areaKey, bundle).then(() => {
+          resolve({ success: true, msg: `Successfully archived area (${areaName})` });
+        }).catch((err) => {
+          reject({ success: false, msg: `Failed to save file (${areaName}) - ${err}` });
+        });
       }).catch((err) => {
-        reject({ success: false, msg: `Failed to save file (${areaName}) - ${err}`});
+        reject({ success: false, msg: `Failed to get area bundle (${areaName}) - ${err}` });
       });
     }).catch((err) => {
-      reject({ success: false, msg: `Failed to get area bundle (${areaName}) - ${err}`});
+      reject({ success: false, msg: `Failed to save area data (${areaName}) - ${err}` });
     });
   }).catch((err) => {
     reject({ success: false, msg: `Failed to get area identifiers (${areaName}) - ${err}`});

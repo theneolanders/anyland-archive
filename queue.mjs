@@ -32,10 +32,6 @@ export function queueSearch(query) {
         for (let i = 0; i < results.areas.length; i++) {
           try {
             const identifiers = await getAreaIdentifiers(results.areas[i].id, false)
-            // console.log('Identifying', results.areas[i].name);
-            // console.log('Archived', isAreaArchived(results.areas[i].name, identifiers.id, identifiers.key));
-            // console.log('Downloaded', isInDownloadQueue(results.areas[i].areaId, results.areas[i].areaKey));
-            // console.log('Failed', isInFailedAreas(results.areas[i].areaId, results.areas[i].areaKey));
             if (isAreaArchived(results.areas[i].name, identifiers.id, identifiers.key) || isInDownloadQueue(results.areas[i].name, identifiers.id, identifiers.key) || isInFailedAreas(results.areas[i].name, identifiers.id, identifiers.key)) continue;
             console.log('Queueing', results.areas[i].name);
             queueAreas.push({
@@ -43,7 +39,8 @@ export function queueSearch(query) {
               id: identifiers.id,
               key: identifiers.key,
               subArea: false,
-              parentId: null
+              parentId: null,
+              areaData: identifiers.areaData
             });
 
             const subAreas = await getSubAreas(identifiers.id);
@@ -112,7 +109,7 @@ async function processQueueStep() {
   try {
     const areaData = downloadQueue.shift();
 
-    const status = await archiveArea(areaData.name, areaData.id, areaData.key);
+    const status = await archiveArea(areaData.name, areaData.id, areaData.key, areaData.areaData);
     if (status.success) {
       console.log(status.msg);
       addArchiveLog(areaData.name, areaData.id, areaData.key, areaData.subArea, areaData.parentId);
