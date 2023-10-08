@@ -1,1 +1,201 @@
 areaName,areaId,areaKey,subArea,parentAreaId
+buildtown,57f67019817496af5268f719,rr591bbb78578375c81f557a52,N,-
+nightclub raves-parties-fun,58181d33160c0d921301ea5f,rr5cdd015d66bc325298a23664,N,-
+the future,58158ca9b5cfcb54137342db,rr614e96757f36be33659be49b,N,-
+bluecastle,577610d2bdee942c18292f22,rr5880ccddefcc316c135ea484,N,-
+rusty unit storage,5dec1622694e87358fbca429,rr5dec1d55d5629935958b1384,N,-
+escaperyroom,5baab6a7034a4c056eb32389,rr5baab6a78bf127056e38d681,N,-
+streets of anyland,5bccd0308909a03a0074429d,rr5df47b11d5629935958b13a8,N,-
+fazzi's home,5871a13c6d204d1110ee0e07,rr5b04c39fccccc7617cfd47b8,N,-
+superland64,5b445f7ccd6aec4bce6bcaeb,rr5b445f875f9c7e5a58032723,N,-
+the moon lab,5d129543767ef20631829ada,rr5d16cfedd52023351f963011,N,-
+anywhere,57f850ae668fbacd13637778,rr57fdb1705c53f8f81a85d39a,N,-
+vault 112 - entrance,589269cab37feaae13bf02f5,rr59cada7ab3b4555d284aa030,N,-
+body shop,58e36deffb5e0bb113a068bc,rr58e36dfa4eabd65b3f374f0d,N,-
+central cinema,57b1a5403a204055538212e3,rr580903f04284ea4a1309c9e9,N,-
+haunted woods trails,5973d74703f844a4138903ae,rr5edd4951622bdd7ff0fec334,N,-
+the upside down hwt,59c6db8964aaf0ca1318316f,rr59c6db8d18fc5eb413ce6162,Y,5973d74703f844a4138903ae
+bar whirl,5778c9f454ed9032183cd348,rr58c69715f2f5a59c136ad7f7,N,-
+the underground,58c5afab54ad76a01374fbd0,rr6132d526e53e301529a3d6f9,N,-
+overworld,5810f5b56af01ae90f753f8e,rr58a293bd2852ba9f137f5f3b,N,-
+mrleadfellow's home,57fef2577f96509e1cc5342d,rr584869034f1647aa13d48013,N,-
+fallingtolife,587e943eab0d5b8113c7ad54,rr587e943eef62338113170b99,Y,5833c783806faf7213ebdcb4
+lunopolis,5833c783806faf7213ebdcb4,rr5878238d89b1486e13ceb1d1,N,-
+mr-worms house,587f0d01a3e2c20815a5c8a1,rr587f0d014b8d2108152632f7,Y,5833c783806faf7213ebdcb4
+nightmare,588eb66dd87deb961370fc3a,rr58e939a3f165ebea13e42d63,Y,5833c783806faf7213ebdcb4
+offtozzz,589657a63127890d10c017cf,rr589657acd53a86c413c3f273,Y,5833c783806faf7213ebdcb4
+hypercub3,5987169874ed51eb494633f5,rr5988b518246119d213a037cb,N,-
+dataspace,5c469ae6231fb132b7b1d25c,rr5c469d94dde5bf32b72751f0,N,-
+vault 112 - interior,5ab190cc82515d254e2c6050,rr5ab1a9d0de75502560ac199d,N,-
+stretching room,59b19637f45aa620104ef3de,rr5bf86d3ad5a9a7650223124b,N,-
+boocube,597cb994ef93d30d145664ee,rr597cb9b7a235d3351058ed68,Y,5987169874ed51eb494633f5
+rustybot's home,5bb6693c236557585f156459,rr5f790bce618bc42a351cab41,N,-
+electronics,57f6929bf6412bed1388c8b5,rr57f6929badd681ed137395ff,N,-
+a fox place,5800d5b6c4a3ed6113da50d8,rr58566db6fad3973f1d1cc53a,N,-
+fazzis island,587b448611054fae258933de,rr587b7c4ac4f411c013b3b2b2,N,-
+jinx mansion,58291608f83d7a125f4aa898,rr6085d2abfc694f307f5de658,N,-
+nightclub raves-parties-fun,58181d33160c0d921301ea5f,rr5cdd015d66bc325298a23664,N,-
+fazzi's home,5871a13c6d204d1110ee0e07,rr5b04c39fccccc7617cfd47b8,N,-
+anywhere,57f850ae668fbacd13637778,rr57fdb1705c53f8f81a85d39a,N,-
+the moon lab,5d129543767ef20631829ada,rr5d16cfedd52023351f963011,N,-
+sheep's basement,601776fab8b4dd054fc7a58d,rr60177840b2ea36212915d372,N,-
+tombot's home,5b47b25c7a7e757a664223f8,rr5b47b25c1ebda57a66f56908,N,-
+amp's build spot alt,5cb2af75fb0ce72671539f97,rr5cb2af7e584efa703a68a7ec,N,-
+amplicorp private lab,5fbf0f8bc1f28e28c1c4e2a4,rr5fbf0f9fc3fafc659ea993c7,N,-
+noobzone,57fb13b223bde029116f91ed,rr57fb13b2ab22d42911914d0a,N,-
+hypercub3,5987169874ed51eb494633f5,rr5988b518246119d213a037cb,N,-
+rustybot's home,5bb6693c236557585f156459,rr5f790bce618bc42a351cab41,N,-
+boocube,597cb994ef93d30d145664ee,rr597cb9b7a235d3351058ed68,Y,5987169874ed51eb494633f5
+jinx mansion,58291608f83d7a125f4aa898,rr6085d2abfc694f307f5de658,N,-
+inside the tardis,5805c37fc49961cf28d6aae2,rr584868efbe101d410e05e4c9,N,-
+block city,585888ebe110c1c6227bad6b,rr5860b406d8164c7313ca4d5a,N,-
+art train,587d7077ca817b19107d3619,rr587d72fc0d5f654829c58e10,N,-
+five nights at freddys 1,5847f19601cb1be810b8e836,rr584a017e0a1e731d10cd5a9a,N,-
+cabbages,583b2a8aa964741a106c594b,rr5a6e2cf21fd854c1138fba54,N,-
+rusty academy,5c4391a3c5430b583c30674f,rr5c4391a39fab45583c6acb42,N,-
+the tavern,58c1bbde637119fb13016548,rr5c0416d20155b0650f0e12be,N,-
+frog mansion,582f5065af8797a16406c398,rr58c4ad7ef78781e711bfa7b0,N,-
+nebulacn's home,57f8c8c34f6a7c6a15b3cbe7,rr58b196c06075ffe714c5d6b4,N,-
+archopal's 2nd home,625c84daebe5c404877fd641,rr625c84daa2999704873db202,N,-
+swoggity's place,61dc9e824cbcdd7a31b64a6f,rr61dc9e8281c9ba7a31a4ba36,N,-
+welcome-town,58037a75e0f5aa4e139143b3,rr58037a75c2d2eb4e13e83258,N,-
+church of philipp,589df93de1e50591133c2d0f,rr5c77ce6c15277032a2031ebd,N,-
+time keys,5971bf1943c229ef3003f9fa,rr59f888a69e7894bc13a8a63d,N,-
+sheep zone,6003833e11e60605a2d7cb16,rr600a50c424badd5aa1af805c,N,-
+the varga,589f9e1135aab8a413e9f4c0,rr5a2d526a1f3356221021851c,N,-
+amplicorp park,5a8709cac2665dd513158b4a,rr5a8709caef6c5dd513b255a6,N,-
+laser tag arena,57fc267a6b4f4f7d13e9c8bf,rr57fc267a72c1397d13d73fdd,N,-
+pvp fight,57f6b82b83be327f1407b79f,rr57f6b82bd698687f14836fb6,N,-
+fazzis grove,58870e15203d04de32b26cea,rr58870e1c600cf01a107ec5e7,N,-
+swoggity's home,5f65317630e9206e0fd39391,rr5fb8435b6cf2b226e21b272c,N,-
+longhouse,6057be4bdf5e600545e7e1cd,rr6523145d3c8c4352a4b479fe,N,-
+weapon collection,57f8e735bc75113c12ba8c45,rr57f8e7352df5743c12729896,N,-
+desert garage basement,59dc48c41db027ee134b6cb0,rr59dc48c42553fbee13c46959,Y,58f194024c28e9de1323d004
+desert garage,58f194024c28e9de1323d004,rr59f24296e3f263be13572e83,N,-
+the hive,583413f5cc12caf00fc2bc53,rr586f2be945aefc0418615366,N,-
+nic wardrobe,587be6c2f03d6e80133c5e9d,rr587c12c96ec0f0a22511fec5,Y,57fa1a9a062bfb6013e320ea
+nicolas cage's home,57fa1a9a062bfb6013e320ea,rr596f0580e8be1eac13440fb1,N,-
+halloween town,57f9c4edbf3d8ea711ce97ff,rr57f9c4ed370336a71140201f,N,-
+animation zone,605e6edd3c7e3405279780ea,rr605e6ee53e94ec052d7bad23,N,-
+groove pool,59271c6bce0f533610e495c9,rr5bb0d96e4539b705836e08db,N,-
+jurassic park,588002945a6e169613cff414,rr58800294fe03199613ca8067,N,-
+stratus,5d27aa4f140a26792a82cc43,rr5d27aa53b93b457924e65126,N,-
+zeta's jukebox,5b6686c83204100709bb4be4,rr5d968761c5914d062a8eabea,N,-
+dari's hidden cave,62cce3aa479a721904d3114d,rr62cce3b072c42918fd9c59ae,N,-
+savedjbarc,6175a9bca3d9d21bd27021a8,rr6175a9bce93ac11bd24478cb,N,-
+jboi arcade,6082f45490f0fe25aff47599,rr6142683aa9747d346b9060fe,N,-
+lenzic's home,5b773104031d397ea66e1acf,rr5c4370fd7d49bd2556cb6d35,N,-
+the mountainside,5bbd3b50fca90d549df8c2cd,rr5c3bb30064ac4831856d6841,Y,5b773104031d397ea66e1acf
+sloppy mcfloppy's home,5c77a5add3d4f8514e338204,rr5d27a16fa19e7e0762e1fb61,N,-
+jinx apartment,58c23022ee11752310050eec,rr5d7ea45f406789062300ef44,N,-
+jinx hub,5888121e6840418613caf283,rr6085baf748c005054cc89be4,N,-
+sgt acids place,58352f45e68e3ab873157d2d,rr58a5e8595b54d87d720669f0,N,-
+acids avatars,5844253a0d2d168613fcbe0c,rr584425448f3c27911384b407,Y,58352f45e68e3ab873157d2d
+purity showers,5a0ea2d592c5049f13190574,rr5afcd98dad1ec1110a9c7c53,N,-
+jojokes apartment,5aad736b91da310ff9539c19,rr5c526c4b7c6bd3237de20005,N,-
+cjramos22's home,5c71f188e59c5e5b788bbebb,rr5e2bfcab0cdb8a287e83f549,N,-
+judgement hall,591211c7d8fa6df313af8cc6,rr59445c22156ff7b013e636dc,N,-
+club n party,5877bd9187397b7b14908eea,rr587d4364a3e500691314fc29,N,-
+turbo town,5b2c1a637424986eb1d6aafa,rr5b2c1a63d8ff6a6eb132a0ad,N,-
+turboblades's home,5b2c06102e5a730f789e7436,rr5b2c0610da98c80f78a8e717,Y,5b2c1a637424986eb1d6aafa
+just another place,5b3b267547c8ae5b9b8eb4a1,rr5b3b26759d175f5b9bf12482,Y,5b2c1a637424986eb1d6aafa
+shingeki no kyojin -aot-,58549e634f4f76101080b84e,rr58549e63789cbf10102071da,N,-
+jadith's home,5ad995144a42996f7934d75e,rr5af61fed97ce210f83a6ae10,N,-
+cheesy's getaway,5c897545be6c200562786576,rr5c95ba215613be26ef384aa7,N,-
+temple of mj,58bb3e431f7e002610c6ec78,rr58bb3e436a8a0126109c0607,N,-
+the lighthouse,5c58a8b3513c2b109f8d3bb0,rr5c9f89d6e9710905623d72d3,N,-
+everyone is john classic,5b9303aa08728c4bd3e83b48,rr5d01659d1a4ff87049f92618,N,-
+gaming house,5af62277d1bbdc50015afa38,rr5fb2e9393d905f44ecda634f,N,-
+wckdjay2's home,58f95d5584084d4c1466e5d1,rr58f95d553197e94c14c53037,N,-
+majhjong world,5806f9eebd92f467133d7908,rr5806f9eecd47c36713636b65,N,-
+sloppy mcfloppy's home,5c77a5add3d4f8514e338204,rr5d27a16fa19e7e0762e1fb61,N,-
+music studio,591cc9cbc30bab9b13ae3805,rr59e43fb0d7e140744ba6a4b2,N,-
+-ping me-,5add11ccec262303241d8883,rr5b8c2bf573c6570567e7fa28,N,-
+winterland,5828bd40f83d7a125f4aa876,rr584f31b8886dee64137a545c,N,-
+hello kingdom unit room,5b127351d8f76003d2db5e7e,rr5c491286bd03c1487b300bef,N,-
+sullys bar,58e36eb9f0c5324f3fc6b703,rr58e94b32c9080d9e13d56d32,N,-
+house on the haunted woods trails 3,5cf74407d367810629426380,rr5f6d5f3fd9cfdf6e1658c7e2,N,-
+insect kingdom,5805416611c61476135007c1,rr58e2f1738e3958833db64063,N,-
+walkers apartment,58b5f63b0d0faee513f49fae,rr5b85ac5b8d503d7e6ab0db2e,N,-
+the bukkits home,59ce8f892df64b1f2f1f38dd,rr5b94580df0bd6e26c13b539b,N,-
+lynks apartment,587e906429820dda2c88320f,rr5ababad8a72b0c0fecdac699,N,-
+black mesa,58a202e5b6b22189725e07e4,rr5998c7ddaaff041e10feee42,N,-
+sans and papyrus house,58f95ffa84084d4c1466e5d5,rr58f98b0ce109455d3836664e,N,-
+futurama,5a7786e3106d4ce70fae7e38,rr5afd4b29e783300f7e5ab7e3,N,-
+transporter room,5802c26453cefd69139c5bd3,rr5802c26946341fce13e207c8,N,-
+newcomers,5b6f1758a28b7c74d11efc36,rr5c3e7320ffe67a1e0811a436,N,-
+mos eisley cantina,58bc801f26e484a013a622bc,rr58bc80242c5c871d10674100,N,-
+the armory,58028f8610b42ea11364fba2,rr580696f93fb00d5c1343df06,N,-
+quiz show,58e0856d2b1c56e634c86160,rr58e0856d4e822ae63406fc82,N,-
+spiders aquarium,58fcff0188afbf5c3866b80c,rr58ffb6758213e35e42f3515d,N,-
+rusty hq,5c7af837084dbd0560cf75fe,rr5c7af837248ecd0560c21788,N,-
+reduckted,6052e5d52073160545852309,rr6052e5d5cff72c05450ac286,N,-
+my-quiet-place,5b56dd9ffbcb3d688ae52c32,rr5b6936400326d40dcdd8f6ba,N,-
+12333hjframzftuiomg aq,5cea63f9e38b3431e80bc61e,rr5cea63f957f6ce31e812f1c4,N,-
+zonavrqro01's home,5d646214203e4b062a064685,rr5d646214def35a062a4023f9,N,-
+anyfleet hq,608cf2f25a2152054bcedbe3,rr608f0147868ee70545bb2fb1,N,-
+quest test,5c45db15da89d12f3d9d70ac,rr5c45e9e4c97db30557d0c2d1,N,-
+the globe,5c3544666aa3fd0542691c6a,rr5c3e20d55c0c8f254fd98480,N,-
+anystudio,5a73b53f6117a8dc0f8d66a3,rr5a7a1f3d49b8956913abab83,N,-
+anyquest,583c23b71f98989e7d27f78a,rr583c23b7691de09e7d4574c0,N,-
+queenxhype's home,5c7ca20d119b47724d0b5244,rr5c8462acbae035052793cd58,N,-
+whitesquare's workshop,59f4a6a650b3fbac132d5e2b,rr5bbd5524b39ab10572834356,N,-
+confession,5bd29155f393013a06f2b7df,rr5d5dee13a861dc63ad01b9c3,N,-
+tquigley7777's home,58463611e645aa1b100e0506,rr58463611cafe921b10a0ff2a,N,-
+seventy enterprise hq,5f4432e256dc833193905041,rr5f4ef8f5fad1b8630c0d4eb1,N,-
+portico,5c3e5cd25606e0255ca6874a,rr5ca5fb79366dc7642147dbef,N,-
+sirequick's home,5bfdf14a021a9d67791479d3,rr5c082f98571e05055ace31ba,N,-
+qwertyuiop,58acbd325ffbec3010b3e61d,rr58acbd321a06723010d412d9,N,-
+mantra hq,5fcae45a00fd376591dc8b83,rr5fcae46bbef86f1a63236b86,N,-
+cervtech biodome,5ccfd2a2e2908e3aa1cb902a,rr5ccfd2a28958d43aa14bd030,N,-
+quark starfleet,5e196569484d4271592ca911,rr5e1965693414c77159e4e184,N,-
+sirune's study,60c961f76b2c2c1656264c71,rr60ca681e7b4ed017f255c72b,N,-
+op4 qaz's home,59d05a8f953163291034a08c,rr59d05a8f570a7829105ec696,N,-
+q bert's colliseum,5c9ff3e08df0ef056fbf7e0c,rr5c9ff3e0e330d5056ff34e03,N,-
+whitesquare's workshop,59f4a6a650b3fbac132d5e2b,rr5bbd5524b39ab10572834356,N,-
+sheep's avatars,6070b6116a176b1a1ddfedda,rr6070b618ff9e7705542da63b,N,-
+nslave mining outpost,5ca615a83280bc15f1e2ed85,rr5f2f24d2ffb22b70ed924eb7,N,-
+other-people,5913d292d72797ae13a9c0b2,rr5913d2926e159aae1321b927,N,-
+drumstick's testing place,5d93916865465a0628d17ed4,rr5dcc21d7c874731c64f532b5,N,-
+the fairy fountain,58ec74155db7dccc13fe35a2,rr58ec7415517ef5cc133613d0,Y,58a1ecd55c0ebbd513686d5a
+hyrule adventure map,58a1ecd55c0ebbd513686d5a,rr5c8e12582be0a26d523f7178,N,-
+inexhale,58b78dbf09c7ceda1357e91f,rr58be195f03b3b28109d370ee,N,-
+rex's true home,5eff35be53a70f0634bbb68e,rr5eff360ffb37f2361c2a8dfc,N,-
+rex538 build station,5c8c1dcec241066d4666bc1c,rr5d8751853a268c062c81f5a0,N,-
+maxtrombax's home,5ca9eb05eb795e2f9768a930,rr5ca9eb0528f8872f97875c06,N,-
+dari's playground,5cf33161c26fd906370b76a6,rr61a6aaddc58af04e31ea391d,N,-
+isle of styx,58413d84bb0909927d65f162,rr58ef6ffa9faedea01363e4ec,N,-
+beach city,5869427ba42b096613bbcc60,rr5cc22e47ff080b056c01ffa0,N,-
+boardwalk,590be1ff8ba9a24d71286de7,rr5b302685800c8d28b2925859,Y,5869427ba42b096613bbcc60
+home of a fox,585681c1fe3a810f107380c5,rr587a9e036ec0f0a22511fec0,N,-
+the after party - zw,58293f090ae3375b132c42e3,rr58293f0983bc1f5b1316f568,N,-
+universe rpg,5a00d878429cbb27105f3bc3,rr5a0615ba20cba933109a3aa8,N,-
+firing range by laxawp,588e7ba5152a11ac13f8dd42,rr588e7ba5fdae61ac13d13b24,N,-
+sandboxland,586870f4a0873f15107abd78,rr586870f436b07c1510d56440,N,-
+xau's hub,5b81ea777c173a4914ada046,rr5c3a4c2d5441ea056029f64a,N,-
+experiments,58f97d73aea6392a104f650e,rr58f97d73c442cb2a1078338f,N,-
+mountain pass,5c9031b1b6063d18b4eb9ade,rr5c971db5cef9454a484a4cdb,N,-
+the cat box,5955c4fa530e98b1134f6271,rr5955c4fa40f111b113b1654b,N,-
+virtualax,5953417a96ab2e1b10fd0b80,rr596dbc86a1a99cdc1389b94d,N,-
+[--Processing wordlist: wordlist-2-dashes.txt---],,,N,-
+anim zone 2,5bb824cd213225585909495b,rr605fc528577dba2972e3f779,N,-
+amplicorp plaza,5f6fb63ab516d76e10e95d5d,rr5f6fb63a58eb1e6e10b72d7c,N,-
+z00rland,581fa87aa19b1ade0fd58f13,rr581fa87a73c3e4de0fd88ae5,N,-
+puzzle rooms,583ef848bb0909927d65f095,rr583ef85835a59981135bf6a3,N,-
+emilys apartment,58c1f349552e9a3210e5cb8f,rr58c88dc3a265cd2b101ac5b4,N,-
+zombie sim,58956a2ee567deba13f4e9b9,rr58956c76133ad6c613fffa75,N,-
+zombie sim 2,58a3f692eefb1f8b727d7f74,rr58a3f692b2f0688b72d9a6de,Y,58956a2ee567deba13f4e9b9
+broadcast station,58803a2bf6f3c9fd2e43dc4d,rr58803a31d7b918f72e6fa446,N,-
+shooting range z,581cbf1e6dfb76fa54e57edd,rr581cc491ad08ec7c13be8d27,N,-
+zap lounge,587d91dbe14fb69613f8c2ce,rr587d956aa743827214575739,N,-
+rezz city,5a514c65b7c78e2077c4636a,rr5c12c2192a02bc6f77aae44e,N,-
+art plane,58d9cfe9130927cf134ea778,rr58d9cfef89d79b2b10ed8970,N,-
+zeye's home,5818b621596123eb4ad44798,rr581d0ff8551a788713e42490,N,-
+zipp's trailer home,5c19822461d6a30551a77c4d,rr5e40c38f378eec2877e0259b,N,-
+uncivilized's home,5b54ebd13fea0a67a4b548f6,rr5c32475f83c166317e7b8479,N,-
+[--Processing wordlist: wordlist-2.txt---],,,N,-
+z-a-p forest,59e7d9427e6853a6135d409c,rr59e7d9420872a8a613a6a355,N,-
+ vz-homeworld,5bb15aa9b82e8f7568c9bf04,rr5bb15aa9497321756838eaf9,N,-
+craz-ie biscuit's home,5b3206759d250c2e0ac8f2a8,rr5b320675af37112e0a8aeac6,N,-
+siracz-75e's home,5ac57d6f9f65d9339547b096,rr5ac57d6fffc2a9339505140a,N,-
+ z-h-r 's home,5b2047168b75da1e6b10fe45,rr5b204716a114781e6bb3442c,N,-
