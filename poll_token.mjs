@@ -10,7 +10,7 @@ const options = {
 function pollServer() {
   request(options, (error, response, body) => {
     if (error) console.error('Error polling session token:', error);
-    else console.log('Token response:', response.statusCode, body);
+    else if (response.statusCode !== 200) console.log('Token response:', response.statusCode, body);
   });
 }
 
