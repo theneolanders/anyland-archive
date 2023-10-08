@@ -6,7 +6,7 @@ import { Worker } from 'worker_threads';
 
 const worker = new Worker('./poll_token.mjs');
 
-const DEBUG = true;
+const DEBUG = false;
 
 /**
  * Used to add a delay between requests
