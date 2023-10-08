@@ -1,6 +1,10 @@
 import fs from 'fs';
 import path from 'path';
 import { queueSearch, startDownloadQueue } from './queue.mjs';
+import { addArchiveLog } from './utils.mjs';
+import { Worker } from 'worker_threads';
+
+const worker = new Worker('./poll_token.mjs');
 
 const DEBUG = true;
 
@@ -16,7 +20,7 @@ const delay = (ms) => {
 async function start() {
   startDownloadQueue();
 
-  // let queueResult = await queueSearch("Zeta");
+  // let queueResult = await queueSearch("jukebox");
 
   // Start by doing a search for every letter in the alphabet
   for (let i = 0; i < 26; i++) {
@@ -32,6 +36,7 @@ async function start() {
       const content = fs.readFileSync(filePath, 'utf-8');
       const lines = content.split('\n');
       console.log(`Processing file: ${file}`);
+      addArchiveLog(`[--Processing wordlist: ${file}---]`, '', '', false, '');
       for (const line of lines) {
         await queueSearch(line);
         await delay(500);
