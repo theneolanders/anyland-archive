@@ -35,6 +35,7 @@ export function isAreaArchived(areaName, areaId, areaKey) {
  */
 export function logFailedArchive(areaName, areaId, areaKey, error) {
   return new Promise((resolve, reject) => {
+    areaName = areaName.replace(/,/g, '');
     const logData = `${areaName},${areaId},${areaKey},${error}\n`;
     fs.appendFile(`failed_logs/failedDownloads.csv`, logData, function (err) {
       if (err) reject(err)
@@ -87,6 +88,7 @@ export function createArchiveLog() {
  * @param {string}} parentId
  */
 export function addArchiveLog(areaName, areaId, areaKey, subArea = false, parentId = '') {
+  areaName = areaName.replace(/,/g, '');
   const row = `${areaName},${areaId},${areaKey},${subArea ? 'Y' : 'N'},${subArea ? parentId : '-'}\n`;
   fs.appendFileSync('archived_world_list.csv', row);
 }
