@@ -17,6 +17,14 @@ const delay = (ms) => {
   return new Promise(resolve => setTimeout(resolve, ms));
 };
 
+function stripNewline(str) {
+  if (str.endsWith('\r') || str.endsWith('\n')) {
+      return str.slice(0, -1);
+  }
+  return str;
+}
+
+
 async function start() {
   startDownloadQueue();
 
@@ -38,7 +46,7 @@ async function start() {
       console.log(`Processing file: ${file}`);
       addArchiveLog(`[--Processing wordlist: ${file}---]`, '', '', false, '');
       for (const line of lines) {
-        await queueSearch(line);
+        await queueSearch(stripNewline(line));
         await delay(500);
       }
     }
