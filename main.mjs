@@ -37,9 +37,12 @@ async function start() {
   }
 
   // Now iterate through every file in the wordlists directory
+  let currentFile = '';
   try {
     const files = fs.readdirSync('./wordlists');
     for (const file of files) {
+      currentFile = file;
+      addArchiveLog(`[--Processing wordlist: ${file}---]`, '', '', false, '');
       const filePath = path.join('./wordlists', file);
       const content = fs.readFileSync(filePath, 'utf-8');
       const lines = content.split('\n');
@@ -51,7 +54,7 @@ async function start() {
       }
     }
   } catch (error) {
-    console.error('Error processing files:', error);
+    console.error('Error processing files:', currentFile, error);
   }
 }
 
