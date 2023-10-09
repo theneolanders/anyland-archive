@@ -1,0 +1,1 @@
+{"thingDefinitions":[{"id":"61c631580ef109788a647221","def":"{\"v\":9,\"p\":[{\"s\":[{\"p\":[0,0,0],\"r\":[0,0,0],\"s\":[0.1750001,0.1750001,0.1750002],\"c\":[1,1,1],\"b\":[\"when touched then destroy all parts with burst 50 parts\"]}]}]}"}],"serveTime":6}
