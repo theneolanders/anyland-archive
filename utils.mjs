@@ -1,4 +1,3 @@
-import glob from 'glob';
 import fs from 'fs';
 import 'dotenv/config'
 
@@ -22,7 +21,7 @@ export const headers = {
  * @returns {boolean}
  */
 export function isAreaArchived(areaName, areaId, areaKey) {
-  return glob.sync(`areas/${areaName}__${areaId}_${areaKey}.json`).length > 0;
+  return fs.existsSync(`areas/${areaName}__${areaId}_${areaKey}.json`) && fs.existsSync(`areas/${areaName}__${areaId}_${areaKey}_areaData.json`);
 }
 
 /**

@@ -48,7 +48,6 @@ async function start() {
       const content = fs.readFileSync(filePath, 'utf-8');
       const lines = content.split('\n');
       console.log(`Processing file: ${file}`);
-      addArchiveLog(`[--Processing wordlist: ${file}---]`, '', '', false, '');
       for (const line of lines) {
         await queueSearch(stripNewline(line));
         await delay(500);
