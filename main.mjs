@@ -40,6 +40,7 @@ async function start() {
   let currentFile = '';
   try {
     const files = fs.readdirSync('./wordlists');
+    files.sort();
     for (const file of files) {
       currentFile = file;
       addArchiveLog(`[--Processing wordlist: ${file}---]`, '', '', false, '');
