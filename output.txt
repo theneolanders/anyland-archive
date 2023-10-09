@@ -1,0 +1,74 @@
+Download queue started with 1 second download delay
+Download queue started with 1 second download delay
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Undefined keys, probably area name
+Processing file: wordlist-2-dashes.txt
+Processing file: wordlist-2.txt
+Queueing louwizz93's home
+Queueing chrisrtorrez96's home
+Queueing kazruiz98's home
+Queueing jredz9's home
+Queueing chriscruz994's home
+Queueing datz92's home
+Queueing diez974's home
+Queued 7 new areas for download. Queue contains 7 areas
+Processing file: wordlist-LLN.txt
+Successfully archived area (louwizz93's home)
+Successfully archived area (chrisrtorrez96's home)
+Successfully archived area (kazruiz98's home)
+Successfully archived area (jredz9's home)
+Successfully archived area (chriscruz994's home)
+Successfully archived area (datz92's home)
+Successfully archived area (diez974's home)
