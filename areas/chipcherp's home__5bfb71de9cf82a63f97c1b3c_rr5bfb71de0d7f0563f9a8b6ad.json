@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Manyland</title>
+<style>
+@import url(//fonts.googleapis.com/css?family=Press+Start+2P);
+body {
+text-align: center;
+margin: 0px;
+background-color: white;
+color: white;
+overflow: hidden;
+}
+canvas, input[type="text"], input[type="password"], textarea, select {
+outline: none;
+}
+canvas {
+border: 0;
+}
+input:focus {
+background-color: #fff;
+}
+#painter {
+-ms-interpolation-mode: nearest-neighbor;
+image-rendering: optimizeSpeed;
+image-rendering: -moz-crisp-edges;
+image-rendering: -webkit-optimize-contrast;
+image-rendering: optimize-contrast;
+}
+/** Screenshot Overlay **/
+#locationImageOverlay {
+position: absolute;
+left: 20px;
+top: 20px;
+-moz-box-shadow: 0 0 10px 10px rgba(0,0,0,0.3);
+-webkit-box-shadow: 0 0 10px rgba(0,0,0,0.3);
+box-shadow: 0 0 10px 10px rgba(0,0,0,0.3);
+}
+@media (max-width: 1100px) {
+#locationImageOverlay {
+zoom: .75;
+}
+}
+.snapshotZoomDialog {
+background-color: rgb(207,187,177);
+width: 1004px;
+height: 765px;
+background:
+-moz-linear-gradient(45deg, rgba(0,0,0,0.3) 8px, rgb(207,187,177) 8px),
+-moz-linear-gradient(135deg, rgba(0,0,0,0.3) 12px, rgb(207,187,177) 8px),
+-moz-linear-gradient(225deg, rgba(0,0,0,0.3) 10px, rgb(207,187,177) 10px),
+-moz-linear-gradient(315deg, rgba(0,0,0,0.3) 6px, rgb(207,187,177) 8px);
+background:
+-o-linear-gradient(45deg, rgba(0,0,0,0.3) 8px, rgb(207,187,177) 8px),
+-o-linear-gradient(135deg, rgba(0,0,0,0.3) 12px, rgb(207,187,177) 8px),
+-o-linear-gradient(225deg, rgba(0,0,0,0.3) 10px, rgb(207,187,177) 10px),
+-o-linear-gradient(315deg, rgba(0,0,0,0.3) 6px, rgb(207,187,177) 8px);
+background:
+-webkit-linear-gradient(45deg, rgba(0,0,0,0.3) 8px, rgb(207,187,177) 8px),
+-webkit-linear-gradient(135deg, rgba(0,0,0,0.3) 12px, rgb(207,187,177) 8px),
+-webkit-linear-gradient(225deg, rgba(0,0,0,0.3) 10px, rgb(207,187,177) 10px),
+-webkit-linear-gradient(315deg, rgba(0,0,0,0.3) 6px, rgb(207,187,177) 8px);
+background-position: bottom left, bottom right, top right, top left;
+-moz-background-size: 50% 50%;
+-webkit-background-size: 50% 50%;
+background-size: 50% 50%;
+background-repeat: no-repeat;
+}
+.snapshotZoomUrl input {
+position: absolute;
+display: block;
+width: 920px;
+left: 10px;
+top: 10px;
+font-family: 'Press Start 2P', arial, helvetica, sans-serif;
+font-size: 11px;
+color: #555;
+padding: 4px;
+border: 3px #aaa inset;
+opacity: .8;
+display: none;
+}
+.snapshotZoomDialogCloseButton {
+position: absolute;
+top: 5px; right: 5px;
+width: 27px; height: 27px;
+background-image: url(//static.manyland.com/media/spritesheet.png);
+background-position: -460px -157px;
+background-repeat: no-repeat;
+overflow: hidden;
+}
+.snapshotZoomImage {
+position: absolute;
+left: 10px;
+top: 10px;
+-webkit-user-select: none; // webkit (safari, chrome) browsers
+-moz-user-select: none; // mozilla browsers
+-khtml-user-select: none; // webkit (konqueror) browsers
+}
+.bottomMenuVisitedUrl,
+.bottomMenuVisitedUrlFader {
+position: absolute;
+visibility: hidden;
+display: block;
+}
+.bottomMenuVisitedUrl {
+border-style: solid;
+border-color: #000;
+border-left-color: rgb(18,14,13);
+border-top-color: rgb(18,14,13);
+border-right-color: rgb(178,170,149);
+border-bottom-color: rgb(178,170,149);
+background-color: rgb(207,205,195);
+color: rgb(71,66,46);
+opacity: .7;
+font-family: 'Press Start 2P', sans-serif;
+}
+.bottomMenuVisitedUrlFader {
+background-image: url(//static.manyland.com/media/input-box-fader.png);
+background-repeat: repeat-y;
+background-position: 100% 0;
+pointer-events: none;
+}
+/** Start Page and More **/
+.start, .intermission {
+background-color: rgb(0,0,0);
+color: white;
+background-image: url(//static.manyland.com/media/background-zoomed.png);
+margin: 0;
+font-family: 'Press Start 2P', sans-serif;
+font-size: 11px;
+text-transform: uppercase;
+line-height: 17px;
+margin-bottom: 80px;
+width: 100%;
+height: 100%;
+position: absolute;
+left: 0;
+top: 0;
+}
+.start strong {
+font-weight: normal;
+font-size: 14px;
+}
+.language_zh span {
+font-family: arial, helvetica, sans-serif;
+font-weight: bold;
+font-size: 18px;
+}
+.language_pl {
+text-transform: none;
+font-size: 13px;
+}
+.language_pl strong {
+font-size: 17px;
+}
+.start .language_zh strong {
+font-weight: normal !important;
+font-size: 14px !important;
+}
+.start .introDialog {
+background-image: url(//static.manyland.com/media/login-dialog.png);
+background-repeat: no-repeat;
+width: 614px;
+height: 510px;
+position: relative;
+top: 128px;
+margin-left: auto;
+margin-right: auto;
+color: rgb(70,70,70);
+text-align: center;
+}
+.start .header {
+position: absolute;
+top: 22px;
+width: 100%;
+left: 15px;
+width: 585px;
+}
+.start #headerSingleLine {
+top: 35px !important;
+}
+.start .content {
+width: 578px;
+height: 325px;
+position: absolute;
+top: 86px;
+left: 18px;
+}
+.start #footer {
+position: relative;
+top: 427px;
+width: 100%;
+line-height: 29px;
+}
+.start a {
+color: rgb(0,88,120);
+}
+.start .button {
+background-color: rgb(255,255,255);
+border-bottom: 2px solid rgb(100,100,100);
+border-right: 1px solid rgb(100,100,100);
+padding: 8px;
+padding-top: 10px;
+font-size: 13px;
+}
+.start a.button {
+text-decoration: none;
+}
+.start a.button .service {
+text-decoration: underline;
+}
+.start #overlay {
+opacity: 0;
+display: none;
+background-color: #fff;
+position: absolute;
+left: 0;
+top: 0;
+width: 100%;
+height: 100%;
+z-index: 1000;
+}
+.start .logo {
+letter-spacing: 1px;
+font-size: 13px;
+color: transparent;
+background-image: url(//static.manyland.com/media/logo.png);
+background-repeat: no-repeat;
+width: 109px;
+height: 16px;
+padding-bottom: 1px;
+}
+.start #terms {
+left: 16px;
+top: 415px;
+font-size: 8px;
+position: absolute;
+}
+.start #login1 {
+background-image: url(//static.manyland.com/media/spritesheet.png);
+background-repeat: no-repeat;
+background-position: -1000px -1000px;
+}
+.start .language_zh #terms {
+font-size: 11px;
+}
+.start #terms a {
+color: black;
+opacity: .25;
+text-decoration: none;
+}
+/** Intermission Page **/
+.intermission .content {
+position: relative;
+width: 876px;
+height: 484px;
+margin-left: auto;
+margin-right: auto;
+top: 60px;
+padding: 30px;
+color: white;
+}
+.intermission .message {
+width: 100%;
+height: 46px;
+position: relative;
+margin-top: 20px;
+padding-bottom: 2px;
+}
+.intermission #lifeBar {
+position: relative;
+width: 128px;
+height: 16px;
+background-image: url(//static.manyland.com/media/life-bar.png);
+background-repeat: no-repeat;
+margin-left: 350px;
+margin-top: 170px;
+}
+.intermission #lifeBarEnergy {
+width: 0;
+height: 3px;
+background-color: rgb(255,62,62);
+overflow: hidden;
+position: absolute;
+left: 26px;
+top: 5px;
+}
+.intermission .continueButton {
+width: 134px;
+height: 32px;
+}
+.intermission #overlay {
+opacity: 1;
+background-color: #fff;
+position: absolute;
+left: 0;
+top: 0;
+width: 100%;
+height: 100%;
+z-index: 1000;
+}
+.intermission a {
+color: white;
+}
+.oops {
+color: rgb(157,39,0);
+}
+.footerError,
+.newsLabel,
+.start input,
+.subscribeButton {
+font-family: 'Press Start 2P', arial, helvetica, sans-serif;
+font-size: 10px;
+}
+.start input {
+width: 120px;
+}
+.footerError {
+line-height: 11px;
+}
+.introDialog a,
+.footerError a {
+color: rgb(70,70,70);
+}
+/** More **/
+#suspendOverlay {
+position: absolute;
+display: block;
+left: 0;
+top: 0;
+width: 100%;
+height: 100%;
+background-color: #fff;
+color: #555;
+text-align: center;
+font-family: 'Press Start 2P', sans-serif;
+font-size: 12px;
+text-transform: uppercase;
+line-height: 17px;
+opacity: 0;
+background-image: url("data:image/gif;base64,R0lGODlhQABAACIAACH/C05FVFNDQVBFMi4wAwEAAAAh+QQhAAAGACwAAAAAQABAAIJ3d3e7u7tVVVUzMzOZmZnMzMz///8AAAAI/gANCBxIsKDBgwQHIFzIsKFDhwMiPpxIsaLAiBgtatyYEKNEjiArevwYsmTDkQpNqkSIcqXLgi1fyowp0yXNmgYF6NQ58SbDAkCBcty586FPhEGDDiXK8+RIh0mVbmRalOHRglGlTqUqwOrThVm1bqW68KrAsEJLcu160CzaAivXtv2KFe1LuTDpDnxbE+9An3xx+m0YGKeBwWDDGiZIdmLWxQWJWkwKOSfbyXAra97MubPnzw4BiB5NurRok28LGzDNujTq1HZXt54N4DVsxbRn275NWWBu1rt5Zx7423VJ4WJBK1/OnDMBjsOdE3iOOXrl6dgrRt2Mvbvjx5C7f4t/GBuneO/fwcs8n51ggPfwDZZfyX66Qfjx5SumX/8g/vdI7VdSfdTd919i6nFE4EL/BfCTgBotyOCBDyZYUX8MNQiVhRSx55CGG/YW4XgfUhhiWiO2VyJ+FImoGYjNZWhijAjBSKN/M95YkI06updjjwLxCGSQ+Q1poJGfBQQALAAAAABAAEAAgnd3d7u7u1VVVTMzM5mZmczMzP///wAAAAj+AA0IHEiwoMGDBAUgXMiwoUOHAiI+nEixosCIGC1q3JgQo0SOICt6/BiyZMORCk2qRIhypcuCLV/KjCnTJc2aBgHo1DnxJsMBQIFy3LnzoU+EQYMOJcrz5EiHSZVuZFqU4dGCUaVOpQrA6tOFWbVupbrwqsCwQkty7XrQLNoBK9e2/YoV7Uu5MOkOfFsT70CffHH6bRgYp4HBYMMaJkh2YtbFBYlaTAo5J9vJcCtr3sy5s+fPDgmIHk26tGiTBVKrXs1aNUHTsEujbk2btcDYuE+XrM3bdW7cs3vTHvgbdnDhqwsWl70beXLQ0KNL/xyAYwHqAapbdM05u/eKtjV8ex8/cTjk8egf1l6Mnnx58zLbfyfY2uD6l/Kz2w9f8L7K/Nr1x5+A9ZkEIEIFHuQfRwciOOB+CWrUoIPPLbRgRfk1FCGFFVokn0Mbcpgag+mB+KCFHWLonokpMtTiYiFOByF3MqL4Yo0DxYijQDru2COOPwJJ444OEhldQAAsAAAAAEAAQACCd3d3u7u7VVVVMzMzmZmZzMzM////AAAACP4ADQgcSLCgwYMEASBcyLChQ4cAIj6cSLGiwIgYLWrcmBCjRI4gK3r8GLJkw5EKTapEiHKly4ItX8qMKdMlzZoGCejUOfEmQwFAgXLcufOhT4RBgw4lyvPkSIdJlW5kWpTh0YJRpU6lSsDq04VZtW6luvCqwLBCS3LtetAsWgEr17b9ihXtS7kw6Q58WxPvQJ98cfptGBingcFgwxomSHZi1sUFiVpMCjkn28lwK2vezLmz588OA4geTbq0aJMDUqtezVo1QdOwS6NuTZu1wNi4T5eszdt1btyze9Me+Bt2cOGrCxaXvRt5ctDQo0v/XIBjdc8FsmvMfn0zd+0Uv393hywevMPy43GiN89w/eL16dujV++eYHmD9V3Cxy/+YH6T+/H3HUL/gRSggNwtVOB2Cw50n4LzWdegg/3J9yCDFxJYoYUDbhQhh+xB2CGGCZ63YUMnVpSiiCU+NKJmGU6n4Ysy+rdijfbdiKNAMe5IIY0+8qijj0AGSaGRoAUEACwAAAAAQABAAIJ3d3e7u7tVVVUzMzOZmZnMzMz///8AAAAI/gANCBxIsKDBgwQJIFzIsKFDhwQiPpxIsaLAiBgtatyYEKNEjiArevwYsmTDkQpNqkSIcqXLgi1fyowp0yXNmgYD6NQ58SZDAECBcty586FPhEGDDiXK8+RIh0mVbmRalOHRglGlTqUawOrThVm1bqW68KrAsEJLcu160CxaACvXtv2KFe1LuTDpDnxbE+9An3xx+m0YGKeBwWDDGiZIdmLWxQWJWkwKOSfbyXAra97MubPnzw4LiB5NurRokwJSq17NWjVB07BLo25Nm7XA2LhPl6zN23Vu3LN70x74G3Zw4asLFpe9G3ly0NCjS/9cgOMA6rorDtjemfnE7eA3fBt/CL58ZeAOy5s3jJ68eu4129/2PvA9fJfy55M+aP/6yvz6jYZQfyoBGGB2BhEYkoEHVreQghsx2GBDEFoUW0OmpfceR+MxlKGG62n0IYb0MaQeh/s9NCKI/olX4nQHrQhjjC/O+FqNNk6YI40p7qgcjjv26KNBCA7JWUAALAAAAABAAEAAgnd3d7u7u1VVVTMzM5mZmczMzP///wAAAAj+AA0IHEiwoMGDBAMgXMiwoUOHASI+nEixosCIGC1q3JgQo0SOICt6/BiyZMORCk2qRIhypcuCLV/KjCnTJc2aBgvo1DnxJkMCQIFy3LnzoU+EQYMOJcrz5EiHSZVuZFqU4dGCUaVOpVrA6tOFWbVupbrwqsCwQkty7XrQLFoCK9e2/YoV7Uu5MOkOfFsT70CffHH6bRgYp4HBYMMaJkh2YtbFBYlaTAo5J9vJcCtr3sy5s+fPDteKNgmgtOnTqE0zFo14Y+rXqQWyHl0Stm3Vs1trvG17YO7GIXm/jvy7anDhp0ErX84c9GWLAj4bpyigememFatr38x1ovbvlWl8N/wO3rB4h+S390U8oL17g+mt323t/j38+C7PD6zfHmH86Cbptx9/C/2nlm4C8TcAQwYu1d1CCo6H31jYMRShhOQ5KFlDF2KonkbAWUjgQxlS+JyI9VH3oWYdNgfhiC6+mGKMMtpH40Et3khQjjomCGOPO9oIZEH9DelZQAAsAAAAAEAAQACCd3d3u7u7VVVVMzMzmZmZzMzM////AAAACP4ADQgcSLCgwYMECyBcyLChQ4cFIj6cSLGiwIgYLWrcmBCjRI4gK3r8GLJkw5EKTapEiHKly4ItX8qMKdMlzZoGR068yTCAT58cebLU6fDnz6BCcxLtaRToRpQkh3ps2PQo0qQDsQqsavXqUqVTEXJ1GhJqSrAZD44NsNLswaRrX7qF+XXr2Jpzs9aNizMv1bs4L0J9CDiw4LCEmxqmGzUx2cV6Nz6GTLmy5cuYMy80y9kkgc+gQ4sG3ZHz4JKjU48+bForRdWwSbf2yzE2bL2zEYO0nZpx7rO7eYfWTLy4cc0DOALIPKC5RgDQLzefXhG69crTs0+0zh1y9u8PuYF3D/xd+3bx0WuWp05QgPv3BtGnd7neecH38OPLp1//IH73CMm3nEn1JefffwsJWFKBC/0nAEMKcsRggwhCuN9G/THkoEMXarSeQxtyKJ6E4IFYoYjXYWieifhRNF5lIR6n4YkyIhRjjQe2iKONNO7YXo8+CnRjkAPpSKRBAB6JWUAALAAAAABAAEAAgnd3d7u7u1VVVTMzM5mZmczMzP///wAAAAj+AA0IHEiwoMGDBAsgXMiwoUOHBSI+nEixosCIGC1q3JgQo0SOICt6/BiyZMORCk2qRIhypcuCLV/KjCnTJc2aBkdOvMlQ50aeLH2eFGoRZcqeRIMmpWj0qNKMSIEyNRoV6tOlIqledQqzqUmvB6UaaMoVJNiuHsOeVbn24lKyNdvyhIuz7UK6OMdqHSr2Zd+cWOta3Tk4b8efZQ0rXsy4sePHIAdInky5smSTATJr3sxZM0HLoCtj7kyas8DQqC+XLM3ac2rUo1uTHvgadGzZmwvWFr0ad27IwIMLH15QAEcCwAUo10ig+WPl0Cs2n94YuvWJ07Mvts79YXbtebl+X8f+3XlN8dEJAljP3mB58y7RLy/Ivr379/HlH6y/HuF75CbJZ9x+/C30X0kCLsQfAAwdyFGCChbYIH4b6cfQgg5RqBF6DmGY4XcPdtehhB9SV+F4I9ZHEXiNeUhcQy6+GKGKMl5IYo0E0ohjjvbtaFCMPqrXY5A/MkgkcAEBACwAAAAAQABAAIJ3d3e7u7tVVVUzMzOZmZnMzMz///8AAAAI/gANCBxIsKDBgwQLIFzIsKFDhwUiPpxIsaLAiBgtatyYEKNEjiArevwYsmTDkQpNqkSIcqXLgi1fyowp0yXNmgYH6NQ58SbDkRx37nzokyXQjUKHnjz6s+jEpEoXOu049SFUnlKZHkSZEeTVAVk9hq1K8atRsVu5pjRp1qBTtWtVtqXala7WlXMv3oWL00Deplz7Cvx79i5OqBTJvhRqEa3gglgbx31MubLly5gzVxTAubPnz5xNwuU7ELTpz6JHqxV4unXokqr5um6dOjbT2aZr2ybJGrdn3bY1Cx9OvLgBABwDaAbAXGOA55iZS6/4vLpl6dgnVt9OGbv3h9u5gPf1nl17eOg1yU8nSKC9e4Pn0btU37yg+/fw48+nf/B+e4TxKWcSfcj1599CAZZE4EL+EcBQghwtyOCBD+q3EX8MNeiQhRqp55CGG4YX4XcfUhiidReWV+J9FIlnGYjGZWhijAjBSKOBLN5Y44w6ssdjjwLZCORAOQ5p0H9GZhYQADs=");
+background-repeat: no-repeat;
+background-position: 50% 50%;
+background-size: 128px 128px;
+}
+.dialogInputBox {
+position: absolute;
+visibility: hidden;
+border-style: solid;
+display: block;
+font-family: "Press Start 2P", sans-serif;
+border-left-color: rgb(129,122,119);
+border-top-color: rgb(129,122,119);
+border-right-color: transparent;
+border-bottom-color: transparent;
+background-color: rgb(238,228,223);
+height: 15px;
+text-transform: uppercase;
+border-width: 1px;
+}
+#pledgeText {
+color: rgb(32,130,21);
+text-align: center;
+}
+.chromePromptWrapper {
+}
+#chromePrompt {
+}
+.chromeNote {
+position: absolute;
+text-align: center;
+width: 100%;
+left: 0;
+top: 10px;
+height: 30px;
+font-family: 'Press Start 2P', arial, helvetica, sans-serif;
+font-size: 16px;
+}
+.chromeFrameInstallDefaultStyle {
+width: 850px;
+border: 0px solid #444;
+}
+#browserUnsupported {
+line-height: 1.8em;
+}
+.upgrade a {
+background-color: #fff;
+padding: 4px;
+padding-top: 6px;
+padding-bottom: 6px;
+}
+/*** Mobile ***/
+@media screen and (max-device-width: 568px){
+.start {
+zoom: .6;
+}
+.intermission .content {
+position: relative;
+width: 500px;
+height: 300px;
+margin-left: auto;
+margin-right: auto;
+top: 15px;
+padding: 5px;
+}
+.intermission #lifeBar {
+margin-left: auto;
+margin-right: auto;
+margin-top: 65px;
+}
+.start .introDialog {
+top: 20px;
+}
+#videoFrame {
+width: 400px;
+height: 225px;
+}
+.start #footer {
+top: 330px;
+}
+}
+input#nativeKeyboardInput {
+border: 0;
+background-color: transparent;
+color: #fff;
+visibility: hidden;
+color: transparent;
+opacity: 0;
+}
+#failwhale {
+position: absolute;
+width: 100%;
+height: 100%;
+background-image: none !important;
+background-color: transparent !important;
+}
+#failwhale .introDialog {
+background-image: url(//static.manyland.com/media/failwhale.png);
+}
+#failwhale .header,
+#failwhale #footer {
+background-color: rgb(206,165,148);
+}
+.connectionIssue .introDialog {
+background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAmYAAAH+CAMAAAABLzILAAAADFBMVEX////37+bOpZQAAACRnBEvAAAABHRSTlP///8AQCqp9AAAAAlwSFlzAAASdAAAEnQB3mYfeAAABXpJREFUeJzt2zFuhDAAAEGs+P9fJgeX9ook57WUzBTuwEZaGVwwP47LecAK4x7nPaqMRc67szszlbHM3dmVmcpY6OpsqozFHp1NlbHaOabKWO6cu1fAfyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAi8zO99z//HtKzZMvO1Zt09eLcBuRkBmBGRGQGYEZEZAZgRkRkBmBGRGQGYEZEZAZgRkRkBmBGRGQGYEZEZAZgRkRkBmBGRGQGYEZEZAZgRkRkBmBF5m9vOf5X9pw8TbnnX75NUC7GYEZEZAZgRkRkBmBGRGQGYEZEZAZgRkRkBmBGRGQGYEZEZAZgRkRkBmBGRGQGYEZEZAZgRkRkBmBGRGQGYEZEZAZgRkRkBmBGRGQGYEZEZAZgRkRkBmBGRGQGYEZEZAZgRkRkBmBGRGQGYEZEZAZgRkRkBmBGRGQGYEZEZAZgRkRkBmBGRGQGYEZEZAZgRkRkBmBGRGQGYEZEZAZgRkRkBmBGRGQGYEZEZAZgRkRkBmBGRGQGYEZEZAZgRkRkBmBGRGQGYEZEZAZgRkRkBmBGRGQGYEZEZAZgRkRkBmBGRGQGYEZEZAZgRkRkBmBGRGQGYEZEZAZgRkRkBmBGRGQGYEZEZAZgRkRkBmBGRGQGYEZEZAZgRkRkBmBGRGQGYEZEZAZgRkRkBmBGRGQGYEZEZAZgRkRkBmBGRGQGYEZEZAZgRkRkBmBGRGQGYEZEZAZgRkRkBmBGRGQGYEZEZAZgRkRkBmBGRGQGYEZEZAZgRkRkBmBGRGQGYEZEZAZgRkRkBmBGRGQGYEZEZAZgRkRkBmBGRGQGYEZEZAZgRkRkBmBGRGQGYEZEZAZgRkRkBmBGRGQGYEZEZAZgRkRkBmBGRGQGYEZEZAZgRkRkBmBGRGQGYEZEZAZgRkRkBmBGRGQGYEZEZAZgRkRkBmBGRGQGYEZEZAZgRkRkBmBGRGQGYEZEZAZgRkRkBmBGRGQGYEZEZAZgRkRkBmBGRGQGYEZEZAZgRkRkBmBGRGQGYEZEZAZgRkRkBmBGRGQGYEZEZAZgRkRkBmBGRGQGYEZEZAZgRkRkBmBGRGQGYEZEZAZgRkRkBmBGRGQGYEZEZAZgRkRkBmBOY4dy+BP2/MQ2csNq6Xps5Yajy/zXTGQo/KnkcAnbHMVdnXSVNnLHJXdnwCiQ8gADNAfQMAAAAASUVORK5CYII=") !important;
+}
+#failwhale .content {
+margin-top: 40px;
+}
+#failwhale .errorString {
+width: 100%;
+height: 30px;
+background-color: transparent;
+opacity: .5;
+font-size: 9px;
+top: 135px;
+position: relative;
+padding: 5px;
+border: 0;
+resize: none;
+}
+.loginWith {
+width: 100%;
+}
+#browserSupported {
+display: block;
+}
+#browserUnsupported {
+display: none;
+padding-top: 20px;
+}
+a.forReference {
+background-color: transparent;
+text-decoration: none;
+opacity: .75;
+}
+#registrationsClosed {
+background-color: rgb(196,164,153);
+padding: 10px;
+position: absolute;
+left: 10px;
+top: 0;
+width: 570px;
+}
+.existingUser,
+.existingUser a {
+color: #666;
+}
+a#continueButtonLink,
+a#continueButtonLink:active,
+a#continueButtonLink:focus {
+outline:none;
+}
+#widgetIframe {
+display: none;
+visibility: hidden;
+position: absolute;
+left: 150px;
+top: 0px;
+width: 80px;
+height: 80px;
+overflow: hidden;
+}
+</style>
+<script type="text/javascript"><!--
+var g_overlayOpacity = 0;
+var g_fadeStep = .05;
+var g_fadeDelayMS = 30;
+var g_backX = 0, g_backY = 0;
+var g_backgroundElm = null;
+var g_footerY = 427;
+var g_footerElm = null;
+var g_videoElm = null;
+var g_videoOpacity = 1;
+function init() {
+animateBackground();
+}
+function animateBackground() {
+g_backY += 1;
+if (g_backgroundElm == null) { g_backgroundElm = document.getElementById('body'); }
+g_backgroundElm.style.backgroundPosition = g_backX + 'px ' + g_backY + 'px';
+setTimeout(animateBackground, 100);
+}
+function animateLoginEmphasis() {
+var minY = 205;
+if (g_footerElm == null) {
+g_footerElm = document.getElementById('footer');
+var elmTerms = document.getElementById('terms');
+if (elmTerms) { elmTerms.style.display = 'none'; }
+}
+if (g_videoElm == null) { g_videoElm = document.getElementById('myytplayer'); }
+if (g_videoOpacity <= 0) {
+g_footerY -= 5;
+if (g_footerY < minY) { g_footerY = minY; }
+g_footerElm.style.top = g_footerY + 'px';
+}
+if (g_videoOpacity > 0) {
+g_videoOpacity -= .1;
+if (g_videoOpacity > 0) {
+g_videoElm.style.opacity = g_videoOpacity;
+}
+else {
+g_videoOpacity = 0;
+g_videoElm.style.display = 'none';
+}
+}
+if (g_footerY > minY || g_videoOpacity > 0) { setTimeout(animateLoginEmphasis, 30); }
+}
+function fadeInOverlay() {
+g_overlayOpacity += g_fadeStep;
+setOpacity('overlay', g_overlayOpacity);
+if (g_overlayOpacity < 1) { setTimeout(fadeInOverlay, g_fadeDelayMS); }
+}
+function setOpacity(id, opacity) {
+var elm = document.getElementById(id);
+if (elm) { elm.style.opacity = opacity; }
+}
+function showElm(id) {
+var elm = document.getElementById(id);
+if (elm) { elm.style.display = 'block'; }
+}
+function setText(id, text) {
+var elm = document.getElementById(id);
+if (elm) { elm.innerHTML = text; }
+}
+// --></script>
+</head>
+<body class="start" id="body" onload="init()">
+<div id="overlay"></div>
+<div class="introDialog">
+<div class="header">
+<span id="welcomeTo"><span class="oops">Oops!</span> There's an issue with </span> <strong class="logo">Manyland</strong><br/>
+<span id="welcomeTo2">but we're working on it!</span>
+</div>
+<div class="content">
+
+<iframe width="578" height="325"
+sandbox="allow-scripts allow-same-origin allow-pointer-lock"
+src="http://www.youtube.com/embed/LFBfANLqjzw?rel=0&amp;showinfo=0&amp;autoplay=1&amp;autohide=1" frameborder="0" allowfullscreen>
+</iframe>
+
+</div>
+<div id="footer" class="footerError">
+<span class="youCanAlso"><br/>You can also reload
+<a href="http://manyland.com">Manyland</a> or check our <a href="https://twitter.com/manylandnews" target="_blank">Twitter</a></span>
+</div>
+</div>
+</div>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-60595-51']);
+_gaq.push(['_trackPageview']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+</body>
+</html>
