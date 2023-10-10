@@ -31,8 +31,8 @@ export function queueSearch(query) {
         let queueAreas = [];
         for (let i = 0; i < results.areas.length; i++) {
           try {
+            if (isAreaArchived(results.areas[i].name, results.areas[i].id) || isInDownloadQueue(results.areas[i].name, results.areas[i].id) || isInFailedAreas(results.areas[i].name, results.areas[i].id)) continue;
             const identifiers = await getAreaIdentifiers(results.areas[i].id, false)
-            if (isAreaArchived(results.areas[i].name, identifiers.id, identifiers.key) || isInDownloadQueue(results.areas[i].name, identifiers.id, identifiers.key) || isInFailedAreas(results.areas[i].name, identifiers.id, identifiers.key)) continue;
             console.log('Queueing', results.areas[i].name);
             queueAreas.push({
               name: results.areas[i].name,
@@ -74,7 +74,7 @@ export function startDownloadQueue(delay = downloadDelay) {
   rotateRunOutputLog();
   rotateFailedDownloadsLog();
   console.log(`Download queue started with ${delay} second download delay`);
-  downloadTimer = setInterval(processQueueStep, delay * 1000);
+  downloadTimer = setInterval(processQueueStep, delay * 1);
 }
 
 /**
@@ -83,9 +83,9 @@ export function startDownloadQueue(delay = downloadDelay) {
  * @param {string} areaKey
  * @returns {boolean}
  */
-function isInDownloadQueue(areaId, areaKey) {
+function isInDownloadQueue(areaId) {
   return downloadQueue.some(area =>
-    area.areaId === areaId && area.areaKey === areaKey
+    area.areaId === areaId
   );
 }
 
@@ -95,9 +95,9 @@ function isInDownloadQueue(areaId, areaKey) {
  * @param {*} areaKey
  * @returns {boolean}
  */
-function isInFailedAreas(areaId, areaKey) {
+function isInFailedAreas(areaId) {
   return failedAreas.some(area =>
-    area.areaId === areaId && area.areaKey === areaKey
+    area.areaId === areaId
   );
 }
 

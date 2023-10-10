@@ -1,5 +1,6 @@
 import fs from 'fs';
 import 'dotenv/config'
+import glob from 'glob';
 
 /**
  * This is used by all network requests to mimic the Anyland client and include the session cookie
@@ -20,8 +21,11 @@ export const headers = {
  * @param {string} areaKey
  * @returns {boolean}
  */
-export function isAreaArchived(areaName, areaId, areaKey) {
-  return fs.existsSync(`areas/${areaName}__${areaId}_${areaKey}.json`) && fs.existsSync(`areas/${areaName}__${areaId}_${areaKey}_areaData.json`);
+export function isAreaArchived(areaName, areaId) {
+  let generalFiles = glob.sync(`areas/${areaName}__${areaId}_*.json`);
+  let areaDataFiles = glob.sync(`areas/${areaName}__${areaId}_*_areaData.json`);
+
+  return generalFiles.length > 0 && areaDataFiles.length > 0;
 }
 
 /**
