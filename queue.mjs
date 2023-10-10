@@ -31,7 +31,7 @@ export function queueSearch(query) {
         let queueAreas = [];
         for (let i = 0; i < results.areas.length; i++) {
           try {
-            if (isAreaArchived(results.areas[i].name, results.areas[i].id) || isInDownloadQueue(results.areas[i].name, results.areas[i].id) || isInFailedAreas(results.areas[i].name, results.areas[i].id)) continue;
+            if (isAreaArchived(results.areas[i].name, results.areas[i].id) || isInDownloadQueue(results.areas[i].id) || isInFailedAreas(results.areas[i].id)) continue;
             const identifiers = await getAreaIdentifiers(results.areas[i].id, false)
             console.log('Queueing', results.areas[i].name);
             queueAreas.push({
