@@ -8,6 +8,14 @@ let downloadTimer = null;
 const downloadDelay = 1; // How long in seconds between getting each area
 
 /**
+ * Manually push new items onto the download queue
+ * @param {Array} items
+ */
+export function appendDownloadQueue(items) {
+  downloadQueue = downloadQueue.concat(items);
+}
+
+/**
  * Queue a search query
  * Adds all new unique matched areas to the queue, including subareas
  * @param {string} query
@@ -22,6 +30,7 @@ export function queueSearch(query) {
       form: { 'term': query.toLowerCase() }
     };
     request(options, async function (error, response) {
+      let lastAreaId = '';
       try {
         if (error) reject(error);
         if (typeof response === 'undefined' || typeof response.body === 'undefined') reject('Missing body');
@@ -30,8 +39,9 @@ export function queueSearch(query) {
         if (typeof results.areas === 'undefined' || typeof results.areas.length === 'undefined') reject('No areas found in response');
         let queueAreas = [];
         for (let i = 0; i < results.areas.length; i++) {
+          lastAreaId = results.areas[i].id;
           try {
-            if (isAreaArchived(results.areas[i].name, results.areas[i].id) || isInDownloadQueue(results.areas[i].id) || isInFailedAreas(results.areas[i].id)) continue;
+            if (isAreaArchived(results.areas[i].name, results.areas[i].id) || isInDownloadQueue(results.areas[i].id) || isInFailedAreas(results.areas[i].name)) continue;
             const identifiers = await getAreaIdentifiers(results.areas[i].id, false)
             console.log('Queueing', results.areas[i].name);
             queueAreas.push({
@@ -50,6 +60,7 @@ export function queueSearch(query) {
             }
           } catch (e) {
             console.error(e);
+            failedAreas.push(results.areas[i].name);
             logFailedArchive(results.areas[i].name, results.areas[i].areaId, results.areas[i].areaKey, e);
           }
         }
@@ -74,7 +85,7 @@ export function startDownloadQueue(delay = downloadDelay) {
   rotateRunOutputLog();
   rotateFailedDownloadsLog();
   console.log(`Download queue started with ${delay} second download delay`);
-  downloadTimer = setInterval(processQueueStep, delay * 1);
+  downloadTimer = setInterval(processQueueStep, 0 * 1);
 }
 
 /**
@@ -95,9 +106,9 @@ function isInDownloadQueue(areaId) {
  * @param {*} areaKey
  * @returns {boolean}
  */
-function isInFailedAreas(areaId) {
+function isInFailedAreas(areaName) {
   return failedAreas.some(area =>
-    area.areaId === areaId
+    area.areaName === areaName
   );
 }
 
@@ -114,7 +125,7 @@ async function processQueueStep() {
       console.log(status.msg);
       addArchiveLog(areaData.name, areaData.id, areaData.key, areaData.subArea, areaData.parentId);
     } else {
-      failedAreas.push(areaName);
+      failedAreas.push(areaData.name);
       logFailedArchive(areaData.name, areaData.id, areaData.key, status.msg);
     }
   } catch (e) {
