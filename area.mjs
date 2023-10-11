@@ -22,7 +22,7 @@ export function getAreaIdentifiers(areaValue, isName = true) {
       if (error) reject(error);
       if (typeof response === 'undefined' || typeof response.body === 'undefined') reject('Missing response');
       const areaData = JSON.parse(response.body);
-      if (typeof areaData.areaId === 'undefined' || typeof areaData.areaKey === 'undefined') reject('Undefined keys, probably area name');
+      if (typeof areaData.areaId === 'undefined' || typeof areaData.areaKey === 'undefined') reject('Undefined keys probably area name');
       resolve({ id: areaData.areaId, key: areaData.areaKey, areaData: areaData });
     });
   });
