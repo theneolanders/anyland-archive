@@ -1,4 +1,4 @@
-# Anyland Archivek
+# Anyland Archive
 
 This is an archive of all of the virtual world platform Anyland.
 
