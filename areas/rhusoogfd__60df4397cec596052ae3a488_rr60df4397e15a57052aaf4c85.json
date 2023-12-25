@@ -1,1 +1,0 @@
-{"thingDefinitions":[{"id":"60df44253b614e164b0c36a2","def":"{\"v\":9,\"a\":[22],\"inc\":[[\"thing\",\"600d9229564c0105a3de97a6\"]],\"p\":[{\"s\":[{\"p\":[0,0,0],\"r\":[0,0,0],\"s\":[0.0196767,0.1213257,0.1091285],\"c\":[1,1,1],\"b\":[\"when hears anywhere size then emit gravity-free thing\"]}]}]}"}],"serveTime":6}
