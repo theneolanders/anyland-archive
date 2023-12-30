@@ -3,7 +3,7 @@ import { isMongoId } from './utils';
 
 const sentIds = new Set();
 
-type NetRequest = {
+export type NetRequest = {
   ts_iso: string,
   ts: number,
   url: string,
