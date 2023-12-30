@@ -318,6 +318,13 @@ const PersonInfoSchema = z.union([
     isAreaLocked: z.boolean(),
     isOnline: z.boolean()
   }).strict(),
+  // why
+  z.object({
+    isFriend: z.boolean(),
+    isEditorHere: z.boolean(),
+    isAreaLocked: z.boolean(),
+    isOnline: z.boolean()
+  }).strict(),
 ])
 
 
