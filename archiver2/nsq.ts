@@ -38,6 +38,7 @@ export const mkWriter = async (NSQD_HOST: string, NSQD_PORT: number) => {
     enqueuePlayer: mkEnqueueFunc("al_players"),
     enqueueArea: mkEnqueueFunc("al_areas"),
     enqueueForum: mkEnqueueFunc("al_forum"),
+    enqueueThread: mkEnqueueFunc("al_threads"),
     sendCdnError: (id: string, res: Response) => {
       workWriter.publish("al_cdn_error", JSON.stringify({ id, status: res.status }))
     },

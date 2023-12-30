@@ -1,5 +1,5 @@
 import z from 'zod'
-import { isMongoId } from './utils';
+import { headersToObject, d, isMongoId } from './utils';
 import { mkQueueReader, mkWriter } from './nsq'
 
 if (!process.env.ANYLAND_COOKIE) throw "no cookie in env"
@@ -11,17 +11,13 @@ const DEFAULT_AREAID = "5b6686c83204100709bb4be4";
 const NSQD_HOST = process.env.NSQD_HOST;
 const NSQD_PORT = 4150;
 
-const { sendNetRequest, enqueueThing, enqueuePlayer, enqueueArea, enqueueForum, sendCdnError } = await mkWriter(NSQD_HOST, NSQD_PORT);
+const { sendNetRequest, enqueueThing, enqueuePlayer, enqueueArea, enqueueForum, enqueueThread, sendCdnError } = await mkWriter(NSQD_HOST, NSQD_PORT);
 
 
-function headersToObject(headers: any) {
-  const object = {};
-  for (const [key, value] of headers) {
-    // @ts-ignore
-    object[key] = value;
-  }
-  return object;
-}
+
+//////////////////////////////
+//////////////////////////////
+// These functions abstract the API calls, headers, and send the req/res to NSQ for future reference or in case I mess something up in the archival process.
 
 const api_get = async (reason: string, path: string) => {
   const now = new Date();
@@ -92,84 +88,85 @@ const api_post = async (reason: string, path: string, body: string) => {
 }
 
 
+//////////////////////////////
+//////////////////////////////
+
+
 const bumpToken = async () => {
   const response = await api_post("token keepalive", "/p", "");
   if (response.status !== 200) console.log('Token response:', response.status);
   //console.log('Token response:', response.status);
 }
 
-bumpToken();
-setInterval(bumpToken, 30000);
 
+//////////////////////////////
+//////////////////////////////
 
+// NSQ readers read one item from the queue and process it accordingly
+// I use NSQ for the queue and automatic retries (and also because I already run it and it's simple to use).
+const startQueueHandlers = () => {
 
+  mkQueueReader("al_things", "archiver", async (id, msg) => {
+    try {
+      await downloadItemDefAndCrawlForNestedIds(id);
+      await downloadItemInfo(id);
 
+      await Bun.sleep(700);
 
+      msg.finish();
+    } catch (e) {
+      console.log("error handling!", e)
+    }
+  })
 
+  mkQueueReader("al_players", "personinfo", async (id, msg) => {
+    try {
+      console.log("getting player personinfo", id)
+      await downloadPersonInfo(id);
 
+      await Bun.sleep(1000);
 
+      msg.finish();
+    } catch (e) {
+      console.log("error handling!", e)
+    }
+  })
+  mkQueueReader("al_players", "topby", async (id, msg) => {
+    try {
+      console.log("getting player topby", id)
+      await downloadPersonTopBy(id);
 
+      await Bun.sleep(500);
 
-mkQueueReader("al_things", "archiver", async (id, msg) => {
-  try {
-    await downloadItemDefAndCrawlForNestedIds(id);
-    await downloadItemInfo(id);
+      msg.finish();
+    } catch (e) {
+      console.log("error handling!", e)
+    }
+  })
+  mkQueueReader("al_players", "nifts", async (id, msg) => {
+    try {
+      console.log("getting player nifts", id)
+      await downloadPersonReceivedGifts(id);
 
-    await Bun.sleep(700);
+      await Bun.sleep(1000);
 
-    msg.finish();
-  } catch(e) {
-    console.log("error handling!", e)
-  }
-})
+      msg.finish();
+    } catch (e) {
+      console.log("error handling!", e)
+    }
 
-mkQueueReader("al_players", "personinfo", async (id, msg) => {
-  try {
-    console.log("getting player personinfo", id)
-    await downloadPersonInfo(id);
+  })
 
-    await Bun.sleep(1000);
-
-    msg.finish();
-  } catch(e) {
-    console.log("error handling!", e)
-  }
-})
-mkQueueReader("al_players", "topby", async (id, msg) => {
-  try {
-    console.log("getting player topby", id)
-    await downloadPersonTopBy(id);
-
-    await Bun.sleep(500);
-
-    msg.finish();
-  } catch(e) {
-    console.log("error handling!", e)
-  }
-})
-mkQueueReader("al_players", "nifts", async (id, msg) => {
-  try {
-    console.log("getting player nifts", id)
-    await downloadPersonReceivedGifts(id);
-
-    await Bun.sleep(1000);
-
-    msg.finish();
-  } catch(e) {
-    console.log("error handling!", e)
-  }
-
-})
-
-
+}
 
 
 //////////////////////////////
 //////////////////////////////
 
 
-const d = () => new Date().toISOString();
 
+// Abstracts the generic boilerplate for doing an API call, handling errors, writing to file
+// Only use for things that gets written to disk! Not for generic API abstractions.
 const mkQuery = (
   ctx: string,
   getFilePath: (id: string) => string,
@@ -202,6 +199,7 @@ const mkQuery = (
     if (throwOnBadRes) throw "check logs";
   }
 }
+
 
 //////////////////////////////
 //////////////////////////////
@@ -293,6 +291,8 @@ const walkProps = (obj: unknown) => {
 //////////////////////////////
 //////////////////////////////
 
+
+
 const PersonInfoSchema = z.union([
   z.object({
     id: z.string(),
@@ -381,7 +381,7 @@ const downloadPersonReceivedGifts = mkQuery(
 );
 
 const downloadPersonTopBy = mkQuery(
-  "downloadPersonReceivedGifts",
+  "downloadPersonTopBy",
   (id) => "data/person/topby/" + id + ".json",
   (id) => api_post( "downloadPersonTopBy", "/thing/topby", `id=${id}&limit=0`),
   (id, res, bodyTxt) => {
@@ -399,6 +399,7 @@ const downloadPersonTopBy = mkQuery(
 
 //////////////////////////////
 //////////////////////////////
+
 
 
 const AreaListArea = z.object({
@@ -436,15 +437,160 @@ const rollAreaRoulette = async () => {
   }
 }
 
-rollAreaRoulette()
 
 
 
-//api_post("manual test", "/gift/getreceived", `userId=5810de65ac626721405bb671`).then(res => res.json()).then(PersonGiftsReceived.parseAsync).then(console.log).catch(e => console.error)
-//api_post("manual test", "/thing/topby", `id=5810de65ac626721405bb671&limit=0`).then(res => res.json()).then(console.log).catch(e => console.error)
+//////////////////////////////
+//////////////////////////////
+
+
+
+const ForumListSchema = z.object({
+  forums: z.array(
+    z.object({
+      name: z.string(),
+      description: z.string(),
+      creatorId: z.string(),
+      creatorName: z.string(),
+      threadCount: z.number(),
+      latestCommentDate: z.string().datetime(),
+      protectionLevel: z.number(),
+      creationDate: z.string().datetime(),
+      dialogThingId: z.string().optional(),
+      dialogColor: z.string().optional(),
+      latestCommentText: z.string().optional(),
+      latestCommentUserId: z.string().optional(),
+      latestCommentUserName: z.string().optional(),
+      id: z.string(),
+    })
+  )
+})
+
+const ForumForumSchema = z.object({
+  ok: z.boolean(),
+  forum: z.object({
+    name: z.string(),
+    description: z.string(),
+    creatorId: z.string(),
+    creatorName: z.string(),
+    threadCount: z.number(),
+    latestCommentDate: z.string().datetime(),
+    protectionLevel: z.number(),
+    creationDate: z.string().datetime(),
+    dialogThingId: z.string().optional(),
+    dialogColor: z.string().optional(),
+    latestCommentText: z.string().optional(),
+    latestCommentUserId: z.string().optional(),
+    latestCommentUserName: z.string().optional(),
+    user_isModerator: z.boolean(),
+    user_hasFavorited: z.boolean()
+  }),
+  threads: z.array(
+    z.object({
+      forumId: z.string(),
+      title: z.string(),
+      creatorId: z.string(),
+      creatorName: z.string(),
+      latestCommentDate: z.string().datetime(),
+      commentCount: z.number(),
+      isLocked: z.boolean(),
+      isSticky: z.boolean(),
+      creationDate: z.string().datetime(),
+      latestCommentText: z.string(),
+      latestCommentUserId: z.string(),
+      latestCommentUserName: z.string(),
+      id: z.string()
+    })
+  )
+})
+
+
+
+const downloadForum = mkQuery(
+  "downloadForum",
+  (id) => "data/forum/forum/" + id + ".json",
+  (id) => api_get( "downloadForum", "/forum/forum/" + id),
+  async (id, res, bodyTxt) => {
+      const bodyJson = ForumForumSchema.parse(JSON.parse(bodyTxt))
+      enqueueForum(id)
+      enqueuePlayer(bodyJson.forum.creatorId)
+      if (bodyJson.forum.dialogThingId) enqueueThing(bodyJson.forum.dialogThingId)
+
+      for (const thread of bodyJson.threads) {
+        console.log("enqueueing thread", thread.id)
+        enqueueThread(thread.id)
+      }
+
+      await Bun.sleep(1500);
+  },
+  true
+);
+
+const findAllForums = async () => {
+  const alphanumeric = 'abcdefghijklmnopqrstuvwxyz0123456789';
+  for (let i = 0; i < alphanumeric.length; i++) {
+    const char = alphanumeric[i]
+    console.log("Finding forums with", char);
+    const body = await api_post("findAllForums", "/forum/search", `searchTerm=${char}`).then(res => res.json()).then(ForumListSchema.parseAsync)
+
+    for (const forum of body.forums) {
+      console.log(d(), "downloading", forum.id, forum.name, forum.description, forum.threadCount, forum.latestCommentDate)
+      await downloadForum(forum.id)
+
+      // NOTE: We sleep in downloadForum instead of here to avoid sleeping on boards we've skipped
+    }
+
+    await Bun.sleep(1500);
+  }
+}
+
+
+
+
+//////////////////////////////
+//////////////////////////////
+
+// Where we actually start it all
+// Note that since mostly everything is in one file because I couldn't be bothered to make a factory for the API helpers,
+// I comment things in/out and follow a pretty REPL-y style.
+
+bumpToken();
+setInterval(bumpToken, 30000);
+
+//startQueueHandlers()
+await rollAreaRoulette()
+await findAllForums()
+
+
+
+
+
+//////////////////////////////
+//////////////////////////////
+
+// Testing zone
+
+const USER_ID_PHILIPP = "5773b5232da36d2d18b870fb";
+const FORUM_ID_UPDATES = "5846f556b09fa5d709e5f6fe";
+//api_get("manual test", "/forum/forum/" + FORUM_ID_UPDATES).then(res => res.json()).then(ForumForumSchema.parseAsync).then(console.log).catch(e => console.error)
+//api_post("manual test", "/gift/getreceived", `userId=${USER_ID_PHILIPP}`).then(res => res.json()).then(PersonGiftsReceived.parseAsync).then(console.log).catch(e => console.error)
+//api_post("manual test", "/thing/topby", `id=${USER_ID_PHILIPP}&limit=0`).then(res => res.json()).then(console.log).catch(e => console.error)
 //api_get("manual test", "/sl/tdef/5a9fcb52f744157c9de0b557").then(res => res.json()).then(console.log).catch(console.error)
 //api_get("manual test", "/forum/favorites").then(res => res.json()).then(console.log).catch(console.error)
 //api_post("manual test", "/area/lists", `subsetsize=-1&setsize=1`).then(res => res.json()).then(console.log).catch(e => console.error)
 //api_post("manual test", "/area/lists", `subsetsize=-1&setsize=1`).then(res => res.json()).then(console.log).catch(e => console.error)
+//api_post("manual test", "/thing/gettags", `thingId=5a9fcb52f744157c9de0b557`).then(res => res.json()).then(console.log).catch(e => console.error)
+//api_post("manual test", "/forum/search", `searchTerm=e`).then(res => res.json()).then(console.log).catch(e => console.error)
+
+
+/* TODO:
+- run getAreaInfo on all areas (list them from files)
+- run getSubAreas on all areas
+- archive threads
+- get creations tags?
+- make a query for all known endpoints
+- check if thread search returns older threads
+- how is philipp's board tied to his profile? he has [board: philbox] in his statusText...
+*/
 
 
