@@ -397,8 +397,54 @@ const downloadPersonTopBy = mkQuery(
 
 
 
+//////////////////////////////
+//////////////////////////////
+
+
+const AreaListArea = z.object({
+  id: z.string(),
+  name: z.string(),
+  description: z.string().optional(),
+  playerCount: z.number(),
+})
+
+const AreaList = z.object({
+  visited: z.array(AreaListArea),
+  created: z.array(AreaListArea),
+  totalOnline: z.number(),
+  totalAreas: z.number(),
+  totalPublicAreas: z.number(),
+  totalSearchablePublicAreas: z.number(),
+  popular: z.array(AreaListArea),
+  popular_rnd: z.array(AreaListArea),
+  newest: z.array(AreaListArea),
+  popularNew: z.array(AreaListArea),
+  popularNew_rnd: z.array(AreaListArea),
+  lively: z.array(AreaListArea),
+  favorite: z.array(AreaListArea),
+  mostFavorited: z.array(AreaListArea),
+})
+
+
+const rollAreaRoulette = async () => {
+  const res = await api_post("rollAreaRoulette", "/area/lists", `subsetsize=30&setsize=300`).then(res => res.json());
+  const body = AreaList.parse(res);
+
+  for (const area of body.popular_rnd) {
+    console.log("enqueueing area", area.id, area.name, area.description)
+    enqueueArea(area.id)
+  }
+}
+
+rollAreaRoulette()
+
+
+
 //api_post("manual test", "/gift/getreceived", `userId=5810de65ac626721405bb671`).then(res => res.json()).then(PersonGiftsReceived.parseAsync).then(console.log).catch(e => console.error)
 //api_post("manual test", "/thing/topby", `id=5810de65ac626721405bb671&limit=0`).then(res => res.json()).then(console.log).catch(e => console.error)
 //api_get("manual test", "/sl/tdef/5a9fcb52f744157c9de0b557").then(res => res.json()).then(console.log).catch(console.error)
+//api_get("manual test", "/forum/favorites").then(res => res.json()).then(console.log).catch(console.error)
+//api_post("manual test", "/area/lists", `subsetsize=-1&setsize=1`).then(res => res.json()).then(console.log).catch(e => console.error)
+//api_post("manual test", "/area/lists", `subsetsize=-1&setsize=1`).then(res => res.json()).then(console.log).catch(e => console.error)
 
 
