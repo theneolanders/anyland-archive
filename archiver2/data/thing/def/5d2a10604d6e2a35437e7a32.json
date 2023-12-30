@@ -1,0 +1,1 @@
+{"n":"money col","v":9,"a":[7,18],"p":[{"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.1750021,0.1750023,0.175002],"c":[1,1,1],"b":["when starts then set attract money 25","when touches money -1 then tell any mon 1","when touches money -3 then tell any mon 3","when touches money -5 then tell any mon 5"]}]}]}

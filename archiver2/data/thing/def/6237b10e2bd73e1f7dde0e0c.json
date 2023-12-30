@@ -1,0 +1,1 @@
+{"v":9,"inc":[["handle","6237b06a0d5a081c45bffd6b"],["axe","6237b0fc89611a1f76dc97ca"]],"p":[{"a":[42],"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.1750002,0.1750002,0.1750002],"c":[1,1,1],"b":["when any state gets stick then emit gravity-free handle with 0.1","when any state gets rock then emit gravity-free axe with 0.1"]}]}]}

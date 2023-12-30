@@ -1,0 +1,1 @@
+{"v":7,"a":[20,48,49],"p":[{"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.1750015,0.1750029,0.1750023],"c":[1,1,1],"b":["when neared then become next in 5s"]},{"p":[0,0,0],"r":[0,0,0],"s":[0.1750015,0.1750029,0.1750023],"c":[1,1,1],"b":["when starts then send nearby onto catacombs","when starts then become previous in 0s"]}]}]}

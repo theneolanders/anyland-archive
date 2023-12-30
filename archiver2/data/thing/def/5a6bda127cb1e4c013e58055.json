@@ -1,0 +1,1 @@
+{"n":"thing","v":2,"a":[2,7],"p":[{"s":[{"p":[0,0,0],"r":[0,0,3.828216E-20],"s":[0.005,0.07915132,0.05197858],"c":[1,1,1],"b":["when touched then become next"]},{"p":[0,0,0],"r":[0,0,3.828216E-20],"s":[0.005,0.04589128,0.05082706],"c":[1,1,1],"b":["when touched then add crumbles","when touched then play glass breaks"]}]}]}

@@ -1,0 +1,1 @@
+{"v":7,"p":[{"b":129,"e":"[AREA.PLAYERCOUNT VALUE]","s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.003000004,0.003000002,0.003000003],"c":[1,1,1],"b":["when starts then become next in 0.2s"]},{"p":[0,0,0],"r":[0,0,0],"s":[0.003000004,0.003000002,0.003000003],"c":[1,1,1],"b":["when starts then become previous in .2s","when starts then is area.playercount = [people count]"]}]}]}

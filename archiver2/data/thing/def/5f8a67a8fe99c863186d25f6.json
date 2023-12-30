@@ -1,0 +1,1 @@
+{"v":9,"a":[5,48],"p":[{"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.1483017,0.09209157,0.08718223],"c":[1,1,1],"b":["when touches hand then play raven call with 0.4s duration 300 varied-pitch","when touches hand then become next in 0s"]},{"p":[0,0,0],"r":[0,0,0],"s":[0.1483017,0.09209157,0.08718223],"c":[1,1,1],"b":["when starts then become previous in 0.2s"]}]}]}

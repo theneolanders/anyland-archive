@@ -1,0 +1,1 @@
+{"v":9,"a":[48,49],"p":[{"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.175,0.175,0.175],"c":[1,1,1],"b":["when neared then become next in 15s"]},{"p":[0,0,0],"r":[0,0,0],"s":[0.175,0.175,0.175],"c":[1,1,1],"b":["when starts then tell any resetvoidtele","when starts then become untweened 1 in 29s"]}]}]}

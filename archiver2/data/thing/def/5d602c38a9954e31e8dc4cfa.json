@@ -1,0 +1,1 @@
+{"v":9,"a":[2,3,7],"p":[{"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.00379896,0.0307558,0.743232],"c":[1,1,1],"b":["when triggered then become 2 in 0"]},{"p":[0,0,0],"r":[0,0,0],"s":[0.00379896,0.0307558,0.743232],"c":[1,1,1],"b":["when starts then trail start","when trigger let go then become 1 in 0"]}]}]}

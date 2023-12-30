@@ -1,0 +1,1 @@
+{"v":4,"a":[2,14],"inc":[["thing","5af76ecc1a6fed0f88e0597f"]],"p":[{"t":3,"pr":2,"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.03818399,0.03656568,0.1750083],"c":[0.9714286,1,0],"b":["when triggered then emit thing with 100","when triggered then play heavy explosion"],"pr":{"c":[1,0,0],"m":0.25,"a":0.25,"s":0.15,"z":0.25,"g":0.5,"h":0.25}}]}]}

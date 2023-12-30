@@ -1,0 +1,1 @@
+{"v":9,"inc":[["mad robot","608139ca872d1725a96aa99f"]],"p":[{"a":[12],"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.06235269,0.05960868,0.05710237],"c":[1,1,1],"b":["when touched then emit mad robot with 0.01, tell any 1, send nearby onto spawn"]}]}]}

@@ -1,0 +1,1 @@
+{"v":7,"p":[{"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.175,0.175,0.1750001],"c":[1,1,1],"b":["when hears start then become next in 1s"]},{"p":[0,0,0],"r":[0,0,0],"s":[0.3408222,0.2954036,0.256316],"c":[0,1,1],"b":["when hears stop then become previous in 1s"]}]}]}

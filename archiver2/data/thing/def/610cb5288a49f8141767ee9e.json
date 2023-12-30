@@ -1,0 +1,1 @@
+{"v":9,"a":[5,48,49],"p":[{"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.1750008,0.1750014,0.1750019],"c":[1,1,1],"b":["when starts then play distant explosion with very-low-pitch very-varied-pitch 500","when starts then become next in 0s"]},{"p":[0,0,0],"r":[0,0,0],"s":[0.1750008,0.1750014,0.1750019],"c":[1,1,1],"b":["when starts then become previous in 2.5s"]}]}]}

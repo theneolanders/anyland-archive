@@ -1,0 +1,1 @@
+{"v":9,"a":[6,7,38,48,49],"inc":[["thing","61174fe43daf6714226a6ef2"]],"p":[{"b":4,"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.1250248,0.1250149,0.1250153],"c":[1,1,1],"b":["when starts then emit gravity-free thing with 0","when starts then become next in 0s"]},{"p":[0,0,0],"r":[0,0,0],"s":[0.1250248,0.1250149,0.1250153],"c":[1,1,1],"b":["when starts then become next in 30s"]}]}]}

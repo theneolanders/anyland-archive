@@ -1,0 +1,1 @@
+{"n":"hitfloat thrower","v":7,"a":[7,18],"inc":[["hit","5c0dd7a14257f40565903112"],["hitfloat","5c0dd86f7863da6f76f38501"],["hitfloat 2","5c0dd93efbe56c6f83fe14de"]],"p":[{"b":205,"a":[37],"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.04500313,0.04500023,0.04500312],"c":[1,1,1],"b":["when told by any throw2 then emit gravity-free hitfloat 2 with 10"]}]}]}

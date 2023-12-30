@@ -1,0 +1,1 @@
+{"n":"actionmusic","p":[{"b":6,"t":2,"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.1460359,0.03513867,0.01840174],"c":[1,0,0],"b":["when starts then play action with 82","when starts then become 2 in 3s"]},{"p":[0,0,0],"r":[0,0,0],"s":[0.1250001,0.03513867,0.01840174],"c":[1,1,1],"b":["when starts then play action with 100","when starts then become 1 in 3s"]}]}]}

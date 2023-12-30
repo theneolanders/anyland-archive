@@ -1,0 +1,1 @@
+{"v":9,"a":[7,48,49],"p":[{"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.1750099,0.1750183,0.1750178],"c":[1,1,1],"b":["when starts then play wind with very-low-pitch 360 varied-pitch","when starts then become next in 0s"]},{"p":[0,0,0],"r":[0,0,0],"s":[0.1750099,0.1750183,0.1750178],"c":[1,1,1],"b":["when starts then become previous in 1.5s"]}]}]}

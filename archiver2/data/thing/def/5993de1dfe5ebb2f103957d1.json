@@ -1,0 +1,1 @@
+{"n":"bubble","a":[7,18],"p":[{"b":76,"t":8,"a":[5,12,14,17],"s":[{"p":[0.002200335,-4.770296E-07,2.381857E-07],"r":[0,0,0],"s":[3.209452,10.62512,3.209353],"c":[0.8888889,0.8888889,0.8888889],"b":["when touched then send nearby onto spawn","when someone new in vicinity then send one nearby onto spawn"]}]}]}

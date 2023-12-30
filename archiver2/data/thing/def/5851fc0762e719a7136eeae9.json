@@ -1,0 +1,1 @@
+{"n":"orgportal","a":[7,12],"p":[{"b":3,"t":3,"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.02718976,0.02620962,0.03456858],"c":[1,0.6857142,0],"b":["when touched then become 2 in 0.5s"]},{"p":[0,0,0],"r":[0,0,0],"s":[0.4001098,0.7200292,0.02271265],"c":[1,0.6857142,0],"b":["when touched hand then send nearby onto bluportal","when told by any orange then destroy all parts"]}]}]}

@@ -1,0 +1,1 @@
+{"v":9,"a":[7,48,49],"p":[{"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.1750011,0.1750002,0.1750017],"c":[1,1,1],"b":["when starts then play mumbling voice with 55, become next in 4s"]},{"p":[0,0,0],"r":[0,0,0],"s":[0.1750011,0.1750002,0.1750017],"c":[1,1,1],"b":["when starts then become next in 1s"]}]}]}

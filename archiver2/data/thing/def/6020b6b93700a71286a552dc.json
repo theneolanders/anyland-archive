@@ -1,0 +1,1 @@
+{"v":9,"a":[7,31,48,49],"p":[{"i":[{"t":"6020b5a0e32087053e8b8c6f","p":[0,0,0],"r":[8.49675E-06,270,1.162597E-06]}],"s":[{"p":[-0.06497812,-0.09115028,0.1415085],"r":[0,0,0],"s":[0.01657222,0.01657325,0.01657215],"c":[1,1,1],"b":["when told coinflip then set constant rotation to 0 -300 0, become untweened next in 1s","when told coinstop then set constant rotation to 0 0 0"]}]}]}
