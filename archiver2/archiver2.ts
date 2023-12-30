@@ -115,12 +115,12 @@ mkQueueReader("al_things", "archiver", async (id, msg) => {
     await downloadItemDefAndCrawlForNestedIds(id);
     await downloadItemInfo(id);
 
+    await Bun.sleep(700);
+
     msg.finish();
   } catch(e) {
     console.log("error handling!", e)
   }
-
-  await Bun.sleep(500);
 })
 
 mkQueueReader("al_players", "personinfo", async (id, msg) => {
@@ -128,34 +128,37 @@ mkQueueReader("al_players", "personinfo", async (id, msg) => {
     console.log("getting player personinfo", id)
     await downloadPersonInfo(id);
 
+    await Bun.sleep(1000);
+
     msg.finish();
   } catch(e) {
     console.log("error handling!", e)
   }
-
-  await Bun.sleep(500);
 })
 mkQueueReader("al_players", "topby", async (id, msg) => {
   try {
     console.log("getting player topby", id)
     await downloadPersonTopBy(id);
+
+    await Bun.sleep(500);
+
     msg.finish();
   } catch(e) {
     console.log("error handling!", e)
   }
-
-  await Bun.sleep(500);
 })
 mkQueueReader("al_players", "nifts", async (id, msg) => {
   try {
     console.log("getting player nifts", id)
     await downloadPersonReceivedGifts(id);
+
+    await Bun.sleep(1000);
+
     msg.finish();
   } catch(e) {
     console.log("error handling!", e)
   }
 
-  await Bun.sleep(500);
 })
 
 
