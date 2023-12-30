@@ -329,33 +329,39 @@ const downloadPersonInfo = mkQuery(
 );
 
 
-const PersonGiftsReceived = z.object({
-  gifts: z.array(
-    z.object({
-      id: z.string(),
-      thingId: z.string(),
-      rotationX: z.number(),
-      rotationY: z.number(),
-      rotationZ: z.number(),
-      positionX: z.number(),
-      positionY: z.number(),
-      positionZ: z.number(),
-      dateSent: z.string(),
-      senderId: z.string(),
-      senderName: z.string(),
-      wasSeenByReceiver: z.boolean(),
-      isPrivate: z.boolean(),
-    }).strict()
-  )
-})
+const Gift = z.object({
+  id: z.string(),
+  thingId: z.string(),
+  rotationX: z.number(),
+  rotationY: z.number(),
+  rotationZ: z.number(),
+  positionX: z.number(),
+  positionY: z.number(),
+  positionZ: z.number(),
+  dateSent: z.string(),
+  senderId: z.string(),
+  senderName: z.string(),
+  wasSeenByReceiver: z.boolean(),
+  isPrivate: z.boolean(),
+}).strict();
+type Gift = z.infer<typeof Gift>;
+const PersonGiftsReceived = z.union([
+  z.object({
+    gifts: z.array(Gift)
+  }),
+  z.object({}).strict()
+]);
+
+//api_post("manual test", "/gift/getreceived", `userId=5810de65ac626721405bb671`).then(res => res.json()).then(PersonGiftsReceived.parseAsync).then(console.log).catch(e => console.error)
 
 const downloadPersonReceivedGifts = mkQuery(
   "downloadPersonReceivedGifts",
-  (id) => "data/person/info/" + id + ".json",
-  (id) => api_post( "downloadPersonReceivedGifts", "/gifts/getreceived", `userId=${id}` ),
+  (id) => "data/person/gift/" + id + ".json",
+  (id) => api_post( "downloadPersonReceivedGifts", "/gift/getreceived", `userId=${id}` ),
   (id, res, bodyTxt) => {
       const bodyJson = PersonGiftsReceived.parse(JSON.parse(bodyTxt))
-      for (const gift of bodyJson.gifts) {
+      if (!("gifts" in bodyJson)) { return }
+      for (const gift of (bodyJson as any).gifts as Gift[]) {
         console.log("enqueueing gift", gift.thingId, "by", gift.senderName)
         enqueuePlayer(gift.senderId)
         enqueueThing(gift.thingId)
