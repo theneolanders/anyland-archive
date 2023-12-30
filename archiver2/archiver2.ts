@@ -211,7 +211,7 @@ const mkQuery = (
 const ItemInfoSchema = z.object({
   name: z.string(),
   creatorId: z.string(),
-  creatorName: z.string(),
+  creatorName: z.string().nullable(), // Might only be null for ground 000000000000000000000001
   createdDaysAgo: z.number(),
   collectedCount: z.number(),
   placedCount: z.number(),
