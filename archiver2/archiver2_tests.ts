@@ -1,6 +1,6 @@
 import { mkWriter } from './lib/nsq'
 import { mkApiReqs } from './lib/api';
-import { AreaSearchSchema, ForumForumSchema, PersonGiftsReceived, ThreadsSchema } from './lib/schemas';
+import { AreaInfoSchema, AreaSearchSchema, ForumForumSchema, PersonGiftsReceived, SubareaListSchema, ThreadsSchema } from './lib/schemas';
 import { z } from 'zod';
 
 
@@ -17,7 +17,10 @@ const api = await mkApiReqs(sendNetRequest);
 const USER_ID_PHILIPP = "5773b5232da36d2d18b870fb";
 const FORUM_ID_UPDATES = "5846f556b09fa5d709e5f6fe";
 const THREAD_ID = "5a6cd2fccaa74f8613047dd1";
-api.post("manual test", "/area/search", `term=&byCreatorId=${USER_ID_PHILIPP}`).then(res => res.json()).then(AreaSearchSchema.parseAsync).then(console.log).catch(console.error)
+const AREA_ID_BUILDTOWN = "57f67019817496af5268f719";
+api.post("manual test", "/area/getsubareas", `areaId=${AREA_ID_BUILDTOWN}`).then(res => res.json()).then(SubareaListSchema.parseAsync).then(console.log).catch(console.error)
+//api.post("manual test", "/area/info", `areaId=${AREA_ID_BUILDTOWN}`).then(res => res.json()).then(AreaInfoSchema.parseAsync).then(console.log).catch(console.error)
+//api.post("manual test", "/area/search", `term=&byCreatorId=${USER_ID_PHILIPP}`).then(res => res.json()).then(AreaSearchSchema.parseAsync).then(console.log).catch(console.error)
 //api.get("manual test", "/forum/thread/" + THREAD_ID).then(res => res.json()).then(ThreadsSchema.parseAsync).then(console.log).catch(console.error)
 //api.get("manual test", "/forum/forum/" + FORUM_ID_UPDATES).then(res => res.json()).then(ForumForumSchema.parseAsync).then(console.log).catch(console.error)
 //api.post("manual test", "/gift/getreceived", `userId=${USER_ID_PHILIPP}`).then(res => res.json()).then(PersonGiftsReceived.parseAsync).then(console.log).catch(console.error)

@@ -30,6 +30,20 @@ export const PersonInfoSchema = z.union([
     isAreaLocked: z.boolean(),
     isOnline: z.boolean()
   }).strict(),
+  // self
+  z.object({
+    id: z.string(),
+    screenName: z.string(),
+    age: z.number(),
+    statusText: z.string(),
+    isFindable: z.boolean(),
+    isBanned: z.boolean(),
+    lastActivityOn: z.string().datetime(),
+    isEditorHere: z.boolean(),
+    isListEditorHere: z.boolean(),
+    isOwnerHere: z.boolean(),
+    isAreaLocked: z.boolean(),
+  }).strict(),
   // either deleted/nonexistent players, or some kind of unfindable setting?
   z.object({
     isFriend: z.boolean(),
@@ -107,6 +121,44 @@ export const AreaSearchSchema = z.object({
   ownPrivateAreas: z.array(AreaListArea),
 }).strict()
 
+export const EditorSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  isOwner: z.boolean().optional()
+}).strict()
+export const AreaInfoSchema = z.object({
+    editors: z.array(EditorSchema),
+    listEditors: z.array(EditorSchema),
+    copiedFromAreas: z.array(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+        creatorId: z.string(),
+      }).strict()),
+    name: z.string(),
+    description: z.string().optional(),
+    creationDate: z.string().datetime(),
+    totalVisitors: z.number(),
+    parentAreaId: z.string().optional(),
+    isZeroGravity: z.boolean().optional(),
+    hasFloatingDust: z.boolean().optional(),
+    isCopyable: z.boolean().optional(),
+    onlyOwnerSetsLocks: z.boolean().optional(),
+    isExcluded: z.boolean(),
+    renameCount: z.number(),
+    copiedCount: z.number(),
+    isFavorited: z.boolean()
+}).strict()
+
+export const SubareaListSchema = z.object({
+  subAreas: z.array(
+    z.object({
+      name: z.string(),
+      description: z.string().optional(),
+      id: z.string(),
+    }).strict()
+  )
+}).strict()
 
 
 

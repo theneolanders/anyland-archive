@@ -39,7 +39,8 @@ const downloadForum = mkQuery(
 
       await Bun.sleep(1500);
   },
-  true
+  true,
+  3000
 );
 
 const findAllForums = async () => {

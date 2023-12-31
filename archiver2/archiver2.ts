@@ -2,7 +2,7 @@ import z from 'zod'
 import { d, isMongoId, mkQuery } from './lib/utils';
 import { mkQueueReader, mkWriter } from './lib/nsq'
 import { mkApiReqs } from './lib/api';
-import { AreaList, AreaSearchSchema, ForumForumSchema, ForumListSchema, Gift, ItemInfoSchema, PersonGiftsReceived, PersonInfoSchema, ThreadsSchema } from './lib/schemas';
+import { AreaInfoSchema, AreaList, AreaSearchSchema, ForumForumSchema, ForumListSchema, Gift, ItemInfoSchema, PersonGiftsReceived, PersonInfoSchema, SubareaListSchema, ThreadsSchema } from './lib/schemas';
 
 if (!process.env.ANYLAND_COOKIE) throw "no cookie in env"
 if (!process.env.NSQD_HOST) throw "no cookie in env"
@@ -202,6 +202,49 @@ const downloadThread = mkQuery(
 //////////////////////////////
 
 
+const downloadAreaInfo = mkQuery(
+  "downloadAreaInfo",
+  (id) => "data/area/info/" + id + ".json",
+  (id) => api.post("archiver2_downloadAreaInfo", "/area/info", `areaId=${id}`),
+  (id, res, bodyTxt) => {
+    const bodyJson = AreaInfoSchema.parse(JSON.parse(bodyTxt))
+
+    if (bodyJson.parentAreaId) {
+      enqueueArea(bodyJson.parentAreaId)
+    }
+
+    for (const editor of bodyJson.editors) {
+      enqueuePlayer(editor.id)
+    }
+    for (const editor of bodyJson.listEditors) {
+      enqueuePlayer(editor.id)
+    }
+
+    for (const area of bodyJson.copiedFromAreas) {
+      enqueuePlayer(area.creatorId)
+      enqueueArea(area.id)
+    }
+  },
+  true,
+  2000
+);
+
+const downloadAreaSubareas = mkQuery(
+  "downloadAreaSubareas",
+  (id) => "data/area/subareas/" + id + ".json",
+  (id) => api.post("archiver2_downloadAreaSubareas", "/area/getsubareas", `areaId=${id}`),
+  (id, res, bodyTxt) => {
+    const bodyJson = SubareaListSchema.parse(JSON.parse(bodyTxt))
+
+    for (const area of bodyJson.subAreas) {
+      // NOTE: not distinguishing areas and subareas means we'll get subareas in downloadAreaSubareas,
+      // but the API happily returns data so this is not really an issue
+      enqueueArea(area.id) 
+    }
+  },
+  true,
+  2000
+);
 
 const rollAreaRoulette = async () => {
   const res = await api.post("rollAreaRoulette", "/area/lists", `subsetsize=30&setsize=300`).then(res => res.json());
@@ -240,6 +283,9 @@ const startQueueHandlers = () => {
       console.log("error handling!", e)
     }
   })
+
+
+
 
   mkQueueReader("al_players", "personinfo", async (id, msg) => {
     try {
@@ -281,6 +327,9 @@ const startQueueHandlers = () => {
     }
   })
 
+
+
+
   mkQueueReader("al_threads", "threads", async (id, msg) => {
     try {
       console.log("getting thread", id)
@@ -292,6 +341,30 @@ const startQueueHandlers = () => {
     }
   })
 
+
+
+
+  mkQueueReader("al_areas", "area_info", async (id, msg) => {
+    try {
+      console.log("getting areainfo", id)
+      await downloadAreaInfo(id)
+
+      msg.finish();
+    } catch (e) {
+      console.log("error handling!", e)
+    }
+  })
+
+  mkQueueReader("al_areas", "area_subareas", async (id, msg) => {
+    try {
+      console.log("getting area_subareas", id)
+      await downloadAreaSubareas(id)
+
+      msg.finish();
+    } catch (e) {
+      console.log("error handling!", e)
+    }
+  })
 }
 
 
@@ -301,11 +374,9 @@ await rollAreaRoulette()
 
 
 /* TODO:
-- run getAreaInfo on all areas (list them from files)
-- run getSubAreas on all areas
-- archive threads
-- get creations tags?
-- make a query for all known endpoints
-- check if thread search returns older threads
-- how is philipp's board tied to his profile? he has [board: philbox] in his statusText...
+- feed all areaIds from archiver/areas using to_nsq
+- re-feed areaIds from archiver2/area/info, the subareas queue did not get everything
+- get creations tags
+- get placement infos
+- check if data/person/areasearch has the same number of files as data/person/info - I might have messed up
 */
