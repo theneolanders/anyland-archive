@@ -2,7 +2,7 @@ import z from 'zod'
 import { d, isMongoId, mkQuery } from './lib/utils';
 import { mkQueueReader, mkWriter } from './lib/nsq'
 import { mkApiReqs } from './lib/api';
-import { AreaList, ForumForumSchema, ForumListSchema, Gift, ItemInfoSchema, PersonGiftsReceived, PersonInfoSchema } from './lib/schemas';
+import { AreaList, AreaSearchSchema, ForumForumSchema, ForumListSchema, Gift, ItemInfoSchema, PersonGiftsReceived, PersonInfoSchema, ThreadsSchema } from './lib/schemas';
 
 if (!process.env.ANYLAND_COOKIE) throw "no cookie in env"
 if (!process.env.NSQD_HOST) throw "no cookie in env"
@@ -136,6 +136,59 @@ const downloadPersonTopBy = mkQuery(
   true
 );
 
+const searchAreasByPerson = mkQuery(
+  "searchAreasByPerson",
+  (id) => "data/person/areasearch/" + id + ".json",
+  (id) => api.post( "searchAreasByPerson", "/area/search", `term=&byCreatorId=${id}`),
+  (id, res, bodyTxt) => {
+      const bodyJson = AreaSearchSchema.parse(JSON.parse(bodyTxt))
+      for (const area of bodyJson.areas) {
+        console.log("enqueueing area", area.id, area.name, area.description)
+        enqueueArea(area.id)
+      }
+  },
+  true
+);
+
+//////////////////////////////
+//////////////////////////////
+
+
+const downloadThread = mkQuery(
+  "downloadThread",
+  (id) => "data/forum/thread/" + id + ".json",
+  (id) => api.get( "downloadThread", "/forum/thread/" + id),
+  (id, res, bodyTxt) => {
+      const bodyJson = ThreadsSchema.parse(JSON.parse(bodyTxt))
+      enqueuePlayer(bodyJson.forum.creatorId)
+      if (bodyJson.forum.latestCommentUserId) {
+        enqueuePlayer(bodyJson.forum.latestCommentUserId)
+      }
+      if (bodyJson.forum.dialogThingId) {
+        enqueueThing(bodyJson.forum.dialogThingId)
+      }
+
+      for (const comment of bodyJson.thread.comments) {
+        enqueuePlayer(comment.userId)
+
+        if (comment.likes) {
+          comment.likes.forEach(id => enqueuePlayer(id))
+        }
+        if (comment.oldestLikes) {
+          comment.oldestLikes.forEach(({id}) => enqueuePlayer(id))
+        }
+        if (comment.newestLikes) {
+          comment.newestLikes.forEach(({id}) => enqueuePlayer(id))
+        }
+
+        if (comment.thingId) {
+          enqueueThing(comment.thingId)
+        }
+      }
+  },
+  true
+);
+
 
 
 //////////////////////////////
@@ -218,7 +271,31 @@ const startQueueHandlers = () => {
     } catch (e) {
       console.log("error handling!", e)
     }
+  })
 
+  mkQueueReader("al_players", "areasearch", async (id, msg) => {
+    try {
+      console.log("searching areas by person", id)
+      await searchAreasByPerson(id);
+
+      await Bun.sleep(3000);
+      msg.finish();
+    } catch (e) {
+      console.log("error handling!", e)
+    }
+  })
+
+  mkQueueReader("al_threads", "threads", async (id, msg) => {
+    try {
+      console.log("getting thread", id)
+      await downloadThread(id);
+
+      await Bun.sleep(2000);
+
+      msg.finish();
+    } catch (e) {
+      console.log("error handling!", e)
+    }
   })
 
 }
