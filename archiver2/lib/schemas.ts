@@ -12,6 +12,12 @@ export const ItemInfoSchema = z.object({
   isUnlisted: z.boolean(),
 }).strict().nullable()
 
+export const ItemTagsSchema = z.object({
+  tags: z.array(z.object({
+    tag: z.string(),
+    userIds: z.array(z.string()),
+  }).strict())
+}).strict()
 
 
 export const PersonInfoSchema = z.union([

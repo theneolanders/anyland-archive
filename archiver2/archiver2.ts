@@ -2,7 +2,7 @@ import z from 'zod'
 import { d, isMongoId, mkQuery } from './lib/utils';
 import { mkQueueReader, mkWriter } from './lib/nsq'
 import { mkApiReqs } from './lib/api';
-import { AreaInfoSchema, AreaList, AreaSearchSchema, ForumForumSchema, ForumListSchema, Gift, ItemInfoSchema, PersonGiftsReceived, PersonInfoSchema, SubareaListSchema, ThreadsSchema } from './lib/schemas';
+import { AreaInfoSchema, AreaList, AreaSearchSchema, ForumForumSchema, ForumListSchema, Gift, ItemInfoSchema, ItemTagsSchema, PersonGiftsReceived, PersonInfoSchema, SubareaListSchema, ThreadsSchema } from './lib/schemas';
 
 if (!process.env.ANYLAND_COOKIE) throw "no cookie in env"
 if (!process.env.NSQD_HOST) throw "no cookie in env"
@@ -88,6 +88,24 @@ const walkProps = (obj: unknown) => {
     }
   }
 }
+
+const downloadItemTags = mkQuery(
+  "downloadItemTags",
+  (id) => "data/thing/tags/" + id + ".json",
+  (id) => api.post("downloadItemTags", "/thing/gettags/", `thingId=${id}`),
+
+  (id, res, bodyTxt) => {
+    const bodyJson = ItemTagsSchema.parse(JSON.parse(bodyTxt))
+
+    for (const tag of bodyJson.tags) {
+      for (const userId of tag.userIds) {
+        enqueuePlayer(userId)
+      }
+    }
+  },
+  true,
+  5000,
+);
 
 
 
@@ -284,6 +302,16 @@ const startQueueHandlers = () => {
     }
   })
 
+  mkQueueReader("al_things", "tags", async (id, msg) => {
+    try {
+      await downloadItemTags(id);
+
+      msg.finish();
+    } catch (e) {
+      console.log("error handling!", e)
+    }
+  })
+
 
 
 
@@ -376,7 +404,7 @@ await rollAreaRoulette()
 /* TODO:
 - feed all areaIds from archiver/areas using to_nsq
 - re-feed areaIds from archiver2/area/info, the subareas queue did not get everything
-- get creations tags
+- re-feed thingIds from arhiver/thing/info, the tags endpoint was created late
 - get placement infos
 - check if data/person/areasearch has the same number of files as data/person/info - I might have messed up
 */
