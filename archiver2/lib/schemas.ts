@@ -82,7 +82,8 @@ export const AreaListArea = z.object({
   name: z.string(),
   description: z.string().optional(),
   playerCount: z.number(),
-})
+}).strict()
+
 
 export const AreaList = z.object({
   visited: z.array(AreaListArea),
@@ -99,12 +100,12 @@ export const AreaList = z.object({
   lively: z.array(AreaListArea),
   favorite: z.array(AreaListArea),
   mostFavorited: z.array(AreaListArea),
-})
+}).strict()
 
 export const AreaSearchSchema = z.object({
   areas: z.array(AreaListArea),
   ownPrivateAreas: z.array(AreaListArea),
-})
+}).strict()
 
 
 
@@ -129,9 +130,9 @@ export const ForumListSchema = z.object({
       latestCommentUserId: z.string().optional(),
       latestCommentUserName: z.string().optional(),
       id: z.string(),
-    })
+    }).strict()
   )
-})
+}).strict()
 
 
 const ForumSchema = z.object({
@@ -150,7 +151,7 @@ const ForumSchema = z.object({
   latestCommentUserName: z.string().optional(),
   user_isModerator: z.boolean(),
   user_hasFavorited: z.boolean()
-})
+}).strict()
 
 export const ForumForumSchema = z.object({
   ok: z.boolean(),
@@ -170,9 +171,9 @@ export const ForumForumSchema = z.object({
       latestCommentUserId: z.string(),
       latestCommentUserName: z.string(),
       id: z.string()
-    })
+    }).strict()
   )
-})
+}).strict()
 
 const CommentSchema = z.object({
   date: z.string().datetime(),
@@ -185,7 +186,7 @@ const CommentSchema = z.object({
   newestLikes: z.array(z.object({ id: z.string(), n: z.string() })).optional(),
   totalLikes: z.number().optional(),
   thingId: z.string().optional(),
-})
+}).strict()
 
 export const ThreadsSchema = z.object({
   ok: z.boolean(),
@@ -205,6 +206,6 @@ export const ThreadsSchema = z.object({
     latestCommentUserId: z.string(),
     latestCommentUserName: z.string(),
     id: z.string()
-  })
-})
+  }).strict()
+}).strict()
 
