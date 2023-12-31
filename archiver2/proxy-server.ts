@@ -44,8 +44,9 @@ const server = Bun.serve({
     console.log(d(), req.method, req.url, JSON.stringify(headersToObject(req.headers)), body);
 
 
+    const hostname = req.headers.get('x-forwarded-host') || url.hostname;
     // Transparently proxy the request to Anyland (and store the req/res exchange via our api helpers)
-    if (url.hostname === "app.anyland.com") {
+    if (hostname === "app.anyland.com") {
       if (req.method === "GET") {
         const res = await api.get("PROXY_SERVER", url.pathname + url.search, req.headers.get("Cookie"))
 
@@ -68,7 +69,7 @@ const server = Bun.serve({
         return new Response("Method not implemented", { status: 500 })
       }
     }
-    else if (url.hostname === CLOUDFRONT_CDN_HOSTNAME) {
+    else if (hostname === CLOUDFRONT_CDN_HOSTNAME) {
       console.log("relaying from CDN", url.pathname)
       const res = await fetch("https://" + CLOUDFRONT_CDN_HOSTNAME + url.pathname)
       return relayResponse(res)
