@@ -194,6 +194,7 @@ export const ThreadsSchema = z.object({
   thread: z.object({
     forumId: z.string(),
     title: z.string(),
+    titleClarification: z.string().optional(),
     creatorId: z.string(),
     creatorName: z.string(),
     latestCommentDate: z.string().datetime(),
