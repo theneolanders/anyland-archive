@@ -37,7 +37,8 @@ const downloadItemInfo = mkQuery(
         }
       }
   },
-  true
+  true,
+  1000,
 );
 
 const downloadItemDefAndCrawlForNestedIds = mkQuery(
@@ -53,7 +54,8 @@ const downloadItemDefAndCrawlForNestedIds = mkQuery(
       const bodyJson = JSON.parse(bodyTxt)
       findNestedIdsInThing(bodyJson)
   },
-  true
+  true,
+  700,
 );
 
 
@@ -101,7 +103,8 @@ const downloadPersonInfo = mkQuery(
   (id, res, bodyTxt) => {
       const bodyJson = PersonInfoSchema.parse(JSON.parse(bodyTxt))
   },
-  true
+  true,
+  1000
 );
 
 
@@ -118,7 +121,8 @@ const downloadPersonReceivedGifts = mkQuery(
         enqueueThing(gift.thingId)
       }
   },
-  true
+  true,
+  1000
 );
 
 const downloadPersonTopBy = mkQuery(
@@ -133,7 +137,8 @@ const downloadPersonTopBy = mkQuery(
         enqueueThing(id)
       }
   },
-  true
+  true,
+  1000
 );
 
 const searchAreasByPerson = mkQuery(
@@ -147,7 +152,8 @@ const searchAreasByPerson = mkQuery(
         enqueueArea(area.id)
       }
   },
-  true
+  true,
+  3000
 );
 
 //////////////////////////////
@@ -186,7 +192,8 @@ const downloadThread = mkQuery(
         }
       }
   },
-  true
+  true,
+  2000
 );
 
 
@@ -228,8 +235,6 @@ const startQueueHandlers = () => {
       await downloadItemDefAndCrawlForNestedIds(id);
       await downloadItemInfo(id);
 
-      await Bun.sleep(700);
-
       msg.finish();
     } catch (e) {
       console.log("error handling!", e)
@@ -240,9 +245,6 @@ const startQueueHandlers = () => {
     try {
       console.log("getting player personinfo", id)
       await downloadPersonInfo(id);
-
-      await Bun.sleep(1000);
-
       msg.finish();
     } catch (e) {
       console.log("error handling!", e)
@@ -252,8 +254,6 @@ const startQueueHandlers = () => {
     try {
       console.log("getting player topby", id)
       await downloadPersonTopBy(id);
-
-      await Bun.sleep(500);
 
       msg.finish();
     } catch (e) {
@@ -265,8 +265,6 @@ const startQueueHandlers = () => {
       console.log("getting player nifts", id)
       await downloadPersonReceivedGifts(id);
 
-      await Bun.sleep(1000);
-
       msg.finish();
     } catch (e) {
       console.log("error handling!", e)
@@ -277,8 +275,6 @@ const startQueueHandlers = () => {
     try {
       console.log("searching areas by person", id)
       await searchAreasByPerson(id);
-
-      await Bun.sleep(3000);
       msg.finish();
     } catch (e) {
       console.log("error handling!", e)
@@ -289,8 +285,6 @@ const startQueueHandlers = () => {
     try {
       console.log("getting thread", id)
       await downloadThread(id);
-
-      await Bun.sleep(2000);
 
       msg.finish();
     } catch (e) {

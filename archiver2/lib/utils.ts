@@ -22,6 +22,7 @@ export const mkQuery = (
   query: (id: string) => Promise<Response>,
   onResOk: (id: string, res: Response, bodyTxt: string) => void | Promise<void>,
   throwOnBadRes: boolean,
+  sleepAfterQuery: number,
 ) => async (id: string) => {
   const file = Bun.file(getFilePath(id))
 
@@ -47,5 +48,7 @@ export const mkQuery = (
     console.warn(d(), ctx, "bad response", res.status, '""""', bodyTxt, '""""')
     if (throwOnBadRes) throw "check logs";
   }
+
+  await Bun.sleep(sleepAfterQuery)
 }
 
