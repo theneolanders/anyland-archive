@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "elysia": "^0.8.6",
     "nsqjs": "^0.13.0",
     "zod": "^3.22.4"
   },
