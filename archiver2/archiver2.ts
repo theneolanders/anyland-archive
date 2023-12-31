@@ -311,6 +311,7 @@ const startQueueHandlers = () => {
     try {
       await downloadItemDefAndCrawlForNestedIds(id);
       await downloadItemInfo(id);
+      await downloadItemTags(id);
 
       msg.finish();
     } catch (e) {
