@@ -1,3 +1,6 @@
+import * as fs from "node:fs/promises"
+import * as path from "node:path"
+
 const objectIdRegExp = /^[0-9a-fA-F]{24}$/;
 export const isMongoId = (str: string) => objectIdRegExp.test(str);
 
@@ -16,15 +19,18 @@ export const d = () => new Date().toISOString();
 
 // Abstracts the generic boilerplate for doing an API call, handling errors, writing to file
 // Only use for things that gets written to disk! Not for generic API abstractions.
-export const mkQuery = (
+export const mkQuery_ = <T>(
   ctx: string,
-  getFilePath: (id: string) => string,
-  query: (id: string) => Promise<Response>,
-  onResOk: (id: string, res: Response, bodyTxt: string) => void | Promise<void>,
+  getFilePath: (id: T) => string,
+  query: (id: T) => Promise<Response>,
+  onResOk: (id: T, res: Response, bodyTxt: string) => void | Promise<void>,
   throwOnBadRes: boolean,
   sleepAfterQuery: number,
-) => async (id: string) => {
-  const file = Bun.file(getFilePath(id))
+) => async (id: T) => {
+  const filepath = getFilePath(id);
+
+  const file = Bun.file(filepath)
+  await fs.mkdir(path.dirname(filepath), { recursive: true })
 
   if (await file.exists()) {
     console.info(d(), ctx, "file already exists for", id, "skipping")
@@ -51,4 +57,6 @@ export const mkQuery = (
 
   await Bun.sleep(sleepAfterQuery)
 }
+
+export const mkQuery = mkQuery_<string>;
 
