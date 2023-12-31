@@ -32,6 +32,7 @@ const relayResponse = (res: Response) => {
 
 
 const CLOUDFRONT_CDN_HOSTNAME = "d6ccx151yatz6.cloudfront.net"
+const CLOUDFRON_CDN_HOSTNAME_AREABUNDLES = "d26e4xubm8adxu.cloudfront.net"
 
 
 // TODO: use a proper server lib with a router
@@ -72,6 +73,11 @@ const server = Bun.serve({
     else if (hostname === CLOUDFRONT_CDN_HOSTNAME) {
       console.log("relaying from CDN", url.pathname)
       const res = await fetch("https://" + CLOUDFRONT_CDN_HOSTNAME + url.pathname)
+      return relayResponse(res)
+    }
+    else if (hostname === CLOUDFRON_CDN_HOSTNAME_AREABUNDLES) {
+      console.log("relaying from CDN", url.pathname)
+      const res = await fetch("https://" + CLOUDFRON_CDN_HOSTNAME_AREABUNDLES + url.pathname)
       return relayResponse(res)
     }
     else {

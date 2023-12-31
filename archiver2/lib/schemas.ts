@@ -173,6 +173,60 @@ export const SubareaListSchema = z.object({
   )
 }).strict()
 
+export const AreaBundleSchema = z.object({
+  thingDefinitions: z.array(
+    z.object({
+      id: z.string(),
+      def: z.string(),
+    }).strict()
+  ),
+  serveTime: z.number(),
+}).strict()
+
+export const Point3D = z.object({ x: z.number(), y: z.number(), z: z.number() }).strict()
+export const AreaLoadSchema = z.object({
+  ok: z.boolean(),
+
+  areaId: z.string(),
+  areaName: z.string(),
+  areaKey: z.string().optional(),
+  areaCreatorId: z.string(),
+
+  isPrivate: z.boolean(),
+  isZeroGravity: z.boolean().optional(),
+  hasFloatingDust: z.boolean().optional(),
+  isCopyable: z.boolean().optional(),
+  onlyOwnerSetsLocks: z.boolean().optional(),
+  isExcluded: z.boolean(),
+
+  _environmentType: z.string().optional(),
+  environmentChangersJSON: z.string(),
+  settingsJSON: z.string().optional(),
+
+  requestorIsEditor: z.boolean(),
+  requestorIsListEditor: z.boolean(),
+  requestorIsOwner: z.boolean(),
+
+  placements: z.array(
+    z.object({
+      Id: z.string(),
+      Tid: z.string(),
+      P: Point3D,
+      R: Point3D,
+      D: z.number().optional(),
+      S: z.number().optional(),
+      A: z.array(z.number()).optional(),
+    }).strict()
+  ),
+
+  serveTime: z.number(),
+}).strict()
+
+
+
+
+
+
 
 
 

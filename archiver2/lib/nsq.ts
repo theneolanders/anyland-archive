@@ -39,6 +39,7 @@ export const mkWriter = async (NSQD_HOST: string, NSQD_PORT: number) => {
     enqueueArea: mkEnqueueFunc("al_areas"),
     enqueueForum: mkEnqueueFunc("al_forum"),
     enqueueThread: mkEnqueueFunc("al_threads"),
+    enqueuePlacement: (areaId: string, placementId: string) => workWriter.publish("al_placements", areaId + "," + placementId),
     sendCdnError: (id: string, res: Response) => {
       workWriter.publish("al_cdn_error", JSON.stringify({ id, status: res.status }))
     },

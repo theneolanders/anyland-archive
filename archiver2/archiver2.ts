@@ -3,7 +3,7 @@ import nsq from 'nsqjs'
 import { d, isMongoId, mkQuery, mkQuery_ } from './lib/utils';
 import { mkQueueReader, mkWriter } from './lib/nsq'
 import { mkApiReqs } from './lib/api';
-import { AreaInfoSchema, AreaList, AreaSearchSchema, ForumForumSchema, ForumListSchema, Gift, ItemInfoSchema, ItemTagsSchema, PersonGiftsReceived, PersonInfoSchema, PlacementInfoSchema, SubareaListSchema, ThreadsSchema } from './lib/schemas';
+import { AreaBundleSchema, AreaInfoSchema, AreaList, AreaLoadSchema, AreaSearchSchema, ForumForumSchema, ForumListSchema, Gift, ItemInfoSchema, ItemTagsSchema, PersonGiftsReceived, PersonInfoSchema, PlacementInfoSchema, SubareaListSchema, ThreadsSchema } from './lib/schemas';
 
 if (!process.env.ANYLAND_COOKIE) throw "no cookie in env"
 if (!process.env.NSQD_HOST) throw "no cookie in env"
@@ -12,7 +12,7 @@ const DEFAULT_AREAID = "5b6686c83204100709bb4be4";
 const NSQD_HOST = process.env.NSQD_HOST;
 const NSQD_PORT = 4150;
 
-const { sendNetRequest, enqueueThing, enqueuePlayer, enqueueArea, enqueueForum, enqueueThread } = await mkWriter(NSQD_HOST, NSQD_PORT);
+const { sendNetRequest, enqueueThing, enqueuePlayer, enqueueArea, enqueueForum, enqueueThread, enqueuePlacement } = await mkWriter(NSQD_HOST, NSQD_PORT);
 const api = await mkApiReqs(sendNetRequest);
 
 
@@ -280,6 +280,59 @@ const downloadAreaSubareas = mkQuery(
   2000
 );
 
+
+//////////////////////////////
+
+
+const downloadAreaBundle = mkQuery_<{areaId: string, areaKey: string}>(
+  "downloadAreaBundle",
+  ({areaId, areaKey}) => "data/area/bundle/" + areaId + "/" + areaKey + ".json",
+  ({areaId, areaKey}) => api.getUrl( "archiver2_downloadAreaBundle", `http://d26e4xubm8adxu.cloudfront.net/${areaId}/${areaKey}`),
+  async ({ areaId, areaKey }, res, bodyTxt) => {
+    const bodyJson = AreaBundleSchema.parse(JSON.parse(bodyTxt))
+    console.log("areabundle", areaId, areaKey)
+    // Nothing to do here after parsing, mkQuery saves the file already
+  },
+  true,
+  1000
+);
+
+const downloadAreaLoadDataAndBundle = mkQuery(
+  "downloadAreaLoadDataAndBundle",
+  (areaId) => "data/area/load/" + areaId + ".json",
+  (id) => api.post("archiver2_downloadAreaLoadDataAndBundle", "/area/load", `areaId=${id}&isPrivate=False`),
+  async (id, res, bodyTxt) => {
+    const bodyJson = AreaLoadSchema.parse(JSON.parse(bodyTxt))
+
+    if (bodyJson.areaKey) {
+      // NOTE: special case here, we call another API endpoint
+      // It is a bit annoying as having a file in /data/area/load/ means it will skip this even if data/area/bundle does not exist...
+      try {
+        await downloadAreaBundle({ areaId: bodyJson.areaId, areaKey: bodyJson.areaKey })
+      } catch(e) {
+        console.error("cloudfront error?", e)
+        throw e;
+      }
+    }
+    else {
+      console.log("area has no key")
+    }
+
+    enqueuePlayer(bodyJson.areaCreatorId)
+
+    for (const placement of bodyJson.placements) {
+      enqueueThing(placement.Tid)
+      enqueuePlacement(bodyJson.areaId, placement.Id)
+    }
+  },
+  true,
+  3000
+);
+
+
+//////////////////////////////
+
+
 const rollAreaRoulette = async () => {
   const res = await api.post("rollAreaRoulette", "/area/lists", `subsetsize=30&setsize=300`).then(res => res.json());
   const body = AreaList.parse(res);
@@ -441,6 +494,17 @@ const startQueueHandlers = () => {
     reader.connect()
   }
 
+  mkQueueReader("al_areas", "load_data", async (id, msg) => {
+    try {
+      console.log("getting areainfo", id)
+      await downloadAreaLoadDataAndBundle(id)
+
+      msg.finish();
+    } catch (e) {
+      console.log("error handling!", e)
+    }
+  })
+
 
 }
 
@@ -452,8 +516,7 @@ await rollAreaRoulette()
 
 /* TODO:
 - feed all areaIds from archiver/areas using to_nsq
-- re-feed areaIds from archiver2/area/info, the subareas queue did not get everything
-- re-feed thingIds from arhiver/thing/info, the tags endpoint was created late
-- get placement infos
+- re-feed areaIds from archiver2/area/info, the subareas queue was created late (wait for other queues to finish so that they can skip it all)
+- re-feed thingIds from archiver2/thing/info, the tags   queue was ditto ditto ditto
 - check if data/person/areasearch has the same number of files as data/person/info - I might have messed up
 */

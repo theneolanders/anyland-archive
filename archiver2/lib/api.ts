@@ -43,6 +43,37 @@ export const mkApiReqs = async (sendNetRequest: (req: NetRequest) => void) => {
         return res;
     }
 
+    // Takes an URL instead of a path. Used for CDNs
+    const getUrl = async (reason: string, url: string) => {
+        const now = new Date();
+        const headers = {
+            'User-Agent': 'UnityPlayer/2018.1.0f2 (UnityWebRequest/1.0, libcurl/7.51.0-DEV)',
+            'Accept': '*/*',
+            'Accept-Encoding': 'identity',
+            'X-Unity-Version': '2018.1.0f2',
+            'Cookie': process.env.ANYLAND_COOKIE!,
+        }
+
+        const res = await fetch(url, { headers })
+
+        const bodyTxt = await res.clone().text();
+        sendNetRequest({
+            ts: now.valueOf(),
+            ts_iso: now.toISOString(),
+            url,
+            reason,
+            method: "GET",
+            reqHeaders: headers,
+            reqbody: null,
+            resCode: res.status,
+            resHeaders: headersToObject(res.headers),
+            resText: bodyTxt,
+        })
+
+
+        return res;
+    }
+
 
     const post = async (reason: string, path: string, body: string) => {
         const now = new Date();
@@ -89,7 +120,7 @@ export const mkApiReqs = async (sendNetRequest: (req: NetRequest) => void) => {
 
 
 
-    return { get, post, bumpToken }
+    return { get, getUrl, post, bumpToken }
 }
 
 
