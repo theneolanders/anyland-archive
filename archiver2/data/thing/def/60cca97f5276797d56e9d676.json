@@ -1,0 +1,1 @@
+{"v":9,"p":[{"b":14,"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.06000027,0.06000003,0.001],"c":[1,1,1],"b":["when touches face then tell stop, become 2","when starts then project with 1 max, tell move"]},{"p":[0,0,0],"r":[0,0,0],"s":[0.06000027,0.06000003,0.001],"c":[0,1,1],"b":["when starts then become 1 in 2"]}]}]}

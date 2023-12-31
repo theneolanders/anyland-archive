@@ -1,0 +1,1 @@
+{"n":"thing","a":[2],"inc":[["arrow","59b727e3f334fab413fa9a9f"]],"p":[{"b":4,"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.005,0.005,0.005],"c":[1,1,1],"b":["when starts then emit gravity-free arrow","when starts then become next in 0.2s"]},{"p":[0,0,0],"r":[0,0,0],"s":[0.005,0.005,0.005],"c":[1,1,1],"b":["when starts then destroy all parts"]}]}]}

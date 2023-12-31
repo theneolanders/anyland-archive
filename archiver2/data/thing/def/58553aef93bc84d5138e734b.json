@@ -1,0 +1,1 @@
+{"n":"thing","a":[7,12],"inc":[["tennis","5854c83e59d5d23814eb2afd"]],"p":[{"t":1,"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.1750013,0.1750041,0.04358882],"c":[1,1,1],"b":["when starts then become 2 in 15s"]},{"p":[0,0,0],"r":[0,0,0],"s":[0.1750063,0.1750006,0.04358968],"c":[1,1,1],"b":["when starts then emit gravity-free tennis with 40","when starts then become 1"]}]}]}
