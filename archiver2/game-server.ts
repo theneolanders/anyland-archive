@@ -100,11 +100,11 @@ const app = new Elysia()
     .get("/thing/sl/tdef/:thingId",
         ({params: { thingId }}) => Bun.file(path.resolve("./data/thing/def/", thingId + ".json")).json(),
     )
-    .get(
-        "/:thingId",
-        ({params: { thingId }}) => Bun.file(path.resolve("./data/thing/def/", thingId + ".json")).json(),
-        { headers: t.Object({ "x-forwarded-host": t.Literal(HOSTNAME_CDN_THINGDEFS) }) }
-    )
+    //.get(
+    //    "/:thingId",
+    //    ({params: { thingId }}) => Bun.file(path.resolve("./data/thing/def/", thingId + ".json")).json(),
+    //    { headers: t.Object({ "x-forwarded-host": t.Literal(HOSTNAME_CDN_THINGDEFS) }) }
+    //)
     .post(
         "/thing/gettags",
         ({body: { thingId }}) => Bun.file(path.resolve("./data/thing/tags/", thingId + ".json")).json(),
