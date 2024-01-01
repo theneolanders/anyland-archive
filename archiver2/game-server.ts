@@ -5,7 +5,13 @@ const HOSTNAME_CDN_THINGDEFS = "d6ccx151yatz6.cloudfront.net"
 const HOSTNAME_CDN_AREABUNDLES = "d26e4xubm8adxu.cloudfront.net"
 
 const app = new Elysia()
-	.post('/auth/start', () => {
+    .post('/auth/start', ({ cookie: { s } }) => {
+        // I'm setting a hardcoded cookie here because this is read-only so I don't care about user sessions,
+        // but we can very easily save a player session here. We just need to be given an account token of sorts (or keep the session forever).
+        // The client only looks for a `set-cookie` on `s`.
+        s.value = "s%3AtbpGGrOdcHy1REgxa1gnD-npvGihWmBT.XynxEe6TsRGW8qif%2BxS2KQC9ryX%2F44CdhQKSNL0hsZc";
+        s.httpOnly = true;
+
         return {
             vMaj: 188,
             vMinSrv: 1,
