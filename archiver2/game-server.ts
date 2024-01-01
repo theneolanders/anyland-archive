@@ -1,8 +1,18 @@
 import * as path from "node:path"
 import { Elysia, t } from 'elysia'
 
+const HOSTNAME_API = "app.anyland.com"
 const HOSTNAME_CDN_THINGDEFS = "d6ccx151yatz6.cloudfront.net"
 const HOSTNAME_CDN_AREABUNDLES = "d26e4xubm8adxu.cloudfront.net"
+
+
+
+// TODO validate env
+const HOST = process.env.HOST
+const PORT_API = process.env.PORT_API
+const PORT_CDN_THINGDEFS = process.env.PORT_CDN_THINGSDEF
+const PORT_CDN_AREABUNDLES = process.env.PORT_CDN_AREABUNDLES
+
 
 const app = new Elysia()
     .onRequest(({ request }) => {
@@ -63,8 +73,7 @@ const app = new Elysia()
                 return await file.json()
             }
             else {
-                // TODO: find some fancy tiny area
-                return await Bun.file("data/area/load/612e57dd600f6a051d8dffe0.json").json()
+                return new Response("Area bundle not found", { status: 404 })
             }
         },
         { body: t.Object({ areaId: t.String(), isPrivate: t.String() }) }
@@ -73,21 +82,6 @@ const app = new Elysia()
         "/area/info",
         ({body: { areaId }}) => Bun.file(path.resolve("./data/area/info/", areaId + ".json")).json(),
         { body: t.Object({ areaId: t.String() }) }
-    )
-    .get(
-        "/:areaId/:areaKey", // TODO: areaKeys all seem to start with "rr"
-        async ({ params: { areaId, areaKey } }) => {
-            const file = Bun.file(path.resolve("./data/area/bundle/", areaId, areaKey + ".json"));
-
-            if (await file.exists()) {
-                return await file.json()
-            }
-            else {
-                // TODO: find some fancy tiny area
-                return await Bun.file("./data/area/bundle/612e57dd600f6a051d8dffe0/rr612e57ddd7ffc6051db0a230.json").json()
-            }
-        },
-        { headers: t.Object({ "x-forwarded-host": t.Literal(HOSTNAME_CDN_AREABUNDLES) }) }
     )
     .post(
         "/placement/info",
@@ -100,11 +94,6 @@ const app = new Elysia()
     .get("/thing/sl/tdef/:thingId",
         ({params: { thingId }}) => Bun.file(path.resolve("./data/thing/def/", thingId + ".json")).json(),
     )
-    //.get(
-    //    "/:thingId",
-    //    ({params: { thingId }}) => Bun.file(path.resolve("./data/thing/def/", thingId + ".json")).json(),
-    //    { headers: t.Object({ "x-forwarded-host": t.Literal(HOSTNAME_CDN_THINGDEFS) }) }
-    //)
     .post(
         "/thing/gettags",
         ({body: { thingId }}) => Bun.file(path.resolve("./data/thing/tags/", thingId + ".json")).json(),
@@ -261,4 +250,71 @@ const app = new Elysia()
         port: process.env.port
     })
 
-console.log(`🦊 Elysia is running at on port ${app.server?.port}...`)
+console.log(`🦊 API server is running at on port ${app.server?.port}...`)
+
+
+
+
+
+
+
+
+const app_areaBundles = new Elysia()
+    .onRequest(({ request }) => {
+        console.info(JSON.stringify({
+            server: "AREABUNDLES",
+            ts: new Date().toISOString(),
+            ip: request.headers.get('X-Real-Ip'),
+            ua: request.headers.get("User-Agent"),
+            method: request.method,
+            url: request.url,
+        }));
+    })
+    .onError(({ code, error }) => {
+        console.info("error in middleware!", code, error.message);
+    })
+    .get(
+        "/:areaId/:areaKey", // TODO: areaKeys all seem to start with "rr"
+        async ({ params: { areaId, areaKey } }) => {
+            const file = Bun.file(path.resolve("./data/area/bundle/", areaId, areaKey + ".json"));
+
+            if (await file.exists()) {
+                return await file.json()
+            }
+            else {
+                return new Response("Area bundle not found", { status: 404 })
+            }
+        },
+    )
+	.listen({
+        hostname: HOST,
+        port: PORT_CDN_AREABUNDLES
+    })
+;
+console.log(`🦊 AreaBundles server is running at on port ${app_areaBundles.server?.port}...`)
+
+
+const app_thingDefs = new Elysia()
+    .onRequest(({ request }) => {
+        console.info(JSON.stringify({
+            server: "THINGDEFS",
+            ts: new Date().toISOString(),
+            ip: request.headers.get('X-Real-Ip'),
+            ua: request.headers.get("User-Agent"),
+            method: request.method,
+            url: request.url,
+        }));
+    })
+    .onError(({ code, error }) => {
+        console.info("error in middleware!", code, error.message);
+    })
+    .get(
+        "/:thingId",
+        ({params: { thingId }}) => Bun.file(path.resolve("./data/thing/def/", thingId + ".json")).json(),
+    )
+	.listen({
+        hostname: HOST,
+        port: PORT_CDN_THINGDEFS,
+    })
+;
+console.log(`🦊 ThingDefs server server is running at on port ${app_thingDefs.server?.port}...`)
