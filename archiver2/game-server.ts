@@ -5,6 +5,18 @@ const HOSTNAME_CDN_THINGDEFS = "d6ccx151yatz6.cloudfront.net"
 const HOSTNAME_CDN_AREABUNDLES = "d26e4xubm8adxu.cloudfront.net"
 
 const app = new Elysia()
+    .onRequest(({ request }) => {
+        console.info(JSON.stringify({
+            ts: new Date().toISOString(),
+            ip: request.headers.get('X-Real-Ip'),
+            ua: request.headers.get("User-Agent"),
+            method: request.method,
+            url: request.url,
+        }));
+    })
+    .onError(({ code, error }) => {
+        console.info("error in middleware!", code, error.message);
+    })
     .post('/auth/start', ({ cookie: { s } }) => {
         // I'm setting a hardcoded cookie here because this is read-only so I don't care about user sessions,
         // but we can very easily save a player session here. We just need to be given an account token of sorts (or keep the session forever).
