@@ -90,6 +90,27 @@ const app = new Elysia()
         }
     )
     .post(
+        "/area/search",
+        async ({body: { term, byCreatorId }}) => {
+            if (byCreatorId) {
+                const file = Bun.file(path.resolve("./data/area/info/", byCreatorId + ".json"))
+
+                if (await file.exists()) {
+                    return await file.json()
+                }
+                else {
+                    return { areas: [], ownPrivateAreas: [] }
+                }
+            }
+            else {
+                // TODO: build an index file of [ areaName, areaId ] and simply run a .includes to find all matching
+                return { areas: [], ownPrivateAreas: [] }
+            }
+
+        },
+        { body: t.Object({ term: t.String(), byCreatorId: t.Optional(t.String()) }) }
+    )
+    .post(
         "/placement/info",
         ({body: { areaId, placementId }}) => Bun.file(path.resolve("./data/placement/info/", areaId, placementId + ".json")).json(),
         { body: t.Object({ areaId: t.String(), placementId: t.String() }) }
