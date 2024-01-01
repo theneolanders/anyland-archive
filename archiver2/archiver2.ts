@@ -294,7 +294,7 @@ const downloadAreaBundle = mkQuery_<{areaId: string, areaKey: string}>(
   ({areaId, areaKey}) => api.getUrl( "archiver2_downloadAreaBundle", `http://d26e4xubm8adxu.cloudfront.net/${areaId}/${areaKey}`),
   async ({ areaId, areaKey }, res, bodyTxt) => {
     const bodyJson = AreaBundleSchema.parse(JSON.parse(bodyTxt))
-    console.log("areabundle", areaId, areaKey)
+    console.log(new Date().toISOString(), "areabundle", areaId, areaKey, bodyTxt.slice(0, 100) + "...")
     // Nothing to do here after parsing, mkQuery saves the file already
   },
   true,
@@ -306,6 +306,7 @@ const downloadAreaLoadDataAndBundle = mkQuery(
   (areaId) => "data/area/load/" + areaId + ".json",
   (id) => api.post("archiver2_downloadAreaLoadDataAndBundle", "/area/load", `areaId=${id}&isPrivate=False`),
   async (id, res, bodyTxt) => {
+    console.log(new Date().toISOString(), "downloadarealoaddataandbundle")
     const bodyJson = AreaLoadSchema.parse(JSON.parse(bodyTxt))
 
     if  (bodyJson.ok === true) {
@@ -349,6 +350,7 @@ const rollAreaRoulette = async () => {
   }
 }
 
+setInterval(() => rollAreaRoulette(), 1000 * 60 * 2)
 
 
 
