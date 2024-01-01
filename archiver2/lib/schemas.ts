@@ -185,43 +185,51 @@ export const AreaBundleSchema = z.object({
 }).strict()
 
 export const Point3D = z.object({ x: z.number(), y: z.number(), z: z.number() }).strict()
-export const AreaLoadSchema = z.object({
-  ok: z.boolean(),
+export const AreaLoadSchema = z.union([
+  z.object({
+    ok: z.literal(false),
+    _reasonDenied: z.string(),
+    serveTime: z.number(),
+  }).strict(),
+  z.object({
+    ok: z.literal(true),
 
-  areaId: z.string(),
-  areaName: z.string(),
-  areaKey: z.string().optional(),
-  areaCreatorId: z.string(),
+    areaId: z.string(),
+    areaName: z.string(),
+    areaKey: z.string().optional(),
+    areaCreatorId: z.string(),
+    parentAreaId: z.string().optional(),
 
-  isPrivate: z.boolean(),
-  isZeroGravity: z.boolean().optional(),
-  hasFloatingDust: z.boolean().optional(),
-  isCopyable: z.boolean().optional(),
-  onlyOwnerSetsLocks: z.boolean().optional(),
-  isExcluded: z.boolean(),
+    isPrivate: z.boolean(),
+    isZeroGravity: z.boolean().optional(),
+    hasFloatingDust: z.boolean().optional(),
+    isCopyable: z.boolean().optional(),
+    onlyOwnerSetsLocks: z.boolean().optional(),
+    isExcluded: z.boolean(),
 
-  _environmentType: z.string().optional(),
-  environmentChangersJSON: z.string(),
-  settingsJSON: z.string().optional(),
+    _environmentType: z.string().optional(),
+    environmentChangersJSON: z.string(),
+    settingsJSON: z.string().optional(),
 
-  requestorIsEditor: z.boolean(),
-  requestorIsListEditor: z.boolean(),
-  requestorIsOwner: z.boolean(),
+    requestorIsEditor: z.boolean(),
+    requestorIsListEditor: z.boolean(),
+    requestorIsOwner: z.boolean(),
 
-  placements: z.array(
-    z.object({
-      Id: z.string(),
-      Tid: z.string(),
-      P: Point3D,
-      R: Point3D,
-      D: z.number().optional(),
-      S: z.number().optional(),
-      A: z.array(z.number()).optional(),
-    }).strict()
-  ),
+    placements: z.array(
+      z.object({
+        Id: z.string(),
+        Tid: z.string(),
+        P: Point3D,
+        R: Point3D,
+        D: z.number().optional(),
+        S: z.number().optional(),
+        A: z.array(z.number()).optional(),
+      }).strict()
+    ),
 
-  serveTime: z.number(),
-}).strict()
+    serveTime: z.number(),
+  }).strict()
+]);
 
 
 

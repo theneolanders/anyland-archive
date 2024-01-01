@@ -308,25 +308,27 @@ const downloadAreaLoadDataAndBundle = mkQuery(
   async (id, res, bodyTxt) => {
     const bodyJson = AreaLoadSchema.parse(JSON.parse(bodyTxt))
 
-    if (bodyJson.areaKey) {
-      // NOTE: special case here, we call another API endpoint
-      // It is a bit annoying as having a file in /data/area/load/ means it will skip this even if data/area/bundle does not exist...
-      try {
-        await downloadAreaBundle({ areaId: bodyJson.areaId, areaKey: bodyJson.areaKey })
-      } catch(e) {
-        console.error("cloudfront error?", e)
-        throw e;
+    if  (bodyJson.ok === true) {
+      if (bodyJson.areaKey) {
+        // NOTE: special case here, we call another API endpoint
+        // It is a bit annoying as having a file in /data/area/load/ means it will skip this even if data/area/bundle does not exist...
+        try {
+          await downloadAreaBundle({ areaId: bodyJson.areaId, areaKey: bodyJson.areaKey })
+        } catch(e) {
+          console.error("cloudfront error?", e)
+          throw e;
+        }
       }
-    }
-    else {
-      console.log("area has no key")
-    }
+      else {
+        console.log("area has no key")
+      }
 
-    enqueuePlayer(bodyJson.areaCreatorId)
+      enqueuePlayer(bodyJson.areaCreatorId)
 
-    for (const placement of bodyJson.placements) {
-      enqueueThing(placement.Tid)
-      enqueuePlacement(bodyJson.areaId, placement.Id)
+      for (const placement of bodyJson.placements) {
+        enqueueThing(placement.Tid)
+        enqueuePlacement(bodyJson.areaId, placement.Id)
+      }
     }
   },
   true,
