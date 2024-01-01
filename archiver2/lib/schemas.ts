@@ -207,7 +207,7 @@ export const AreaLoadSchema = z.union([
     onlyOwnerSetsLocks: z.boolean().optional(),
     isExcluded: z.boolean(),
 
-    _environmentType: z.string().optional(),
+    _environmentType: z.string().nullable().optional(),
     environmentChangersJSON: z.string(),
     settingsJSON: z.string().optional(),
 
