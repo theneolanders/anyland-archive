@@ -526,11 +526,3 @@ const startQueueHandlers = () => {
 
 startQueueHandlers()
 await rollAreaRoulette()
-
-
-/* TODO:
-- feed all areaIds from archiver/areas using to_nsq
-- re-feed areaIds from archiver2/area/info, the subareas queue was created late (wait for other queues to finish so that they can skip it all)
-- re-feed thingIds from archiver2/thing/info, the tags   queue was ditto ditto ditto
-- check if data/person/areasearch has the same number of files as data/person/info - I might have messed up
-*/

@@ -61,7 +61,12 @@ export const mkQueueReader = (topic: string, channel: string, onId: (id: string,
     const body = msg.body.toString();
     console.log(`${new Date().toISOString()} [${topic}/${channel}] msg ${msg.id}: "${body}" (attempt #${msg.attempts})`)
     if (isMongoId(body)) {
-      await onId(body, msg)
+      try {
+        await onId(body, msg)
+      } catch(e) {
+        console.log(`${new Date().toISOString()} [${topic}/${channel}] msg ${msg.id}: "${body}" error! requeuing`, e)
+        msg.requeue()
+      }
     }
     else {
       console.log(`${new Date().toISOString()} [${topic}/${channel}] msg ${msg.id}: "${body}" not a mongoid!!!!!!!!!!!!! requeueing`)
