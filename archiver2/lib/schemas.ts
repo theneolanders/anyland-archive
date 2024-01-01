@@ -137,7 +137,7 @@ export const AreaSearchSchema = z.object({
 
 export const EditorSchema = z.object({
   id: z.string(),
-  name: z.string(),
+  name: z.string().nullable(),
   isOwner: z.boolean().optional()
 }).strict()
 export const AreaInfoSchema = z.object({
