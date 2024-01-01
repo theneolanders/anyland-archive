@@ -10,7 +10,7 @@ const HOSTNAME_CDN_AREABUNDLES = "d26e4xubm8adxu.cloudfront.net"
 // TODO validate env
 const HOST = process.env.HOST
 const PORT_API = process.env.PORT_API
-const PORT_CDN_THINGDEFS = process.env.PORT_CDN_THINGSDEF
+const PORT_CDN_THINGDEFS = process.env.PORT_CDN_THINGDEFS
 const PORT_CDN_AREABUNDLES = process.env.PORT_CDN_AREABUNDLES
 
 
