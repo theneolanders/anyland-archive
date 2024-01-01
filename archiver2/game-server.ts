@@ -38,7 +38,7 @@ const app = new Elysia()
             vMaj: 188,
             vMinSrv: 1,
             personId:   '5a18e948df317fa919191919',
-            homeAreaId: '5a18e948df317fa5161076c3',
+            homeAreaId: '5773b5232da36d2d18b870fb', // Buildtown
             screenName: 'singleplayer explorer',
             statusText: 'exploring around',
             isFindable: true,
@@ -73,7 +73,7 @@ const app = new Elysia()
                 return await file.json()
             }
             else {
-                return new Response("Area bundle not found", { status: 404 })
+                return await Bun.file(path.resolve("./data/area/load/5773b5232da36d2d18b870fb.json")).json() // Wizardhut
             }
         },
         { body: t.Object({ areaId: t.String(), isPrivate: t.String() }) }
@@ -246,8 +246,8 @@ const app = new Elysia()
     .get("/forum/forum/:id", ({params: { id }}) => Bun.file(path.resolve("./data/forum/forum/", id + ".json")).json() )
     .get("/forum/thread/:id", ({params: { id }}) => Bun.file(path.resolve("./data/forum/thread/", id + ".json")).json() )
 	.listen({
-        hostname: process.env.host,
-        port: process.env.port
+        hostname: HOST,
+        port: PORT_API,
     })
 
 console.log(`🦊 API server is running at on port ${app.server?.port}...`)
