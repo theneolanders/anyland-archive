@@ -166,6 +166,41 @@ export const mkApiReqs_cookie = async (sendNetRequest: (req: NetRequest) => void
     }
 
 
+    const getUrl = async (reason: string, url: string, cookie: string | null) => {
+        const now = new Date();
+        const headers = {
+            'User-Agent': 'UnityPlayer/2018.1.0f2 (UnityWebRequest/1.0, libcurl/7.51.0-DEV)',
+            'Accept': '*/*',
+            'Accept-Encoding': 'identity',
+            'X-Unity-Version': '2018.1.0f2',
+        }
+
+        if (cookie) {
+            // @ts-ignore
+            headers['Cookie'] = cookie;
+        }
+
+        const res = await fetch(url, { headers })
+
+        const bodyTxt = await res.clone().text();
+        sendNetRequest({
+            ts: now.valueOf(),
+            ts_iso: now.toISOString(),
+            url,
+            reason,
+            method: "GET",
+            reqHeaders: headers,
+            reqbody: null,
+            resCode: res.status,
+            resHeaders: headersToObject(res.headers),
+            resText: bodyTxt,
+        })
+
+
+        return res;
+    }
+
+
     const post = async (reason: string, path: string, body: string, cookie: string | null) => {
         const now = new Date();
         const url = ANYLAND_ROOT + path;
@@ -207,5 +242,5 @@ export const mkApiReqs_cookie = async (sendNetRequest: (req: NetRequest) => void
     }
 
 
-    return { get, post }
+    return { get, getUrl, post }
 }
