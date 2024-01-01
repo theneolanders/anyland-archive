@@ -20,11 +20,16 @@ const api = await mkApiReqs_cookie(sendNetRequest);
 //setInterval(api.bumpToken, 30000);
 
 
-const relayResponse = (res: Response) => {
+const relayResponse = async (res: Response) => {
   const headers = headersToObject(res.headers);
+  const body = await res.arrayBuffer()
 
-  return new Response(res.body, {
-    headers,
+  return new Response(body, {
+    headers: {
+      ...headers,
+      "X-RELAYED-BY-PROXY": new Date().toISOString(),
+
+    },
     status: res.status,
   })
 }
@@ -42,7 +47,13 @@ const server = Bun.serve({
     const url = new URL(req.url);
     const body = await req.text();
 
-    console.log(d(), req.method, req.url, JSON.stringify(headersToObject(req.headers)), body);
+    console.log({
+      ts: d(),
+      method: req.method,
+      url: req.url,
+      headers: JSON.stringify(headersToObject(req.headers)),
+      body: body
+    });
 
 
     const hostname = req.headers.get('x-forwarded-host') || url.hostname;
@@ -71,13 +82,31 @@ const server = Bun.serve({
       }
     }
     else if (hostname === CLOUDFRONT_CDN_HOSTNAME) {
-      console.log("relaying from CDN", url.pathname)
-      const res = await fetch("https://" + CLOUDFRONT_CDN_HOSTNAME + url.pathname)
+      const toUrl = "https://" + CLOUDFRONT_CDN_HOSTNAME + url.pathname
+      console.log("relaying from CDN", toUrl)
+      //const res = await api.getUrl("PROXY_SERVER", toUrl, req.headers.get("Cookie"))
+      const res = await fetch(toUrl, {
+        headers: {
+          'User-Agent': 'UnityPlayer/2018.1.0f2 (UnityWebRequest/1.0, libcurl/7.51.0-DEV)',
+          'Accept': '*/*',
+          'Accept-Encoding': 'identity',
+          'X-Unity-Version': '2018.1.0f2',
+        }
+      })
       return relayResponse(res)
     }
     else if (hostname === CLOUDFRON_CDN_HOSTNAME_AREABUNDLES) {
-      console.log("relaying from CDN", url.pathname)
-      const res = await fetch("https://" + CLOUDFRON_CDN_HOSTNAME_AREABUNDLES + url.pathname)
+      const toUrl = "https://" + CLOUDFRON_CDN_HOSTNAME_AREABUNDLES + url.pathname
+      console.log("relaying from CDN", toUrl)
+      //const res = await api.getUrl("PROXY_SERVER", toUrl, req.headers.get("Cookie"))
+      const res = await fetch(toUrl, {
+        headers: {
+          'User-Agent': 'UnityPlayer/2018.1.0f2 (UnityWebRequest/1.0, libcurl/7.51.0-DEV)',
+          'Accept': '*/*',
+          'Accept-Encoding': 'identity',
+          'X-Unity-Version': '2018.1.0f2',
+        }
+      })
       return relayResponse(res)
     }
     else {
