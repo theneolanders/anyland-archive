@@ -57,8 +57,17 @@ const app = new Elysia()
     .post( "/p", () => ({ "vMaj": 188, "vMinSrv": 1 }) )
     .post(
         "/area/load",
-        ({body: { areaId }}) => Bun.file(path.resolve("./data/area/load/", areaId + ".json")),
-        { body: t.Object({ areaId: t.String(), isPrivate: t.Boolean()}) }
+        async ({ body: { areaId } }) => {
+            const file = Bun.file(path.resolve("./data/area/load/", areaId + ".json"))
+            if (await file.exists()) {
+                return await file.json()
+            }
+            else {
+                // TODO: find some fancy tiny area
+                return await Bun.file("data/area/load/612e57dd600f6a051d8dffe0.json").json()
+            }
+        },
+        { body: t.Object({ areaId: t.String(), isPrivate: t.String() }) }
     )
     .post(
         "/area/info",
@@ -67,7 +76,17 @@ const app = new Elysia()
     )
     .get(
         "/:areaId/:areaKey", // TODO: areaKeys all seem to start with "rr"
-        ({params: { areaId, areaKey }}) => Bun.file(path.resolve("./data/area/bundle/", areaId , areaKey + ".json")),
+        async ({ params: { areaId, areaKey } }) => {
+            const file = Bun.file(path.resolve("./data/area/bundle/", areaId, areaKey + ".json"));
+
+            if (await file.exists()) {
+                return await file.json()
+            }
+            else {
+                // TODO: find some fancy tiny area
+                return await Bun.file("./data/area/bundle/612e57dd600f6a051d8dffe0/rr612e57ddd7ffc6051db0a230.json").json()
+            }
+        },
         { headers: t.Object({ "x-forwarded-host": t.Literal(HOSTNAME_CDN_AREABUNDLES) }) }
     )
     .post(
