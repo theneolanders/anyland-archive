@@ -301,29 +301,15 @@ const downloadAreaBundle = mkQuery_<{areaId: string, areaKey: string}>(
   1000
 );
 
-const downloadAreaLoadDataAndBundle = mkQuery(
-  "downloadAreaLoadDataAndBundle",
+const downloadAreaLoadData = mkQuery(
+  "downloadAreaLoadData",
   (areaId) => "data/area/load/" + areaId + ".json",
-  (id) => api.post("archiver2_downloadAreaLoadDataAndBundle", "/area/load", `areaId=${id}&isPrivate=False`),
+  (id) => api.post("archiver2_downloadAreaLoad", "/area/load", `areaId=${id}&isPrivate=False`),
   async (id, res, bodyTxt) => {
     console.log(new Date().toISOString(), "downloadarealoaddataandbundle")
     const bodyJson = AreaLoadSchema.parse(JSON.parse(bodyTxt))
 
     if  (bodyJson.ok === true) {
-      if (bodyJson.areaKey) {
-        // NOTE: special case here, we call another API endpoint
-        // It is a bit annoying as having a file in /data/area/load/ means it will skip this even if data/area/bundle does not exist...
-        try {
-          await downloadAreaBundle({ areaId: bodyJson.areaId, areaKey: bodyJson.areaKey })
-        } catch(e) {
-          console.error("cloudfront error?", e)
-          throw e;
-        }
-      }
-      else {
-        console.log("area has no key")
-      }
-
       enqueuePlayer(bodyJson.areaCreatorId)
 
       for (const placement of bodyJson.placements) {
@@ -492,10 +478,9 @@ const startQueueHandlers = () => {
         await downloadPlacementInfo({ areaId, placementId })
       }
       else {
-        console.warn("message was not a mongoId! ignoring")
+        console.log("message was not a mongoId! ignoring")
       }
 
-      await Bun.sleep(3000)
       msg.finish()
     })
 
@@ -505,7 +490,28 @@ const startQueueHandlers = () => {
   mkQueueReader("al_areas", "load_data", async (id, msg) => {
     try {
       console.log("getting areainfo", id)
-      await downloadAreaLoadDataAndBundle(id)
+      await downloadAreaLoadData(id)
+
+      const loadDataFile = Bun.file("data/area/load/" + id + ".json")
+      if (await loadDataFile.exists()) {
+        const loadData = await loadDataFile.json()
+
+        if (loadData.areaKey) {
+          try {
+            await downloadAreaBundle({ areaId: id, areaKey: loadData.areaKey })
+          } catch(e) {
+            console.error("cloudfront error?", e)
+            throw e;
+          }
+        }
+        else {
+          console.log("area has no key")
+        }
+
+
+      } else {
+        console.log("no load data, can't download bundle!")
+      }
 
       msg.finish();
     } catch (e) {
