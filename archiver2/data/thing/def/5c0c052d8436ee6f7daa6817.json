@@ -1,0 +1,1 @@
+{"v":7,"a":[7],"inc":[["coke","5bba88fb415200452c899bf5"],["thing","5c029096021a9d6779147b57"]],"p":[{"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.1750051,0.175003,0.1750031],"c":[1,1,1],"b":["when told by any music1 then emit gravity-free thing with 0.1","when touched then emit gravity-free thing with 0.1"]}]}]}

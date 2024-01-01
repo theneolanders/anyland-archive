@@ -1,0 +1,1 @@
+{"v":9,"a":[7,18],"p":[{"t":2,"a":[12],"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.01554967,0.01608133,0.01577634],"c":[0.3333332,0.3333332,0.3333332],"b":["when starts then trail start with 0.1","when touched then destroy all parts with 0s restore"]}]}]}

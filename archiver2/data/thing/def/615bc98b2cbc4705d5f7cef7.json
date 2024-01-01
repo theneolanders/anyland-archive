@@ -1,0 +1,1 @@
+{"v":9,"a":[5,7,18,48,49],"p":[{"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.3290837,0.08992164,0.07121778],"c":[0.1142856,1,0],"b":["when told by nearby playsound1 then tell nearby asound","when told by nearby playsound2 then tell nearby  bsound","when told by nearby playsound3 then tell nearby csound"]}]}]}

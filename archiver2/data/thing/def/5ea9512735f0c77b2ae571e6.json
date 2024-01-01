@@ -1,0 +1,1 @@
+{"v":9,"a":[7],"inc":[["thing","5d4becc88c31ef1b51dcc5c2"],["thing 2","5ea950eb4d0e0d78911e1d12"]],"p":[{"b":2,"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.01495979,0.01064092,0.01818945],"c":[1,1,1],"b":["when hears remove limiter then emit thing with 0","when hears change spell then emit gravity-free thing 2 with 0"]}]}]}

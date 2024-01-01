@@ -1,0 +1,1 @@
+{"n":"thing","a":[6,8],"p":[{"b":16,"t":3,"a":[17],"s":[{"p":[0,0,0],"r":[0,0,-5.336085E-08],"s":[0.838686,0.04726209,2.101223],"c":[0.5555556,0.419753,0.1234567],"b":["when starts then set light intensity 12.5","when starts then set light range 50","when starts then set light cone size 360"]}]}]}

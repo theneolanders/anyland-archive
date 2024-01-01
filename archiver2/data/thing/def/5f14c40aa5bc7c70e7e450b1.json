@@ -1,0 +1,1 @@
+{"n":"bullet","v":9,"a":[1,7,18],"p":[{"b":2,"t":2,"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.0136939,0.01369721,0.05159578],"c":[0.9714286,1,0],"b":["when touched then destroy all parts","when touched then add crumbles","when starts then trail start with 0.5s"]}]}]}

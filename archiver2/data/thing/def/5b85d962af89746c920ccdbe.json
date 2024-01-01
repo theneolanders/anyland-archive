@@ -1,0 +1,1 @@
+{"v":6,"p":[{"b":129,"e":"PORTAL DEVICE","s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.003,0.003,0.003000001],"c":[1,1,1],"b":["when touched then play track ","when touched then emit [drop from inventory]"]},{"p":[0,0,0],"r":[0,0,0],"s":[0.003,0.003,0.003000001],"c":[1,1,1]}]}]}

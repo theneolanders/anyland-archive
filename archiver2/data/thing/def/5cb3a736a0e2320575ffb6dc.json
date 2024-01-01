@@ -1,0 +1,1 @@
+{"v":9,"a":[7,12,32],"p":[{"t":21,"a":[1,36],"s":[{"p":[0,0.0001220703,-1000],"r":[0,0,0],"s":[0.233133,0.01544895,0.2354219],"c":[0.2857135,1,0],"b":["when told p1 then become untweened next"]},{"p":[0,0,0],"r":[0,0,0],"s":[0.233133,0.01544895,0.2354219],"c":[0.2857134,1,0],"b":["when told p2 then become untweened previous","when told p3 then become untweened previous"]}]}]}

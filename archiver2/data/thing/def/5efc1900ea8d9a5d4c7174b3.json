@@ -1,0 +1,1 @@
+{"v":9,"inc":[["shatter cube","5ac03050c088e313ae025cf5"]],"p":[{"s":[{"p":[0,0,0],"r":[0,0,-5.336085E-08],"s":[0.175,0.1749999,0.175],"c":[1,1,1],"b":["when touches tron disk then emit gravity-free shatter cube, become 2, play glass shattering"]},{"p":[0,0,0],"r":[0,0,-5.336085E-08],"s":[0.175,0.1749999,0.175],"c":[0,1,1],"b":["when starts then become 1 in 2s"]}]}]}

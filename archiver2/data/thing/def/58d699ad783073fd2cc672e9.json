@@ -1,0 +1,1 @@
+{"n":"thing","inc":[["lshoot","58b0aff78303835b7e3bb51d"],["lshoot 2","58b0b1894eb07f627e1f902c"],["lshoot 3","58b0d542f488a8f213cf466d"]],"p":[{"b":5,"t":8,"a":[12],"s":[{"p":[0,0,0],"r":[0,0,-1.707547E-06],"s":[0.005000001,0.005000002,0.005000001],"c":[1,1,1],"b":["when starts then emit gravity-free lshoot 3 with 2","when starts then destroy all parts"]}]}]}

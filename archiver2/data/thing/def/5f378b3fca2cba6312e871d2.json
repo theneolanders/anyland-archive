@@ -1,0 +1,1 @@
+{"v":9,"a":[7,18,48,54],"p":[{"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.1170966,0.0537078,0.08327169],"c":[0.1142856,1,0],"b":["when touches hand then tell nearby ahrealmonsters, become next in 1s"]},{"p":[0,0,0],"r":[0,0,0],"s":[0.1170966,0.0537078,0.08327169],"c":[0.1142855,1,0],"b":["when starts then become next in 6s"]}]}]}

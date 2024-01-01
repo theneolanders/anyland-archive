@@ -1,0 +1,1 @@
+{"n":"kitballlayer","v":5,"a":[2,21],"p":[{"b":3,"t":9,"s":[{"p":[0,0,0],"r":[0,0,-4.268868E-07],"s":[0.0122459,0.01224574,0.01224583],"c":[0.3333332,0.2074073,0.07407395],"b":["when consumed then destroy all parts","when consumed then add crumbles for all parts","when consumed then play bite","when touches kitball then turn visible","when starts then turn invisible"]}]}]}

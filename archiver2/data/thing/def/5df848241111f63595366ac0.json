@@ -1,0 +1,1 @@
+{"v":9,"a":[7,12,31,32],"p":[{"b":4,"a":[12,37],"s":[{"p":[0,0,0],"r":[1.366038E-05,-2.442666E-12,8.142216E-13],"s":[0.01025999,0.01026048,0.01025892],"c":[1,0,0],"b":["when told openmenu then turn visible","when told closemenu then turn invisible","when starts then all parts face someone else"]}]}]}

@@ -1,0 +1,1 @@
+{"v":9,"a":[2,7],"p":[{"b":3,"t":2,"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.1250143,0.1250117,0.1250085],"c":[1,0.6222221,0.2222221],"b":["when touched then destroy nearby with burst gravity-free 30s restore","when touched then play firework crack"]},{"p":[0,0,0],"r":[0,0,0],"s":[0.1250143,0.1250117,0.1250085],"c":[1,0.6222221,0.222222]}]}]}

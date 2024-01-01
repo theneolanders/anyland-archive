@@ -1,0 +1,1 @@
+{"n":"rain loop sfx","v":9,"a":[7,25,48,49,54],"p":[{"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.1750007,0.1750001,0.1750008],"c":[0,1,0.7428571],"b":["when told by any starttherain then loop city rain","when told by any rainsfxstop then end loop"]}]}]}

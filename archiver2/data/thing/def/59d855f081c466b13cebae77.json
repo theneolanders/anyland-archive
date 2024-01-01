@@ -1,0 +1,1 @@
+{"n":"thing","inc":[["thing","59d852505cf44c2810e920a8"]],"p":[{"t":8,"a":[12,17],"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.0781544,0.07981071,0.22425],"c":[0.1111109,0.1111109,0.1111109],"b":["when told by nearby jump then emit thing with 20, play monster hiss with very-high-pitch","when told jump then play short whistle with high-pitch"]}]}]}

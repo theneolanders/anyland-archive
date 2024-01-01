@@ -1,0 +1,1 @@
+{"n":"bspawnwp","v":2,"a":[1],"p":[{"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.1672531,0.175012,0.175006],"c":[1,1,1],"b":["when someone in vicinity then become next"]},{"p":[0,0,0],"r":[0,0,0],"s":[0.1672531,0.175012,0.175006],"c":[1,1,1],"b":["when starts then send one nearby onto  bspawnalpha","when starts then become previous"]}]}]}

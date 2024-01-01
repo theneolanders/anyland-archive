@@ -1,0 +1,1 @@
+{"n":"bullet","v":7,"a":[2,16,20,45],"p":[{"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.05455786,0.06496592,0.0482806],"c":[0,0,0],"b":["when touched then send one nearby onto dead, then tell body hit,then destroy all parts"]}]}]}

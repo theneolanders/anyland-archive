@@ -1,0 +1,1 @@
+{"v":9,"a":[2,3],"p":[{"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.1750003,0.1750004,0.1750005],"c":[1,1,1],"b":["when triggered then play male voice backup with 0.5s duration 0.1s skip stretch, become next in 0.2s"]},{"p":[0,0,0],"r":[0,0,0],"s":[0.1750003,0.1750004,0.1750005],"c":[1,1,1],"b":["when starts then play male voice backup with 0.5s duration 0.1s skip stretch "]}]}]}

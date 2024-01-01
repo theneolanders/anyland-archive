@@ -1,0 +1,1 @@
+{"v":9,"a":[2,3,22,13,40],"inc":[["thing","5e26631bcf649524d1952bfb"],["thing 2","5e2664cd0d37d23816f733db"]],"p":[{"b":69,"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.02033699,0.0108163,0.02033921],"c":[1,1,1],"b":["when consumed then play splosh","when consumed then change head to thing 2","when consumed then destroy all parts"]}]}]}

@@ -1,0 +1,1 @@
+{"n":"bspawnalpha","v":2,"a":[1,20],"p":[{"t":8,"a":[12],"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.175,0.1750002,0.1750001],"c":[1,1,1],"b":["when told by nearby bleh then become next"]},{"p":[0,0,0],"r":[0,0,0],"s":[0.175,0.1750002,0.1750001],"c":[1,1,1],"b":["when starts then send one nearby onto bspawnwp2","when starts then become previous"]}]}]}

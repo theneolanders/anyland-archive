@@ -1,0 +1,1 @@
+{"n":"bolt","v":9,"a":[7,18],"p":[{"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.1333392,0.0572646,0.05391692],"c":[1,1,1],"b":["when told stop then become next in 0.1s"]},{"p":[0,0,0.0502398],"r":[0,0,8.537737E-06],"s":[0.1333397,0.05726489,0.05391719],"c":[1,1,1],"b":["when touches clip then tell clip, play metal crank cutter","when touches clip then become 1 in 0.1s"]}]}]}

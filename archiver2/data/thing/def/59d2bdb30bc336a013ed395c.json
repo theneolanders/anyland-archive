@@ -1,0 +1,1 @@
+{"n":"thing","p":[{"s":[{"p":[0,0,0],"r":[0,0,-1.734228E-07],"s":[0.175,0.175,0.175],"c":[1,1,1],"b":["when touches hand then become next in 0.2s","when touches hand then tell any fire"]},{"p":[0,0,0],"r":[0,0,-1.734228E-07],"s":[0.175,0.175,0.175],"c":[1,1,1],"b":["when touches hand then become 1 in 0.2s","when touches hand then tell any fireoff"]}]}]}

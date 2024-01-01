@@ -1,0 +1,1 @@
+{"n":"pokeball emitter","a":[8,12],"inc":[["normal pokeball","586d5e16fa98721a160b9cef"]],"p":[{"b":5,"t":8,"a":[12],"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.01635475,0.02001717,0.0250136],"c":[0,0,0],"b":["when told by nearby pokeball then emit normal pokeball with 0.5"]}]}]}
