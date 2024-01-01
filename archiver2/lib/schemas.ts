@@ -281,26 +281,28 @@ const ForumSchema = z.object({
   user_hasFavorited: z.boolean()
 }).strict()
 
+const ForumForumThreadSchema = z.object({
+  forumId: z.string(),
+  title: z.string(),
+  titleClarification: z.string().optional(),
+  creatorId: z.string(),
+  creatorName: z.string(),
+  latestCommentDate: z.string().datetime(),
+  commentCount: z.number(),
+  isLocked: z.boolean(),
+  isSticky: z.boolean(),
+  creationDate: z.string().datetime(),
+  latestCommentText: z.string(),
+  latestCommentUserId: z.string(),
+  latestCommentUserName: z.string(),
+  id: z.string()
+}).strict()
+
 export const ForumForumSchema = z.object({
   ok: z.boolean(),
   forum: ForumSchema,
-  threads: z.array(
-    z.object({
-      forumId: z.string(),
-      title: z.string(),
-      creatorId: z.string(),
-      creatorName: z.string(),
-      latestCommentDate: z.string().datetime(),
-      commentCount: z.number(),
-      isLocked: z.boolean(),
-      isSticky: z.boolean(),
-      creationDate: z.string().datetime(),
-      latestCommentText: z.string(),
-      latestCommentUserId: z.string(),
-      latestCommentUserName: z.string(),
-      id: z.string()
-    }).strict()
-  )
+  threads: z.array(ForumForumThreadSchema),
+  stickies: z.array(ForumForumThreadSchema),
 }).strict()
 
 const CommentSchema = z.object({

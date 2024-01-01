@@ -43,33 +43,32 @@ const downloadForum = mkQuery(
   3000
 );
 
-const findAllForums = async () => {
-  const alphanumeric = 'abcdefghijklmnopqrstuvwxyz0123456789';
-  for (let i = 0; i < alphanumeric.length; i++) {
-    const char = alphanumeric[i]
-    console.log("Finding forums with", char);
-    const body = await api.post("findAllForums", "/forum/search", `searchTerm=${char}`).then(res => res.json()).then(ForumListSchema.parseAsync)
+api.bumpToken();
+setInterval(api.bumpToken, 30000);
 
-    for (const forum of body.forums) {
-      console.log(d(), "downloading", forum.id, forum.name, forum.description, forum.threadCount, forum.latestCommentDate)
-      await downloadForum(forum.id)
-
-      // NOTE: We sleep in downloadForum instead of here to avoid sleeping on boards we've skipped
-    }
-
-    await Bun.sleep(1500);
-  }
+const favforums = await api.get("download default fav boards", "/forum/favorites").then(res => res.json()).then(ForumListSchema.parseAsync)
+for (const forum of favforums.forums) {
+  console.log(d(), "downloading", forum.id, forum.name, forum.description, forum.threadCount, forum.latestCommentDate)
+  await downloadForum(forum.id)
 }
 
 
 
+const alphanumeric = '-_abcdefghijklmnopqrstuvwxyz0123456789';
+for (let i = 0; i < alphanumeric.length; i++) {
+  const char = alphanumeric[i]
+  console.log("Finding forums with", char);
+  const body = await api.post("findAllForums", "/forum/search", `searchTerm=${char}`).then(res => res.json()).then(ForumListSchema.parseAsync)
 
-//////////////////////////////
-//////////////////////////////
+  for (const forum of body.forums) {
+    console.log(d(), "downloading", forum.id, forum.name, forum.description, forum.threadCount, forum.latestCommentDate)
+    await downloadForum(forum.id)
+
+    // NOTE: We sleep in downloadForum instead of here to avoid sleeping on boards we've skipped
+  }
+
+  await Bun.sleep(1500);
+}
 
 
 
-api.bumpToken();
-setInterval(api.bumpToken, 30000);
-
-await findAllForums()
