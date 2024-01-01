@@ -59,7 +59,7 @@ export const mkQueueReader = (topic: string, channel: string, onId: (id: string,
 
   reader.on('message', async msg => {
     const body = msg.body.toString();
-    console.log(`${new Date().toISOString()} [${topic}] msg ${msg.id}: "${body}" (attempt #${msg.attempts})`)
+    console.log(`${new Date().toISOString()} [${topic}/${channel}] msg ${msg.id}: "${body}" (attempt #${msg.attempts})`)
     if (isMongoId(body)) {
       await onId(body, msg)
     }
