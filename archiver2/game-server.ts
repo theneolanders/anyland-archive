@@ -84,6 +84,19 @@ const app = new Elysia()
         { body: t.Object({ areaId: t.String() }) }
     )
     .post(
+        "/area/getsubareas",
+        async ({body: { areaId }}) => {
+            const file = Bun.file(path.resolve("./data/area/subareas/", areaId + ".json"))
+            if (await file.exists()) {
+                return await file.json()
+            }
+            else {
+                return { subAreas: [] }
+            }
+        },
+        { body: t.Object({ areaId: t.String() }) }
+    )
+    .post(
         "/area/lists",
         ({}) => {
             return canned_areaList;
@@ -114,6 +127,46 @@ const app = new Elysia()
         "/placement/info",
         ({body: { areaId, placementId }}) => Bun.file(path.resolve("./data/placement/info/", areaId, placementId + ".json")).json(),
         { body: t.Object({ areaId: t.String(), placementId: t.String() }) }
+    )
+    .get("person/friendsbystr",
+        () => canned_friendsbystr
+    )
+    .post("person/info",
+        async ({ body: { areaId, userId } }) => {
+            const file = Bun.file(path.resolve("./data/person/info/", userId + ".json"))
+
+            if (await file.exists()) {
+                return await file.json()
+            }
+            else {
+                return { "isFriend": false, "isEditorHere": false, "isListEditorHere": false, "isOwnerHere": false, "isAreaLocked": false, "isOnline": false }
+            }
+        },
+        { body: t.Object({ areaId: t.String(), userId: t.String() }) }
+    )
+    .post("/person/info",
+        async ({ body: { areaId, userId } }) => {
+            return { "isEditorHere": false}
+        },
+        { body: t.Object({ areaId: t.String(), userId: t.String() }) }
+    )
+    .get("/inventory/:page",
+        () => {
+            return { "inventoryItems": null }
+        }
+    )
+    .post("/thing/topby",
+        async ({ body: { id } }) => {
+            const file = Bun.file(path.resolve("./data/person/topby/", id + ".json"))
+
+            if (await file.exists()) {
+                return await file.json()
+            }
+            else {
+                return { ids: [] }
+            }
+        },
+        { body: t.Object({ id: t.String() }) }
     )
     .get("/thing/info/:thingId",
         ({params: { thingId }}) => Bun.file(path.resolve("./data/thing/info/", thingId + ".json")).json(),
@@ -506,3 +559,22 @@ const canned_areaList = {
         { "name": "-ping me-", "description": "a place to ask your friends to ping you. (ping them and they'll ping you)", "id": "5add11ccec262303241d8883", "playerCount": 0 }
     ]
 }
+
+const canned_friendsbystr = {
+    "online": {
+        "friends": []
+    },
+    "offline": {
+        "friends": [
+            {
+                "lastActivityOn": "2023-11-30T19:07:20.576Z",
+                "screenName": "philipp",
+                "statusText": "great meeting all of you! [board: philbox] ...",
+                "id": "5773b5232da36d2d18b870fb",
+                "isOnline": false,
+                "strength": null
+            }
+        ]
+    }
+}
+
