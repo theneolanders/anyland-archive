@@ -28,6 +28,6 @@ for (let i = 0; i <= files.length; i++) {
 
     findNestedIdsInThing(content, (id) => enqueueThing(id))
   } catch(e) {
-    console.log("error processing wordlist file", filename, e)
+    console.log("error processing file", filename, e)
   }
 }
