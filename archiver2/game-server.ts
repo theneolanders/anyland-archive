@@ -130,20 +130,24 @@ const app = new Elysia()
                     return await file.json()
                 }
                 else {
-                    return await Bun.file(path.resolve("./data/area/load/5773b5232da36d2d18b870fb.json")).json() // Wizardhut
+                    console.error("couldn't find area", areaId, "on disk?")
+                    return Response.json({ "ok": false, "_reasonDenied": "Private", "serveTime": 13 }, { status: 200 })
                 }
             }
             else if (areaUrlName) {
-                const area = areaIndex.find(a => a.name === areaUrlName)
-                if (area) {
+                const areaId = findAreaByUrlName(areaUrlName)
+                console.log("client asked to load", areaUrlName, " - found", areaId);
+
+                if (areaId) {
                     console.error("couldn't find area", areaUrlName, "in our index?")
-                    return await Bun.file(path.resolve("./data/area/load/" + area.id + ".json")).json()
+                    return await Bun.file(path.resolve("./data/area/load/" + areaId + ".json")).json()
                 }
                 else {
                     return Response.json({ "ok": false, "_reasonDenied": "Private", "serveTime": 13 }, { status: 200 })
                 }
             }
 
+            console.error("client asked for neither an areaId or an areaUrlName?")
             // Yeah that seems to be the default response, and yeah it returns a 200 OK
             return Response.json({ "ok": false, "_reasonDenied": "Private", "serveTime": 13 }, { status: 200 })
         },
