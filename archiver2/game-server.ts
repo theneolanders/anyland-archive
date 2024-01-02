@@ -14,6 +14,7 @@ const HOST = process.env.HOST
 const PORT_API = process.env.PORT_API
 const PORT_CDN_THINGDEFS = process.env.PORT_CDN_THINGDEFS
 const PORT_CDN_AREABUNDLES = process.env.PORT_CDN_AREABUNDLES
+const PORT_CDN_UGCIMAGES = process.env.PORT_CDN_UGCIMAGES
 
 
 
@@ -494,10 +495,50 @@ const app_thingDefs = new Elysia()
         port: PORT_CDN_THINGDEFS,
     })
 ;
-console.log(`🦊 ThingDefs server server is running at on port ${app_thingDefs.server?.port}...`)
+console.log(`🦊 ThingDefs server is running at on port ${app_thingDefs.server?.port}...`)
 
 
 
+const app_ugcImages = new Elysia()
+    .onRequest(({ request }) => {
+        console.info(JSON.stringify({
+            server: "UGCIMAGES",
+            ts: new Date().toISOString(),
+            ip: request.headers.get('X-Real-Ip'),
+            ua: request.headers.get("User-Agent"),
+            method: request.method,
+            url: request.url,
+        }));
+    })
+    .onError(({ code, error }) => {
+        console.info("error in middleware!", code, error.message);
+    })
+    .get(
+        "/:part1/:part2/",
+        async ({ params: { part1, part2 } }) => {
+            const file = Bun.file(path.resolve("../archiver/images/", `${part1}_${part2}.png`));
+
+            if (await file.exists()) {
+                try {
+                    return await file.json();
+                }
+                catch (e) {
+                    return new Response("<html><head><title>404 Not Found</title></head><body><h1>Not Found</h1></body></html>", { status: 404 })
+                }
+            }
+            else {
+                console.error("client asked for an ugc image not on disk!!", part1, part2)
+                return new Response("<html><head><title>404 Not Found</title></head><body><h1>Not Found</h1></body></html>", { status: 404 })
+            }
+
+        }
+    )
+	.listen({
+        hostname: HOST,
+        port: PORT_CDN_UGCIMAGES,
+    })
+;
+console.log(`🦊 ugcImages server is running at on port ${app_ugcImages.server?.port}...`)
 
 
 
