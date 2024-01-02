@@ -453,10 +453,10 @@ const startQueueHandlers = () => {
           console.log("error handling placement", e)
 
           if (msg.attempts < 10) {
-            msg.finish()
+            msg.requeue()
           }
           else {
-            msg.requeue()
+            msg.finish()
           }
         }
       }
