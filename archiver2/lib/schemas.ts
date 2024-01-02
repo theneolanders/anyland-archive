@@ -76,6 +76,9 @@ export const PersonInfoSchema = z.union([
   }).strict(),
 ])
 
+export const ThingSearchSchema = z.object({
+  thingIds: z.array( z.string() )
+}).strict()
 
 
 export const Gift = z.object({

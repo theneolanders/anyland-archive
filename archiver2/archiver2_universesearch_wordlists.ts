@@ -1,8 +1,9 @@
-import { d, mkQuery } from './lib/utils';
+import fs from 'node:fs';
+import path from 'node:path';
+import { d } from './lib/utils';
 import { mkWriter } from './lib/nsq'
 import { mkApiReqs } from './lib/api';
-import { ForumForumSchema, ForumListSchema, } from './lib/schemas';
-import * as path from "node:path";
+import { ThingSearchSchema } from './lib/schemas';
 
 
 if (!process.env.ANYLAND_COOKIE) throw "no cookie in env"
@@ -15,13 +16,6 @@ const { sendNetRequest, enqueueThing, enqueuePlayer, enqueueArea, enqueueForum, 
 const api = await mkApiReqs(sendNetRequest);
 
 
-
-
-
-//////////////////////////////
-//////////////////////////////
-
-
 function stripNewline(str: string) {
   if (str.endsWith('\r') || str.endsWith('\n')) {
       return str.slice(0, -1);
@@ -29,71 +23,42 @@ function stripNewline(str: string) {
   return str;
 }
 
-const downloadForum = mkQuery(
-  "downloadForum",
-  (id) => "data/forum/forum/" + id + ".json",
-  (id) => api.get( "downloadForum", "/forum/forum/" + id),
-  async (id, res, bodyTxt) => {
-      const bodyJson = ForumForumSchema.parse(JSON.parse(bodyTxt))
-      enqueueForum(id)
-      enqueuePlayer(bodyJson.forum.creatorId)
-      if (bodyJson.forum.dialogThingId) enqueueThing(bodyJson.forum.dialogThingId)
-
-      for (const thread of bodyJson.threads) {
-        console.log("enqueueing thread", thread.id)
-        enqueueThread(thread.id)
-      }
-
-      await Bun.sleep(1500);
-  },
-  true,
-  3000
-);
-
-api.bumpToken();
-setInterval(api.bumpToken, 30000);
-
 
 const searchAndEnqueue = async (term: string) => {
-  const body = await api.post("findAllForums_wordlist", "/forum/search", `searchTerm=${term}`).then(res => res.json()).then(ForumListSchema.parseAsync)
+  console.log("Searching universe with", term);
+  const body = await api.post("archiver2_universesearch_wordlist", "/thing/search", `term=${term}`).then(res => res.json()).then(ThingSearchSchema.parseAsync)
+  console.log("Searching universe with", term, "results:", body.thingIds.length);
 
-  for (const forum of body.forums) {
-    console.log(d(), "downloading", forum.id, forum.name, forum.description, forum.threadCount, forum.latestCommentDate)
-    await downloadForum(forum.id)
+  for (const id of body.thingIds) {
+    enqueueThing(id)
   }
 
+  await Bun.sleep(500);
 }
 
 
-
+// Start by doing a search for every letter in the alphabet
 /*
-const favforums = await api.get("download default fav boards", "/forum/favorites").then(res => res.json()).then(ForumListSchema.parseAsync)
-for (const forum of favforums.forums) {
-  console.log(d(), "downloading", forum.id, forum.name, forum.description, forum.threadCount, forum.latestCommentDate)
-  await downloadForum(forum.id)
-}
-
-
-
-const alphanumeric = '-_abcdefghijklmnopqrstuvwxyz0123456789';
+const alphanumeric = ' -_abcdefghijklmnopqrstuvwxyz0123456789';
 for (let i = 0; i < alphanumeric.length; i++) {
   const char = alphanumeric[i]
-  console.log("Finding forums with", char);
-  searchAndEnqueue(char);
+  await searchAndEnqueue(char);
 
   await Bun.sleep(1500);
 }
-
 */
-
 
 
 // Now iterate through every file in the wordlists directory
 const WORDLIST_DIR = "../archiver/wordlists/";
+const files_ = fs.readdirSync(WORDLIST_DIR);
+files_.sort();
+
+console.log(JSON.stringify(files_, null, 2))
 
 // Manually-ordered files and commenting the ones we went through already
 const files = [
-  "wordlist-twoletters.txt",
+  //"wordlist-twoletters.txt",
   "wordlist-threeletters.txt",
   "wordlist-fourletters.txt",
   "wordlist-google.txt",
@@ -126,14 +91,11 @@ for (let i = 0; i <= files.length; i++) {
         const lineClean = stripNewline(line).toLowerCase()
         console.log(`line ${j}/${lines.length}: "${lineClean}"`);
 
-        await searchAndEnqueue(lineClean)
-        await Bun.sleep(500)
+        // universe search is lowercase only but case-sensitive?
+        await searchAndEnqueue(lineClean);
       }
     }
   } catch(e) {
     console.log("error processing wordlist file", filename, e)
-    await Bun.sleep(500)
   }
 }
-
-
