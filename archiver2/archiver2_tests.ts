@@ -2,6 +2,7 @@ import { mkWriter } from './lib/nsq'
 import { mkApiReqs } from './lib/api';
 import { AreaInfoSchema, AreaSearchSchema, ForumForumSchema, PersonGiftsReceived, SubareaListSchema, ThreadsSchema } from './lib/schemas';
 import { z } from 'zod';
+import { isMongoId } from './lib/utils';
 
 
 if (!process.env.ANYLAND_COOKIE) throw "no cookie in env"
@@ -12,7 +13,7 @@ const NSQD_HOST = process.env.NSQD_HOST;
 const NSQD_PORT = 4150;
 
 const { sendNetRequest, enqueueThing, enqueuePlayer, enqueueArea, enqueueForum, enqueueThread } = await mkWriter(NSQD_HOST, NSQD_PORT);
-const api = await mkApiReqs(sendNetRequest);
+//const api = await mkApiReqs(sendNetRequest);
 
 const USER_ID_PHILIPP = "5773b5232da36d2d18b870fb";
 const FORUM_ID_UPDATES = "5846f556b09fa5d709e5f6fe";

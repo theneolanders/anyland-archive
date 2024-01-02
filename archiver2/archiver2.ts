@@ -1,6 +1,6 @@
 import z from 'zod'
 import nsq from 'nsqjs'
-import { d, isMongoId, mkQuery, mkQuery_ } from './lib/utils';
+import { d, findNestedIdsInThing, isMongoId, mkQuery, mkQuery_ } from './lib/utils';
 import { mkQueueReader, mkWriter } from './lib/nsq'
 import { mkApiReqs } from './lib/api';
 import { AreaBundleSchema, AreaInfoSchema, AreaList, AreaLoadSchema, AreaSearchSchema, ForumForumSchema, ForumListSchema, Gift, ItemInfoSchema, ItemTagsSchema, PersonGiftsReceived, PersonInfoSchema, PlacementInfoSchema, SubareaListSchema, ThreadsSchema } from './lib/schemas';
@@ -53,34 +53,12 @@ const downloadItemDefAndCrawlForNestedIds = mkQuery(
       }
 
       const bodyJson = JSON.parse(bodyTxt)
-      findNestedIdsInThing(bodyJson)
+      findNestedIdsInThing(bodyJson, (id) => enqueueThing(id))
   },
   true,
   700,
 );
 
-
-const findNestedIdsInThing = (obj: unknown) => {
-  if (obj == null) return;
-
-  if (typeof obj === 'object') {
-    for (const key in obj) {
-      // @ts-ignore
-      const val = obj[key];
-
-      // send any string that looks like a mongoId to the work queue
-      if (typeof val === "string" && isMongoId(val)) {
-        console.debug("Found id", val, "at prop", key)
-        enqueueThing(val)
-      }
-
-      // Recurse on objects (this includes arrays)
-      if (typeof val === 'object') {
-        findNestedIdsInThing(val);
-      }
-    }
-  }
-}
 
 const downloadItemTags = mkQuery(
   "downloadItemTags",

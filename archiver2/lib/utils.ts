@@ -60,3 +60,24 @@ export const mkQuery_ = <T>(
 
 export const mkQuery = mkQuery_<string>;
 
+export const findNestedIdsInThing = (obj: unknown, onMongoId: (id: string) => void) => {
+  if (obj == null) return;
+
+  if (typeof obj === 'object') {
+    for (const key in obj) {
+      // @ts-ignore
+      const val = obj[key];
+
+      // send any string that looks like a mongoId to the work queue
+      if (typeof val === "string" && isMongoId(val)) {
+        console.debug("Found id", val, "at prop", key)
+        onMongoId(val)
+      }
+
+      // Recurse on objects (this includes arrays)
+      if (typeof val === 'object') {
+        findNestedIdsInThing(val, onMongoId);
+      }
+    }
+  }
+}
