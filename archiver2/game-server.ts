@@ -1,5 +1,7 @@
 import * as path from "node:path"
 import { Elysia, t } from 'elysia'
+import * as fs from "node:fs/promises";
+import { AreaInfoSchema } from "./lib/schemas";
 
 const HOSTNAME_API = "app.anyland.com"
 const HOSTNAME_CDN_THINGDEFS = "d6ccx151yatz6.cloudfront.net"
@@ -12,6 +14,28 @@ const HOST = process.env.HOST
 const PORT_API = process.env.PORT_API
 const PORT_CDN_THINGDEFS = process.env.PORT_CDN_THINGDEFS
 const PORT_CDN_AREABUNDLES = process.env.PORT_CDN_AREABUNDLES
+
+
+const areaIndex: {name: string, description?: string, id: string, playerCount: number }[] = [];
+const files = await fs.readdir("./data/area/info");
+
+console.log("building area index...")
+for (let i = 0; i <= files.length; i++) {
+  const filename = files[i];
+  console.log("areafile", i, "/", files.length, filename);
+
+  const areaInfo = await Bun.file(path.join("./data/area/info", filename)).json().then(AreaInfoSchema.parseAsync)
+
+    areaIndex.push({
+        name: areaInfo.name,
+        description: areaInfo.description,
+        id: path.parse(filename).name,
+        playerCount: 0,
+    });
+}
+const searchArea = (term: string) => {
+    return areaIndex.filter(a => a.name.includes(term))
+}
 
 
 const app = new Elysia()
@@ -106,7 +130,7 @@ const app = new Elysia()
         "/area/search",
         async ({body: { term, byCreatorId }}) => {
             if (byCreatorId) {
-                const file = Bun.file(path.resolve("./data/area/info/", byCreatorId + ".json"))
+                const file = Bun.file(path.resolve("./data/person/areasearch/", byCreatorId + ".json"))
 
                 if (await file.exists()) {
                     return await file.json()
@@ -116,8 +140,12 @@ const app = new Elysia()
                 }
             }
             else {
-                // TODO: build an index file of [ areaName, areaId ] and simply run a .includes to find all matching
-                return { areas: [], ownPrivateAreas: [] }
+                const matchingAreas = searchArea(term);
+
+                return {
+                    areas: matchingAreas,
+                    ownPrivateAreas: []
+                }
             }
 
         },
