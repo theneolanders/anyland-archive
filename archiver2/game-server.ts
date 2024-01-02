@@ -48,8 +48,11 @@ const app = new Elysia()
             url: request.url,
         }));
     })
-    .onError(({ code, error }) => {
-        console.info("error in middleware!", code, error.message);
+    .onError(({ code, error, request}) => {
+        console.info("error in middleware!", request.url, code);
+        if (code !== "NOT_FOUND") {
+            console.log(error)
+        }
     })
     .post('/auth/start', ({ cookie: { s } }) => {
         // I'm setting a hardcoded cookie here because this is read-only so I don't care about user sessions,
