@@ -60,16 +60,8 @@ const downloadItemDefAndCrawlForNestedIds = mkQuery(
 );
 
 
-const findNestedIdsInThing = (def: any) => {
-  if (typeof def.p === 'undefined') return;
-
-  for (let j = 0; j < def.p.length; j++) {
-    const part = def.p[j];
-    walkProps(part);
-  }
-}
-const walkProps = (obj: unknown) => {
-  if (obj === null) return;
+const findNestedIdsInThing = (obj: unknown) => {
+  if (obj == null) return;
 
   if (typeof obj === 'object') {
     for (const key in obj) {
@@ -84,7 +76,7 @@ const walkProps = (obj: unknown) => {
 
       // Recurse on objects (this includes arrays)
       if (typeof val === 'object') {
-        walkProps(val);
+        findNestedIdsInThing(val);
       }
     }
   }
