@@ -16,6 +16,23 @@ const PORT_CDN_THINGDEFS = process.env.PORT_CDN_THINGDEFS
 const PORT_CDN_AREABUNDLES = process.env.PORT_CDN_AREABUNDLES
 
 
+
+
+
+const generateObjectId_ = (timestamp: number, machineId: number, processId: number, counter: number) => {
+    const hexTimestamp = Math.floor(timestamp / 1000).toString(16).padStart(8, '0');
+    const hexMachineId = machineId.toString(16).padStart(6, '0');
+    const hexProcessId = processId.toString(16).padStart(4, '0');
+    const hexCounter = counter.toString(16).padStart(6, '0');
+
+    return hexTimestamp + hexMachineId + hexProcessId + hexCounter;
+}
+
+
+let objIdCounter = 0;
+const generateObjectId = () => generateObjectId_(Date.now(), 0, 0, objIdCounter++)
+
+
 const areaIndex: {name: string, description?: string, id: string, playerCount: number }[] = [];
 const areaByUrlName = new Map<string, string>()
 const files = await fs.readdir("./data/area/info");
@@ -71,13 +88,15 @@ const app = new Elysia()
         s.value = "s%3AtbpGGrOdcHy1REgxa1gnD-npvGihWmBT.XynxEe6TsRGW8qif%2BxS2KQC9ryX%2F44CdhQKSNL0hsZc";
         s.httpOnly = true;
 
+        const playerId = generateObjectId()
+
         return {
             vMaj: 188,
             vMinSrv: 1,
-            personId:   '5a18e948df317fa919191919',
-            homeAreaId: '5773b5232da36d2d18b870fb', // Buildtown
+            personId:   playerId,
+            homeAreaId: '5773cf9fbdee942c18292f08', // sunbeach
             screenName: 'singleplayer explorer',
-            statusText: 'exploring around',
+            statusText: 'exploring around (my id: ' + playerId + ')',
             isFindable: true,
             age: 2226,
             ageSecs: 192371963,
