@@ -91,16 +91,30 @@ const app = new Elysia()
     .post( "/p", () => ({ "vMaj": 188, "vMinSrv": 1 }) )
     .post(
         "/area/load",
-        async ({ body: { areaId } }) => {
-            const file = Bun.file(path.resolve("./data/area/load/", areaId + ".json"))
-            if (await file.exists()) {
-                return await file.json()
+        async ({ body: { areaId, areaName } }) => {
+            if (areaId) {
+                const file = Bun.file(path.resolve("./data/area/load/", areaId + ".json"))
+                if (await file.exists()) {
+                    return await file.json()
+                }
+                else {
+                    return await Bun.file(path.resolve("./data/area/load/5773b5232da36d2d18b870fb.json")).json() // Wizardhut
+                }
             }
-            else {
-                return await Bun.file(path.resolve("./data/area/load/5773b5232da36d2d18b870fb.json")).json() // Wizardhut
+            else if (areaName) {
+                const area = areaIndex.find(a => a.name === areaName)
+                if (area) {
+                    return await Bun.file(path.resolve("./data/area/load/" + area.id + ".json")).json()
+                }
+                else {
+                    return Response.json({ "ok": false, "_reasonDenied": "Private", "serveTime": 13 }, { status: 200 })
+                }
             }
+
+            // Yeah that seems to be the default response, and yeah it returns a 200 OK
+            return Response.json({ "ok": false, "_reasonDenied": "Private", "serveTime": 13 }, { status: 200 })
         },
-        { body: t.Object({ areaId: t.String(), isPrivate: t.String() }) }
+        { body: t.Object({ areaId: t.Optional(t.String()), areaName: t.Optional(t.String()), isPrivate: t.String() }) }
     )
     .post(
         "/area/info",
