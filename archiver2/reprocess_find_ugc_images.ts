@@ -18,6 +18,7 @@ const baseUrl = 'https://steamuserimages-a.akamaihd.net/ugc/';
 const handleImage = async (image: string) => {
   if (image.startsWith("http")) {
     console.log("skipping non-ugc image", image)
+    return;
   };
 
   // For partial URLs
