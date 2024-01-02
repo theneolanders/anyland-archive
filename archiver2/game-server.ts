@@ -17,24 +17,36 @@ const PORT_CDN_AREABUNDLES = process.env.PORT_CDN_AREABUNDLES
 
 
 const areaIndex: {name: string, description?: string, id: string, playerCount: number }[] = [];
+const areaByUrlName = new Map<string, string>()
 const files = await fs.readdir("./data/area/info");
 
 console.log("building area index...")
 for (let i = 0; i <= files.length; i++) {
-  const filename = files[i];
-  console.log("areafile", i, "/", files.length, filename);
+    const filename = files[i];
 
-  const areaInfo = await Bun.file(path.join("./data/area/info", filename)).json().then(AreaInfoSchema.parseAsync)
+    const file = Bun.file(path.join("./data/area/info", filename))
 
+    if (!await file.exists()) continue;
+
+    const areaInfo = await file.json().then(AreaInfoSchema.parseAsync)
+    const areaId = path.parse(filename).name
+    const areaUrlName = areaInfo.name.replace(/[^-_a-z0-9]/g, "")
+
+    areaByUrlName.set(areaUrlName, areaId);
     areaIndex.push({
         name: areaInfo.name,
         description: areaInfo.description,
-        id: path.parse(filename).name,
+        id: areaId,
         playerCount: 0,
     });
 }
+console.log("done")
+
 const searchArea = (term: string) => {
     return areaIndex.filter(a => a.name.includes(term))
+}
+const findAreaByUrlName = (areaUrlName: string) => {
+    return areaByUrlName.get(areaUrlName)
 }
 
 
@@ -50,9 +62,7 @@ const app = new Elysia()
     })
     .onError(({ code, error, request}) => {
         console.info("error in middleware!", request.url, code);
-        if (code !== "NOT_FOUND") {
-            console.log(error)
-        }
+        console.log(error);
     })
     .post('/auth/start', ({ cookie: { s } }) => {
         // I'm setting a hardcoded cookie here because this is read-only so I don't care about user sessions,
@@ -94,7 +104,7 @@ const app = new Elysia()
     .post( "/p", () => ({ "vMaj": 188, "vMinSrv": 1 }) )
     .post(
         "/area/load",
-        async ({ body: { areaId, areaName } }) => {
+        async ({ body: { areaId, areaUrlName } }) => {
             if (areaId) {
                 const file = Bun.file(path.resolve("./data/area/load/", areaId + ".json"))
                 if (await file.exists()) {
@@ -104,9 +114,10 @@ const app = new Elysia()
                     return await Bun.file(path.resolve("./data/area/load/5773b5232da36d2d18b870fb.json")).json() // Wizardhut
                 }
             }
-            else if (areaName) {
-                const area = areaIndex.find(a => a.name === areaName)
+            else if (areaUrlName) {
+                const area = areaIndex.find(a => a.name === areaUrlName)
                 if (area) {
+                    console.error("couldn't find area", areaUrlName, "in our index?")
                     return await Bun.file(path.resolve("./data/area/load/" + area.id + ".json")).json()
                 }
                 else {
@@ -117,7 +128,7 @@ const app = new Elysia()
             // Yeah that seems to be the default response, and yeah it returns a 200 OK
             return Response.json({ "ok": false, "_reasonDenied": "Private", "serveTime": 13 }, { status: 200 })
         },
-        { body: t.Object({ areaId: t.Optional(t.String()), areaName: t.Optional(t.String()), isPrivate: t.String() }) }
+        { body: t.Object({ areaId: t.Optional(t.String()), areaUrlName: t.Optional(t.String()), isPrivate: t.String() }) }
     )
     .post(
         "/area/info",
@@ -189,7 +200,7 @@ const app = new Elysia()
         },
         { body: t.Object({ areaId: t.String(), userId: t.String() }) }
     )
-    .post("/person/info",
+    .post("/person/infobasic",
         async ({ body: { areaId, userId } }) => {
             return { "isEditorHere": false}
         },
@@ -198,20 +209,21 @@ const app = new Elysia()
     .get("/inventory/:page",
         () => {
             return { "inventoryItems": null }
-        }
+        },
     )
     .post("/thing/topby",
         async ({ body: { id } }) => {
             const file = Bun.file(path.resolve("./data/person/topby/", id + ".json"))
 
             if (await file.exists()) {
-                return await file.json()
+                const diskData = await file.json()
+                return { ids: diskData.ids.slice(0, 4) }
             }
             else {
                 return { ids: [] }
             }
         },
-        { body: t.Object({ id: t.String() }) }
+        { body: t.Object({ id: t.String(), limit: t.String() }) }
     )
     .get("/thing/info/:thingId",
         ({params: { thingId }}) => Bun.file(path.resolve("./data/thing/info/", thingId + ".json")).json(),
@@ -435,7 +447,24 @@ const app_thingDefs = new Elysia()
     })
     .get(
         "/:thingId",
-        ({params: { thingId }}) => Bun.file(path.resolve("./data/thing/def/", thingId + ".json")).json(),
+        async ({ params: { thingId } }) => {
+            const file = Bun.file(path.resolve("./data/thing/def/", thingId + ".json"));
+            if (await file.exists()) {
+                try {
+                    return await file.json();
+
+                }
+                catch (e) {
+                    return Response.json("", { status: 200 })
+                }
+            }
+            else {
+                console.error("client asked for a thingdef not on disk!!", thingId)
+                //return new Response("Thingdef not found", { status: 404 })
+                return Response.json("", { status: 200 })
+            }
+
+        }
     )
 	.listen({
         hostname: HOST,
