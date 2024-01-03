@@ -82,6 +82,9 @@ const app = new Elysia()
         console.info("error in middleware!", request.url, code);
         console.log(error);
     })
+    .onTransform(( { request, path, body, params }) => {
+        console.log(request.method, path, { body, params })
+    })
     .post('/auth/start', ({ cookie: { s } }) => {
         // I'm setting a hardcoded cookie here because this is read-only so I don't care about user sessions,
         // but we can very easily save a player session here. We just need to be given an account token of sorts (or keep the session forever).
