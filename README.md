@@ -34,3 +34,28 @@ Unzip the contents of this folder into `archiver/data`.
 All of the asset images are compressed in a multi-part file under `old_archiver/images.7z.00X`
 
 Unzip the contents of this folder into `old_archiver/data`.
+
+## Running the server
+
+This repo contains a docker compose file that will start a local development server for the game.
+
+The server contains Bun for running the game server, and Caddy for running the CDN and API reverse proxies.
+
+To run the server, you will need to add the following to your `/etc/hosts` file (or `C:\Windows\System32\drivers\etc\hosts` on Windows):
+
+```
+127.0.0.1  app.anyland.com
+127.0.0.1  d6ccx151yatz6.cloudfront.net
+127.0.0.1  d26e4xubm8adxu.cloudfront.net
+127.0.0.1  steamuserimages-a.akamaihd.net
+```
+
+This will allow the client to redirect requests for the CDN and API to the local server.
+
+Then, run the server with:
+
+```bash
+docker compose up
+```
+
+Or using Docker Desktop.
