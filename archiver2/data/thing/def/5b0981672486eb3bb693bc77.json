@@ -1,1 +1,0 @@
-{"v":4,"p":[{"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.1750128,0.1750098,0.1750126],"c":[1,1,1],"b":["when touched then tell any area1, then become next"]},{"p":[0,0,0],"r":[0,0,0],"s":[0.1750128,0.1750098,0.1750126],"c":[0,1,1],"b":["when touched then tell any clear, then become previous"]}]}]}

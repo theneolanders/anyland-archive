@@ -1,1 +1,0 @@
-{"v":7,"p":[{"b":251,"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.04011533,0.03824337,0.0771452],"c":[1,1,1],"b":["when touches hand then become next in 1s"]},{"p":[0,0,0],"r":[0,0,0],"s":[0.04011533,0.03824337,0.0771452],"c":[0,0,0],"b":["when touches hand then reset area","when told reset then become previous in 2"]}]}]}

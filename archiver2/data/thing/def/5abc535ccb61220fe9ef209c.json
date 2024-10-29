@@ -1,1 +1,0 @@
-{"n":"boundary","v":3,"a":[2,7,18,34],"p":[{"t":21,"t1":16,"s":[{"p":[0,0,0],"r":[0,0,-6.157171E-14],"s":[11.75121,2.78449,0.1716893],"c":[0,0,0],"b":["when starts then destroy all parts","when touched then send one nearby to the dog house"],"t1":{"c":[1,0,0],"x":0,"y":0,"a":1,"m":0.5,"n":0.5,"r":0,"g":1,"o":1,"t":0,"e":0}}]}]}

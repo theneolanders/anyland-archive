@@ -1,1 +1,0 @@
-{"n":"blood gib big","v":9,"a":[2,4,7,12,16],"p":[{"b":3,"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.01471968,0.0147192,0.01471929],"c":[1,0,0],"b":["when starts then trail start with 1s","when touched then become next in 0.5s"]},{"p":[0,0,0],"r":[0,0,0],"s":[0.1909927,0.1660872,0.001],"c":[1,0,0],"b":["when starts then all parts face up","when starts then turn uncollidable"]}]}]}

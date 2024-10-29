@@ -1,1 +1,0 @@
-{"n":"thing","a":[2,3],"p":[{"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.1750002,0.1750002,0.1750004],"c":[1,1,1],"b":["when told by body hand touches right then become next in 2s"]},{"p":[0,0,0],"r":[0,0,0],"s":[0.1750002,0.1750002,0.1750004],"c":[0,1,1],"b":["when starts then become previous in 0.2s"]}]}]}

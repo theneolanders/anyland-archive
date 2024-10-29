@@ -1,1 +1,0 @@
-{"v":7,"a":[22,18],"p":[{"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.06203054,0.03777846,0.1750144],"c":[1,0,0],"b":["when touches hand then become next in 0.5s, then tell any mirrorscreen, then play button click"]},{"p":[-1.192093E-07,1.862645E-09,-0.01184648],"r":[0,0,4.829673E-06],"s":[0.06203035,0.03777908,0.1750207],"c":[1,0,0],"b":["when starts then become next in 0.5s"]}]}]}

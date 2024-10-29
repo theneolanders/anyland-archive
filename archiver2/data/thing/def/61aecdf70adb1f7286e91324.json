@@ -1,1 +1,0 @@
-{"n":"deep cave entrance","v":9,"a":[6,13],"p":[{"t":7,"c":[[-0.454,-0.334,-0.86,7,8,4]],"s":[{"p":[0,0,0],"r":[0,0,1.707547E-06],"s":[1.762498,0.9430172,0.1749997],"c":[0,0,0],"b":["when touched and is area.musicsecret > 0 then send one nearby to the deeper cave"]}]}]}

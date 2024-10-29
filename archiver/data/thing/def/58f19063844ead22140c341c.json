@@ -1,0 +1,1 @@
+{"n":"thing","a":[1,2,17],"inc":[["light","58f18bd3634075b8130427a2"]],"p":[{"b":4,"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.1250001,0.1250001,0.1250001],"c":[1,1,1],"b":["when starts then emit light with 10","when starts then become next in 2s"]},{"p":[0,0,0],"r":[0,0,0],"s":[0.1250001,0.1250001,0.1614099],"c":[1,1,1],"b":["when starts then become next in .1s"]}]}]}

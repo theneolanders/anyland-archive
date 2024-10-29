@@ -1,1 +1,0 @@
-{"n":"cough","v":9,"a":[7,25,48,49,54],"p":[{"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.1750001,0.175,0.175],"c":[1,1,1],"b":["when neared then play voice cough with varied-pitch, become next in 0.5s"]},{"p":[0,0,0],"r":[0,0,0],"s":[0.1750001,0.175,0.175],"c":[1,1,1],"b":["when starts then become next in 0.8s"]}]}]}

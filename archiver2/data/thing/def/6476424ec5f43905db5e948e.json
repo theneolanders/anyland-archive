@@ -1,1 +1,0 @@
-{"v":9,"a":[7,18],"p":[{"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.1750384,0.1750058,0.06655902],"c":[1,1,1],"b":["when touches hand then become unsoftened next in 1"]},{"p":[-3.72529E-09,0,0.03183079],"r":[0,0,-1.001791E-05],"s":[0.1750508,0.1750091,0.0665641],"c":[1,1,1],"b":["when touches hand then become unsoftened next in 0.5","when starts then allow invisibility"]}]}]}

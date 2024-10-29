@@ -1,1 +1,0 @@
-{"n":"thing","p":[{"b":2,"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.1250001,0.1250002,0.1250001],"c":[1,1,1],"b":["when touched then become 2 in 2s, then play alarm clock digital"]},{"p":[0,0,0],"r":[0,0,0],"s":[0.005,0.005,0.1250001],"c":[0.9714286,1,0],"b":["when starts then become 1 in 0.2s"]}]}]}

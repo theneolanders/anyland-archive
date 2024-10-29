@@ -1,1 +1,0 @@
-{"v":7,"a":[7,18,31,32],"inc":[["thing","5c2db99dea1f546e4855e373"]],"p":[{"t":10,"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.04983929,0.04983931,0.04983873],"c":[0.4444443,0.4444443,0.4444443],"b":["when touches drill then emit thing with 0","when touches drill then turn off","when touches drill then play pop","when told by any restore then turn on"]}]}]}

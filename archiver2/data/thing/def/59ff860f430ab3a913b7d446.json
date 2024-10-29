@@ -1,1 +1,0 @@
-{"n":"bspawnwp2","v":2,"a":[1,20],"p":[{"t":8,"a":[12],"s":[{"p":[0,0,0],"r":[0,0,0],"s":[2.674634,2.951516,0.1750002],"c":[0.4571431,0,1],"b":["when someone in vicinity then become next"]},{"p":[0,0,0],"r":[0,0,0],"s":[0.1750002,0.1750001,0.1750002],"c":[1,1,1],"b":["when starts then send one nearby onto homespawn","when starts then become previous"]}]}]}

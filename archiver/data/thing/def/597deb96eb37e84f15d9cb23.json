@@ -1,0 +1,1 @@
+{"n":"orpor","a":[2,16],"p":[{"b":5,"t":8,"a":[12],"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.2160646,0.2604132,0.0875313],"c":[1,0.6857142,0],"b":["when starts then become 2 in 0.3s"]},{"p":[0,0,0],"r":[0,0,0],"s":[0.2160646,0.2604132,0.0875313],"c":[1,1,1],"b":["when starts then send nearby onto orangeportal","when starts then destroy all parts"]}]}]}

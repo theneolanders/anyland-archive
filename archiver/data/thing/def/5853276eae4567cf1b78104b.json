@@ -1,0 +1,1 @@
+{"n":"dun-cave-bgn","p":[{"b":6,"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.1203671,0.1016724,0.1250002],"c":[1,1,1],"b":["when starts then play eerie sound rise with 500","when starts then become 2 in 3s"]},{"p":[0,0,0],"r":[0,0,0],"s":[0.1203671,0.1016724,0.1250002],"c":[1,1,1],"b":["when starts then play eerie sounds with 500","when starts then become 1 in 3s"]}]}]}

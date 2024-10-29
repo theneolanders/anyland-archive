@@ -1,1 +1,0 @@
-{"v":7,"a":[7,31],"p":[{"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.02679903,0.02679895,0.02679884],"c":[1,1,1],"b":["when touches hand then tell nearby secretdoor1open","when touches hand then become 2"]},{"p":[0,0,0],"r":[0,0,0],"s":[0.02246214,0.02246214,0.02246214],"c":[1,1,1],"b":["when touches hand then tell nearby secretdoor1close","when touches hand then become 1"]}]}]}

@@ -1,1 +1,0 @@
-{"v":7,"a":[7,18,21],"p":[{"im":"1001394007105650293/671A57EF517ACBE428804CBC3EC9F51499877E0A/","s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.03187313,0.0001821297,0.03187313],"c":[1,1,1],"b":["when is state = 7 and is q = 4 then turn visible","when is state != 7 then turn invisible"]}]}]}

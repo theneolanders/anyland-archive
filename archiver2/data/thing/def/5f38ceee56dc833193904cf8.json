@@ -1,1 +1,0 @@
-{"v":9,"a":[48,49],"p":[{"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.1750054,0.1750047,0.1750059],"c":[1,1,1],"b":["when starts then play machine 15 with low-pass very-low-pitch 100","when starts then become next in 0s"]},{"p":[0,0,0],"r":[0,0,0],"s":[0.1750054,0.1750047,0.1750059],"c":[1,1,1],"b":["when starts then become previous in 3s"]}]}]}

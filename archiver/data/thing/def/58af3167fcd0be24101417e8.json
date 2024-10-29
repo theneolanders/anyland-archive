@@ -1,0 +1,1 @@
+{"n":"thing","a":[12],"inc":[["thing","58acbd89544dd7e114d3cece"],["blntst","58af311a3bbe409113f3ea70"]],"p":[{"t":8,"a":[12],"s":[{"p":[0,0,0],"r":[0,0,5.336085E-07],"s":[0.01480079,0.02040055,0.03871104],"c":[1,1,1],"b":["when touched then emit blntst with 0, playbounce boing springboard 2"]}]}]}

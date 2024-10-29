@@ -1,1 +1,0 @@
-{"v":9,"a":[20],"p":[{"a":[12],"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.1750005,0.1750005,0.1750006],"c":[1,1,1],"b":["when someone new in vicinity then say welcome","when someone new in vicinity then become next"]},{"p":[0,0,0],"r":[0,0,0],"s":[0.1750005,0.1750005,0.1750006],"c":[1,1,1],"b":["when starts then become previous"]}]}]}

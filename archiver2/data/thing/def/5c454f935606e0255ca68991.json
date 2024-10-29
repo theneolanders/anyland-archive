@@ -1,1 +1,0 @@
-{"n":"block","v":7,"a":[2,32],"p":[{"s":[{"p":[-0.1125183,0.1625061,0.02499962],"r":[-3.415095E-06,0,180],"s":[0.02597978,0.02597894,0.02598061],"c":[1,1,1],"b":["when touches block then tell first of any place","when touches block then destroy all parts"]}]}]}

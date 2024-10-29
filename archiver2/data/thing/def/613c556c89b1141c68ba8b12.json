@@ -1,1 +1,0 @@
-{"v":9,"a":[5,7,18,48],"p":[{"s":[{"p":[0,0,0],"r":[0,0,0],"s":[1.705872,0.04696251,0.7994917],"c":[1,1,1],"b":["when touches hand then tell nearby notouchie, play water splash thick, become next in 1s"]},{"p":[0,0,0],"r":[0,0,0],"s":[1.705872,0.04696251,0.7994917],"c":[1,1,1],"b":["when starts then become next in 27s"]}]}]}

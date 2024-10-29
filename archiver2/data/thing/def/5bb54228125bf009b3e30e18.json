@@ -1,1 +1,0 @@
-{"n":"spider sound","v":7,"a":[48],"p":[{"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.08589555,0.05400887,0.07642565],"c":[1,1,1],"b":["when told by nearby floor trigger spider then become 2 "]},{"p":[0,0,0],"r":[0,0,0],"s":[0.08589555,0.05400887,0.07642565],"c":[1,1,1],"b":["when starts then play creature roar","when starts then become 1"]}]}]}

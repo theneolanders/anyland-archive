@@ -1,0 +1,1 @@
+{"n":"thing","p":[{"t":8,"a":[12],"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.1750017,0.1750025,0.1750025],"c":[1,1,1],"b":["when starts then become previous in 1.5s","when starts then play ghost whoosh with low-pass","when starts then become next in 0.2s"]},{"p":[0,0,0],"r":[0,0,0],"s":[0.1750017,0.1750025,0.1750025],"c":[1,1,1],"b":["when starts then become previous in 1.5s"]}]}]}

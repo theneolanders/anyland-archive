@@ -1,1 +1,0 @@
-{"v":9,"a":[5,7,48],"p":[{"a":[3],"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.1054044,0.1053883,0.1053939],"c":[1,1,1],"b":["when touches hand then play gun sizzle cooldown, become next in 3s"]},{"p":[0,0,0],"r":[0,0,0],"s":[0.1054044,0.1053883,0.1053939],"c":[1,1,1],"b":["when starts then become next in 2s"]}]}]}

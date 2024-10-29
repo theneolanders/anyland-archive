@@ -1,1 +1,0 @@
-{"v":7,"a":[7,12,18],"p":[{"b":205,"a":[12,37],"i":[{"t":"5bd515a4ee4c2f3a0c6d2299","p":[-7.423759E-05,-0.002676606,0.2104049],"r":[0,0,270]}],"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.04500123,0.04500335,0.045003],"c":[1,1,1],"b":["when starts then set constant rotation to 0 0 20","when told by any all_taken then destroy all parts"]}]}]}

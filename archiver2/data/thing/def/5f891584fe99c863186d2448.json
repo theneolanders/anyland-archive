@@ -1,1 +1,0 @@
-{"v":9,"a":[7,34,48,49,54],"p":[{"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.175133,0.1750156,0.175111],"c":[0,1,1],"b":["when starts then become next in 20s"]},{"p":[0,0,0],"r":[0,0,0],"s":[0.175133,0.1750156,0.175111],"c":[0,1,1],"b":["when starts then send one nearby onto deadmansparty, tell any roomwrong"]}]}]}

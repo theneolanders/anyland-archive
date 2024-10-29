@@ -1,1 +1,0 @@
-{"n":"thing","v":3,"a":[2,3],"p":[{"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.05652638,0.01126549,0.005],"c":[0,0,0],"b":["when triggered then tell body open","when trigger let go then tell body closed","when triggered then loop hum 3","when trigger let go then end loop"]}]}]}

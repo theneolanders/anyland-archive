@@ -1,1 +1,0 @@
-{"n":"thing","v":3,"a":[6],"inc":[["thing","5a807419dfd0e38d13e3189c"],["thing 2","5a8074fd24eeafea0fc17ea0"]],"p":[{"s":[{"p":[0,0,0],"r":[0,0,-1.067217E-07],"s":[0.04475043,0.05141336,0.04946753],"c":[1,1,1],"b":["when touched then emit gravity-free thing 2 with 0"]}]}]}

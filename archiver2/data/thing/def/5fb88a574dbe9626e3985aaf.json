@@ -1,1 +1,0 @@
-{"v":9,"a":[7,12,18,31],"p":[{"b":3,"t":2,"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.0373022,0.03729999,0.0373005],"c":[0,0.05714229,1],"b":["when starts then trail start with 1s","when touched then destroy all parts, then play bullet impact"]}]}]}

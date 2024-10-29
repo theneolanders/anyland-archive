@@ -1,1 +1,0 @@
-{"n":"gold-door","p":[{"t":10,"s":[{"p":[0,0,0],"r":[0,0,0],"s":[1.088326,0.1750016,1.965101],"c":[1,0.8571429,0],"b":["when told by any doortoggle then become 2 in 1s","when touched then play doorbell"]},{"p":[0,0,0],"r":[0,0,0],"s":[0.1849005,0.1750016,0.173817],"c":[1,0.8571429,0],"b":["when told by any doortoggle then become 1 in 1s"]}]}]}

@@ -1,0 +1,1 @@
+{"n":"homespawn","v":2,"a":[1,20],"p":[{"t":8,"a":[12],"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.1672531,0.175012,0.175006],"c":[1,1,1],"b":["when told by nearby 1863code then become next"]},{"p":[0,0,0],"r":[0,0,0],"s":[0.1672531,0.175012,0.175006],"c":[1,1,1],"b":["when starts then send one nearby onto  bspawnwp","when starts then become previous"]}]}]}

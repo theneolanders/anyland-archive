@@ -1,1 +1,0 @@
-{"n":"thing","v":3,"a":[7,18],"p":[{"b":7,"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.1250027,0.1250265,0.1250269],"c":[1,0,0.3428572],"b":["when pointed at then become next in 0.05s, tell any selected"]},{"p":[0,0,0],"r":[0,0,0],"s":[0.1250027,0.1250265,0.1250269],"c":[0.1142856,1,0],"b":["when told by any selected then become previous in 0.05s"]}]}]}

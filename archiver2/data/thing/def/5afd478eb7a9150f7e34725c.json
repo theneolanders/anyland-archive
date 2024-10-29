@@ -1,1 +1,0 @@
-{"n":"lazer","v":4,"inc":[["thing","5afd461bc4998e770b95945e"]],"p":[{"b":62,"t":2,"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.0210913,0.02137524,0.1609905],"c":[1,0,0.3428572],"b":["when starts then propel forward with 10","when touched then destroy all parts","when touched then emit gravity-free thing"]}]}]}

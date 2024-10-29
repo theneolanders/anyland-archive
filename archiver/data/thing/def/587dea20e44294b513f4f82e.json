@@ -1,0 +1,1 @@
+{"n":"thing","a":[7,18],"inc":[["thing","587de5c1c624255429ef058f"]],"p":[{"b":4,"a":[14],"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.1252577,0.1251627,0.1249618],"c":[1,1,1],"b":["when starts then emit gravity-free thing with 5","when starts then become next in 1.8"]},{"p":[0,0,0],"r":[0,0,0],"s":[0.1252577,0.1251627,0.1249618],"c":[1,1,1],"b":["when starts then become next"]}]}]}

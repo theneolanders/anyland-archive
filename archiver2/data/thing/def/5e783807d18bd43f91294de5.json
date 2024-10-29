@@ -1,1 +1,0 @@
-{"v":9,"a":[2,7,18],"inc":[["thing","5e7834f76c543274a5b7462c"]],"p":[{"b":3,"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.1250016,0.1250015,0.163121],"c":[1,1,1],"b":["when touched then play splat crunch hit","when touched then emit thing with 0","when touched then add crumbles for all parts","when touched then destroy all parts","when shaken then play funny scream"]}]}]}

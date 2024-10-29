@@ -1,1 +1,0 @@
-{"v":9,"a":[31],"inc":[["thing","5c9d4d893b3fea056ae6b1df"]],"p":[{"a":[12],"s":[{"p":[0,0,0],"r":[0,0,0],"s":[0.4418617,0.4418617,0.4418617],"c":[1,1,1],"b":["when touches hand then change head to thing","when touches face then change head to thing","when consumed then change head to thing"]}]}]}

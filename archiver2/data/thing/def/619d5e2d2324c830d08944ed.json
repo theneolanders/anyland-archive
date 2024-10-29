@@ -1,1 +1,0 @@
-{"n":"rope secret tp collision","v":9,"a":[5],"p":[{"a":[12],"s":[{"p":[0,0,0],"r":[0,0,8.537737E-07],"s":[0.6939804,0.4315243,0.2507385],"c":[1,1,1],"b":["when touched then send one nearby onto rope tp bottom"]}]}]}
