@@ -1,6 +1,6 @@
 import z from 'zod'
 import nsq from 'nsqjs'
-import { d, isMongoId, mkQuery, mkQuery_ } from './lib/utils';
+import { d, findNestedIdsInThing, isMongoId, mkQuery, mkQuery_ } from './lib/utils';
 import { mkQueueReader, mkWriter } from './lib/nsq'
 import { mkApiReqs } from './lib/api';
 import { AreaBundleSchema, AreaInfoSchema, AreaList, AreaLoadSchema, AreaSearchSchema, ForumForumSchema, ForumListSchema, Gift, ItemInfoSchema, ItemTagsSchema, PersonGiftsReceived, PersonInfoSchema, PlacementInfoSchema, SubareaListSchema, ThreadsSchema } from './lib/schemas';
@@ -53,42 +53,12 @@ const downloadItemDefAndCrawlForNestedIds = mkQuery(
       }
 
       const bodyJson = JSON.parse(bodyTxt)
-      findNestedIdsInThing(bodyJson)
+      findNestedIdsInThing(bodyJson, (id) => enqueueThing(id))
   },
   true,
   700,
 );
 
-
-const findNestedIdsInThing = (def: any) => {
-  if (typeof def.p === 'undefined') return;
-
-  for (let j = 0; j < def.p.length; j++) {
-    const part = def.p[j];
-    walkProps(part);
-  }
-}
-const walkProps = (obj: unknown) => {
-  if (obj === null) return;
-
-  if (typeof obj === 'object') {
-    for (const key in obj) {
-      // @ts-ignore
-      const val = obj[key];
-
-      // send any string that looks like a mongoId to the work queue
-      if (typeof val === "string" && isMongoId(val)) {
-        console.debug("Found id", val, "at prop", key)
-        enqueueThing(val)
-      }
-
-      // Recurse on objects (this includes arrays)
-      if (typeof val === 'object') {
-        walkProps(val);
-      }
-    }
-  }
-}
 
 const downloadItemTags = mkQuery(
   "downloadItemTags",
@@ -474,14 +444,27 @@ const startQueueHandlers = () => {
       const body = msg.body.toString();
       console.log(`${new Date().toISOString()} [${topic}] msg ${msg.id}: "${body}" (attempt #${msg.attempts})`)
       const [ areaId, placementId ] = body.split(',')
+
       if (isMongoId(areaId) && isMongoId(placementId)) {
-        await downloadPlacementInfo({ areaId, placementId })
+        try {
+          await downloadPlacementInfo({ areaId, placementId })
+          msg.finish()
+        } catch(e) {
+          console.log("error handling placement", e)
+
+          if (msg.attempts < 10) {
+            msg.requeue()
+          }
+          else {
+            msg.finish()
+          }
+        }
       }
       else {
         console.log("message was not a mongoId! ignoring")
+        msg.finish()
       }
 
-      msg.finish()
     })
 
     reader.connect()
@@ -528,9 +511,15 @@ startQueueHandlers()
 await rollAreaRoulette()
 
 
-/* TODO:
-- feed all areaIds from archiver/areas using to_nsq
-- re-feed areaIds from archiver2/area/info, the subareas queue was created late (wait for other queues to finish so that they can skip it all)
-- re-feed thingIds from archiver2/thing/info, the tags   queue was ditto ditto ditto
-- check if data/person/areasearch has the same number of files as data/person/info - I might have messed up
-*/
+
+
+process.on('uncaughtException', (error) => {
+  console.error('Uncaught Exception:', error);
+  process.exit(1);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+  process.exit(1);
+});
+

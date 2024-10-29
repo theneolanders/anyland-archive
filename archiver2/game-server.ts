@@ -1,5 +1,7 @@
 import * as path from "node:path"
 import { Elysia, t } from 'elysia'
+import * as fs from "node:fs/promises";
+import { AreaInfoSchema } from "./lib/schemas";
 
 const HOSTNAME_API = "app.anyland.com"
 const HOSTNAME_CDN_THINGDEFS = "d6ccx151yatz6.cloudfront.net"
@@ -12,6 +14,58 @@ const HOST = process.env.HOST
 const PORT_API = process.env.PORT_API
 const PORT_CDN_THINGDEFS = process.env.PORT_CDN_THINGDEFS
 const PORT_CDN_AREABUNDLES = process.env.PORT_CDN_AREABUNDLES
+const PORT_CDN_UGCIMAGES = process.env.PORT_CDN_UGCIMAGES
+
+
+
+
+
+const generateObjectId_ = (timestamp: number, machineId: number, processId: number, counter: number) => {
+    const hexTimestamp = Math.floor(timestamp / 1000).toString(16).padStart(8, '0');
+    const hexMachineId = machineId.toString(16).padStart(6, '0');
+    const hexProcessId = processId.toString(16).padStart(4, '0');
+    const hexCounter = counter.toString(16).padStart(6, '0');
+
+    return hexTimestamp + hexMachineId + hexProcessId + hexCounter;
+}
+
+
+let objIdCounter = 0;
+const generateObjectId = () => generateObjectId_(Date.now(), 0, 0, objIdCounter++)
+
+
+const areaIndex: {name: string, description?: string, id: string, playerCount: number }[] = [];
+const areaByUrlName = new Map<string, string>()
+const files = await fs.readdir("./data/area/info");
+
+console.log("building area index...")
+for (let i = 0; i <= files.length; i++) {
+    const filename = files[i];
+
+    const file = Bun.file(path.join("./data/area/info", filename))
+
+    if (!await file.exists()) continue;
+
+    const areaInfo = await file.json().then(AreaInfoSchema.parseAsync)
+    const areaId = path.parse(filename).name
+    const areaUrlName = areaInfo.name.replace(/[^-_a-z0-9]/g, "")
+
+    areaByUrlName.set(areaUrlName, areaId);
+    areaIndex.push({
+        name: areaInfo.name,
+        description: areaInfo.description,
+        id: areaId,
+        playerCount: 0,
+    });
+}
+console.log("done")
+
+const searchArea = (term: string) => {
+    return areaIndex.filter(a => a.name.includes(term))
+}
+const findAreaByUrlName = (areaUrlName: string) => {
+    return areaByUrlName.get(areaUrlName)
+}
 
 
 const app = new Elysia()
@@ -24,8 +78,12 @@ const app = new Elysia()
             url: request.url,
         }));
     })
-    .onError(({ code, error }) => {
-        console.info("error in middleware!", code, error.message);
+    .onError(({ code, error, request}) => {
+        console.info("error in middleware!", request.url, code);
+        console.log(error);
+    })
+    .onTransform(( { request, path, body, params }) => {
+        console.log(request.method, path, { body, params })
     })
     .post('/auth/start', ({ cookie: { s } }) => {
         // I'm setting a hardcoded cookie here because this is read-only so I don't care about user sessions,
@@ -34,13 +92,15 @@ const app = new Elysia()
         s.value = "s%3AtbpGGrOdcHy1REgxa1gnD-npvGihWmBT.XynxEe6TsRGW8qif%2BxS2KQC9ryX%2F44CdhQKSNL0hsZc";
         s.httpOnly = true;
 
+        const playerId = generateObjectId()
+
         return {
             vMaj: 188,
             vMinSrv: 1,
-            personId:   '5a18e948df317fa919191919',
-            homeAreaId: '5773b5232da36d2d18b870fb', // Buildtown
+            personId:   playerId,
+            homeAreaId: '5773cf9fbdee942c18292f08', // sunbeach
             screenName: 'singleplayer explorer',
-            statusText: 'exploring around',
+            statusText: 'exploring around (my id: ' + playerId + ')',
             isFindable: true,
             age: 2226,
             ageSecs: 192371963,
@@ -67,16 +127,35 @@ const app = new Elysia()
     .post( "/p", () => ({ "vMaj": 188, "vMinSrv": 1 }) )
     .post(
         "/area/load",
-        async ({ body: { areaId } }) => {
-            const file = Bun.file(path.resolve("./data/area/load/", areaId + ".json"))
-            if (await file.exists()) {
-                return await file.json()
+        async ({ body: { areaId, areaUrlName } }) => {
+            if (areaId) {
+                const file = Bun.file(path.resolve("./data/area/load/", areaId + ".json"))
+                if (await file.exists()) {
+                    return await file.json()
+                }
+                else {
+                    console.error("couldn't find area", areaId, "on disk?")
+                    return Response.json({ "ok": false, "_reasonDenied": "Private", "serveTime": 13 }, { status: 200 })
+                }
             }
-            else {
-                return await Bun.file(path.resolve("./data/area/load/5773b5232da36d2d18b870fb.json")).json() // Wizardhut
+            else if (areaUrlName) {
+                const areaId = findAreaByUrlName(areaUrlName)
+                console.log("client asked to load", areaUrlName, " - found", areaId);
+
+                if (areaId) {
+                    console.error("couldn't find area", areaUrlName, "in our index?")
+                    return await Bun.file(path.resolve("./data/area/load/" + areaId + ".json")).json()
+                }
+                else {
+                    return Response.json({ "ok": false, "_reasonDenied": "Private", "serveTime": 13 }, { status: 200 })
+                }
             }
+
+            console.error("client asked for neither an areaId or an areaUrlName?")
+            // Yeah that seems to be the default response, and yeah it returns a 200 OK
+            return Response.json({ "ok": false, "_reasonDenied": "Private", "serveTime": 13 }, { status: 200 })
         },
-        { body: t.Object({ areaId: t.String(), isPrivate: t.String() }) }
+        { body: t.Object({ areaId: t.Optional(t.String()), areaUrlName: t.Optional(t.String()), isPrivate: t.String() }) }
     )
     .post(
         "/area/info",
@@ -106,7 +185,7 @@ const app = new Elysia()
         "/area/search",
         async ({body: { term, byCreatorId }}) => {
             if (byCreatorId) {
-                const file = Bun.file(path.resolve("./data/area/info/", byCreatorId + ".json"))
+                const file = Bun.file(path.resolve("./data/person/areasearch/", byCreatorId + ".json"))
 
                 if (await file.exists()) {
                     return await file.json()
@@ -116,8 +195,12 @@ const app = new Elysia()
                 }
             }
             else {
-                // TODO: build an index file of [ areaName, areaId ] and simply run a .includes to find all matching
-                return { areas: [], ownPrivateAreas: [] }
+                const matchingAreas = searchArea(term);
+
+                return {
+                    areas: matchingAreas,
+                    ownPrivateAreas: []
+                }
             }
 
         },
@@ -144,7 +227,7 @@ const app = new Elysia()
         },
         { body: t.Object({ areaId: t.String(), userId: t.String() }) }
     )
-    .post("/person/info",
+    .post("/person/infobasic",
         async ({ body: { areaId, userId } }) => {
             return { "isEditorHere": false}
         },
@@ -153,20 +236,28 @@ const app = new Elysia()
     .get("/inventory/:page",
         () => {
             return { "inventoryItems": null }
-        }
+        },
     )
+    .post("/thing", async ({ body }) => {
+        console.log("user asked to create a thing", body)
+        return new Response("Not implemented", { status: 500 })
+    },
+    {
+        body: t.Unknown()
+    })
     .post("/thing/topby",
         async ({ body: { id } }) => {
             const file = Bun.file(path.resolve("./data/person/topby/", id + ".json"))
 
             if (await file.exists()) {
-                return await file.json()
+                const diskData = await file.json()
+                return { ids: diskData.ids.slice(0, 4) }
             }
             else {
                 return { ids: [] }
             }
         },
-        { body: t.Object({ id: t.String() }) }
+        { body: t.Object({ id: t.String(), limit: t.String() }) }
     )
     .get("/thing/info/:thingId",
         ({params: { thingId }}) => Bun.file(path.resolve("./data/thing/info/", thingId + ".json")).json(),
@@ -191,136 +282,7 @@ const app = new Elysia()
     )
     .get("/forum/favorites",
         () => {
-            return {
-                "forums": [
-                  {
-                    "name": "help",
-                    "description": "for all your anyland questions",
-                    "creatorId": "5773b5232da36d2d18b870fb",
-                    "creatorName": "philipp",
-                    "threadCount": 346,
-                    "latestCommentDate": "2023-12-21T09:35:12.880Z",
-                    "protectionLevel": 0,
-                    "creationDate": "2016-12-06T16:31:52.285Z",
-                    "dialogThingId": "58481eb85a0dc5b20d48e6f8",
-                    "dialogColor": "255,255,255",
-                    "latestCommentText": "this is epic!",
-                    "latestCommentUserId": "622d80e81ee78204797e0e4e",
-                    "latestCommentUserName": "Captain Crunch",
-                    "id": "5846f540e8593a971395c0aa"
-                  },
-                  {
-                    "name": "events",
-                    "description": "find and post dates for your events... parties, games, celebrations, anything!",
-                    "creatorId": "5773b5232da36d2d18b870fb",
-                    "creatorName": "philipp",
-                    "threadCount": 60,
-                    "latestCommentDate": "2023-10-08T20:42:08.929Z",
-                    "protectionLevel": 0,
-                    "creationDate": "2016-12-06T16:42:27.699Z",
-                    "dialogThingId": "5848394801371c5c136a9ea3",
-                    "dialogColor": "100,194,226",
-                    "latestCommentText": "penis fuck",
-                    "latestCommentUserId": "6003833e11e60605a2d7cb15",
-                    "latestCommentUserName": "Sheep",
-                    "id": "5846f54d5a84a62410ce2e66"
-                  },
-                  {
-                    "name": "updates",
-                    "description": "find out what's new with anylad. feature announcements and bug fix info. thanks all!",
-                    "creatorId": "5773b5232da36d2d18b870fb",
-                    "creatorName": "philipp",
-                    "threadCount": 426,
-                    "latestCommentDate": "2023-12-13T00:16:12.269Z",
-                    "protectionLevel": 1,
-                    "creationDate": "2016-12-06T15:17:21.186Z",
-                    "dialogThingId": "58483a3b5a0dc5b20d48e6fe",
-                    "dialogColor": "75,226,187",
-                    "latestCommentText": "im gonna miss it for sure",
-                    "latestCommentUserId": "57fa1a9a062bfb6013e320e9",
-                    "latestCommentUserName": "cet cherinyakov",
-                    "id": "5846f556b09fa5d709e5f6fe"
-                  },
-                  {
-                    "name": "showcase",
-                    "description": "",
-                    "creatorId": "5773b5232da36d2d18b870fb",
-                    "creatorName": "philipp",
-                    "threadCount": 217,
-                    "latestCommentDate": "2023-10-12T18:37:22.004Z",
-                    "protectionLevel": 0,
-                    "creationDate": "2016-12-06T15:17:21.186Z",
-                    "dialogThingId": "58483d2d6243c7d410fc910f",
-                    "dialogColor": "223,226,125",
-                    "latestCommentText": "i'm amaze!",
-                    "latestCommentUserId": "5eeeb2edcb300544abacc984",
-                    "latestCommentUserName": "johnny nu",
-                    "id": "5846f567b09fa5d709e5f6ff"
-                  },
-                  {
-                    "name": "suggestions",
-                    "description": "got a new feature idea for anyland, or anything that could be improved?",
-                    "creatorId": "5773b5232da36d2d18b870fb",
-                    "creatorName": "philipp",
-                    "threadCount": 347,
-                    "latestCommentDate": "2021-08-29T06:33:04.655Z",
-                    "protectionLevel": 0,
-                    "creationDate": "2016-12-06T16:42:28.538Z",
-                    "dialogThingId": "58483e01076bf93b0e75f839",
-                    "dialogColor": "198,163,88",
-                    "latestCommentText": "i wonder if the game can actually handle that many script lines.",
-                    "latestCommentUserId": "5d9690a7288c857ffcc8623e",
-                    "latestCommentUserName": "flarn2006",
-                    "id": "5846f571c966811d10993e1e"
-                  },
-                  {
-                    "name": "hangout",
-                    "description": "a board to relax and discuss all kinds of miscellaneous topics. welcome!",
-                    "creatorId": "5773b5232da36d2d18b870fb",
-                    "creatorName": "philipp",
-                    "threadCount": 48,
-                    "latestCommentDate": "2023-10-03T03:45:06.027Z",
-                    "protectionLevel": 0,
-                    "creationDate": "2016-12-06T16:42:27.699Z",
-                    "dialogThingId": "58483fff5a7d56f91469903f",
-                    "dialogColor": "198,143,132",
-                    "latestCommentText": "hewoo mr obama?",
-                    "latestCommentUserId": "5f911606fe99c863186d3030",
-                    "latestCommentUserName": "alizard",
-                    "id": "5846f5785a84a62410ce2e67"
-                  },
-                  {
-                    "name": "quests",
-                    "description": "a board to post your adventures and quests!",
-                    "creatorId": "5773b5232da36d2d18b870fb",
-                    "creatorName": "philipp ai",
-                    "threadCount": 30,
-                    "latestCommentDate": "2023-12-13T12:19:04.618Z",
-                    "protectionLevel": 0,
-                    "creationDate": "2019-01-19T15:46:36.529Z",
-                    "latestCommentText": "✓ achieved",
-                    "latestCommentUserId": "5af09cf138f35155f103bd92",
-                    "latestCommentUserName": "Yoofaloof",
-                    "dialogColor": "84,255,255",
-                    "dialogThingId": "5c45b3f2dbdb1d61cf7f18b9",
-                    "id": "5c43465c9e61d1567d9c69bd"
-                  },
-                  {
-                    "name": "hhbbbggtestboaaerd",
-                    "description": "testggnn",
-                    "creatorId": "5a18e948df317fa5161076c2",
-                    "creatorName": "siol",
-                    "threadCount": 1,
-                    "latestCommentDate": "2023-12-30T15:29:10.861Z",
-                    "protectionLevel": 0,
-                    "creationDate": "2023-12-30T15:28:20.589Z",
-                    "latestCommentText": "testing",
-                    "latestCommentUserId": "5a18e948df317fa5161076c2",
-                    "latestCommentUserName": "siol",
-                    "id": "65903714baa2b214c00654d6"
-                  }
-                ]
-              }
+            return canned_forums_favorites
         }
     )
     .get("/forum/forum/:id", ({params: { id }}) => Bun.file(path.resolve("./data/forum/forum/", id + ".json")).json() )
@@ -390,17 +352,74 @@ const app_thingDefs = new Elysia()
     })
     .get(
         "/:thingId",
-        ({params: { thingId }}) => Bun.file(path.resolve("./data/thing/def/", thingId + ".json")).json(),
+        async ({ params: { thingId } }) => {
+            const file = Bun.file(path.resolve("./data/thing/def/", thingId + ".json"));
+            if (await file.exists()) {
+                try {
+                    return await file.json();
+
+                }
+                catch (e) {
+                    return Response.json("", { status: 200 })
+                }
+            }
+            else {
+                console.error("client asked for a thingdef not on disk!!", thingId)
+                //return new Response("Thingdef not found", { status: 404 })
+                return Response.json("", { status: 200 })
+            }
+
+        }
     )
 	.listen({
         hostname: HOST,
         port: PORT_CDN_THINGDEFS,
     })
 ;
-console.log(`🦊 ThingDefs server server is running at on port ${app_thingDefs.server?.port}...`)
+console.log(`🦊 ThingDefs server is running at on port ${app_thingDefs.server?.port}...`)
 
 
 
+const app_ugcImages = new Elysia()
+    .onRequest(({ request }) => {
+        console.info(JSON.stringify({
+            server: "UGCIMAGES",
+            ts: new Date().toISOString(),
+            ip: request.headers.get('X-Real-Ip'),
+            ua: request.headers.get("User-Agent"),
+            method: request.method,
+            url: request.url,
+        }));
+    })
+    .onError(({ code, error }) => {
+        console.info("error in middleware!", code, error.message);
+    })
+    .get(
+        "/:part1/:part2/",
+        async ({ params: { part1, part2 } }) => {
+            const file = Bun.file(path.resolve("../archiver/images/", `${part1}_${part2}.png`));
+
+            if (await file.exists()) {
+                try {
+                    return await file.json();
+                }
+                catch (e) {
+                    return new Response("<html><head><title>404 Not Found</title></head><body><h1>Not Found</h1></body></html>", { status: 404 })
+                }
+            }
+            else {
+                console.error("client asked for an ugc image not on disk!!", part1, part2)
+                return new Response("<html><head><title>404 Not Found</title></head><body><h1>Not Found</h1></body></html>", { status: 404 })
+            }
+
+        }
+    )
+	.listen({
+        hostname: HOST,
+        port: PORT_CDN_UGCIMAGES,
+    })
+;
+console.log(`🦊 ugcImages server is running at on port ${app_ugcImages.server?.port}...`)
 
 
 
@@ -578,3 +597,119 @@ const canned_friendsbystr = {
     }
 }
 
+const canned_forums_favorites = {
+    "forums": [
+        {
+            "name": "help",
+            "description": "for all your anyland questions",
+            "creatorId": "5773b5232da36d2d18b870fb",
+            "creatorName": "philipp",
+            "threadCount": 346,
+            "latestCommentDate": "2023-12-21T09:35:12.880Z",
+            "protectionLevel": 0,
+            "creationDate": "2016-12-06T16:31:52.285Z",
+            "dialogThingId": "58481eb85a0dc5b20d48e6f8",
+            "dialogColor": "255,255,255",
+            "latestCommentText": "this is epic!",
+            "latestCommentUserId": "622d80e81ee78204797e0e4e",
+            "latestCommentUserName": "Captain Crunch",
+            "id": "5846f540e8593a971395c0aa"
+        },
+        {
+            "name": "events",
+            "description": "find and post dates for your events... parties, games, celebrations, anything!",
+            "creatorId": "5773b5232da36d2d18b870fb",
+            "creatorName": "philipp",
+            "threadCount": 60,
+            "latestCommentDate": "2023-10-08T20:42:08.929Z",
+            "protectionLevel": 0,
+            "creationDate": "2016-12-06T16:42:27.699Z",
+            "dialogThingId": "5848394801371c5c136a9ea3",
+            "dialogColor": "100,194,226",
+            "latestCommentText": "penis fuck",
+            "latestCommentUserId": "6003833e11e60605a2d7cb15",
+            "latestCommentUserName": "Sheep",
+            "id": "5846f54d5a84a62410ce2e66"
+        },
+        {
+            "name": "updates",
+            "description": "find out what's new with anylad. feature announcements and bug fix info. thanks all!",
+            "creatorId": "5773b5232da36d2d18b870fb",
+            "creatorName": "philipp",
+            "threadCount": 426,
+            "latestCommentDate": "2023-12-13T00:16:12.269Z",
+            "protectionLevel": 1,
+            "creationDate": "2016-12-06T15:17:21.186Z",
+            "dialogThingId": "58483a3b5a0dc5b20d48e6fe",
+            "dialogColor": "75,226,187",
+            "latestCommentText": "im gonna miss it for sure",
+            "latestCommentUserId": "57fa1a9a062bfb6013e320e9",
+            "latestCommentUserName": "cet cherinyakov",
+            "id": "5846f556b09fa5d709e5f6fe"
+        },
+        {
+            "name": "showcase",
+            "description": "",
+            "creatorId": "5773b5232da36d2d18b870fb",
+            "creatorName": "philipp",
+            "threadCount": 217,
+            "latestCommentDate": "2023-10-12T18:37:22.004Z",
+            "protectionLevel": 0,
+            "creationDate": "2016-12-06T15:17:21.186Z",
+            "dialogThingId": "58483d2d6243c7d410fc910f",
+            "dialogColor": "223,226,125",
+            "latestCommentText": "i'm amaze!",
+            "latestCommentUserId": "5eeeb2edcb300544abacc984",
+            "latestCommentUserName": "johnny nu",
+            "id": "5846f567b09fa5d709e5f6ff"
+        },
+        {
+            "name": "suggestions",
+            "description": "got a new feature idea for anyland, or anything that could be improved?",
+            "creatorId": "5773b5232da36d2d18b870fb",
+            "creatorName": "philipp",
+            "threadCount": 347,
+            "latestCommentDate": "2021-08-29T06:33:04.655Z",
+            "protectionLevel": 0,
+            "creationDate": "2016-12-06T16:42:28.538Z",
+            "dialogThingId": "58483e01076bf93b0e75f839",
+            "dialogColor": "198,163,88",
+            "latestCommentText": "i wonder if the game can actually handle that many script lines.",
+            "latestCommentUserId": "5d9690a7288c857ffcc8623e",
+            "latestCommentUserName": "flarn2006",
+            "id": "5846f571c966811d10993e1e"
+        },
+        {
+            "name": "hangout",
+            "description": "a board to relax and discuss all kinds of miscellaneous topics. welcome!",
+            "creatorId": "5773b5232da36d2d18b870fb",
+            "creatorName": "philipp",
+            "threadCount": 48,
+            "latestCommentDate": "2023-10-03T03:45:06.027Z",
+            "protectionLevel": 0,
+            "creationDate": "2016-12-06T16:42:27.699Z",
+            "dialogThingId": "58483fff5a7d56f91469903f",
+            "dialogColor": "198,143,132",
+            "latestCommentText": "hewoo mr obama?",
+            "latestCommentUserId": "5f911606fe99c863186d3030",
+            "latestCommentUserName": "alizard",
+            "id": "5846f5785a84a62410ce2e67"
+        },
+        {
+            "name": "quests",
+            "description": "a board to post your adventures and quests!",
+            "creatorId": "5773b5232da36d2d18b870fb",
+            "creatorName": "philipp ai",
+            "threadCount": 30,
+            "latestCommentDate": "2023-12-13T12:19:04.618Z",
+            "protectionLevel": 0,
+            "creationDate": "2019-01-19T15:46:36.529Z",
+            "latestCommentText": "✓ achieved",
+            "latestCommentUserId": "5af09cf138f35155f103bd92",
+            "latestCommentUserName": "Yoofaloof",
+            "dialogColor": "84,255,255",
+            "dialogThingId": "5c45b3f2dbdb1d61cf7f18b9",
+            "id": "5c43465c9e61d1567d9c69bd"
+        }
+    ]
+}
