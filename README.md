@@ -8,7 +8,6 @@ The archive is divided into the following sections:
 
 - **Public Worlds** - A list of public worlds that have been created by the community.
 - **Steam Client** - The latest release of the Windows Steam client, downloaded via SteamCMD.
-- **Website** - The Anyland.com website.
 
 
 ## Getting the archive
