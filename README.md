@@ -32,6 +32,14 @@ Unzip the contents of this folder into `archiver/data`.
 
 All of the asset images are compressed in a multi-part file under `old_archiver/images.7z.00X`
 
+Unzip the contents of this folder into `old_archiver/images`.
+
+#### Old Archive data
+
+The old archive data is in the `old_archiver` directory. The data is stored in a format that is not compatible with the current archiver.
+
+You can find the data in a multi-part file under `old_archiver/data.7z.00X`.
+
 Unzip the contents of this folder into `old_archiver/data`.
 
 ## Running the server
