@@ -36,7 +36,7 @@ Unzip the contents of this folder into `old_archiver/data`.
 
 ## Running the server
 
-This repo contains a docker compose file that will start a local development server for the game.
+This repo contains a docker compose file in the `archiver` directory that will start a local development server for the game.
 
 The server contains Bun for running the game server, and Caddy for running the CDN and API reverse proxies.
 
